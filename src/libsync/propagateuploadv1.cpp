@@ -215,7 +215,7 @@ void PropagateUploadFileV1::slotPutFinished()
     if (_item->_httpErrorCode == 202) {
         QString path = QString::fromUtf8(job->reply()->rawHeader("OC-JobStatus-Location"));
         if (path.isEmpty()) {
-            done(SyncFileItem::NormalError, tr("Poll URL missing"));
+            done(SyncFileItem::NormalError, tr("Faltando conjunto de URL"));
             return;
         }
         _finished = true;
@@ -239,7 +239,7 @@ void PropagateUploadFileV1::slotPutFinished()
     const QString fullFilePath(propagator()->getFilePath(_item->_file));
     if (!FileSystem::fileExists(fullFilePath)) {
         if (!_finished) {
-            abortWithError(SyncFileItem::SoftError, tr("The local file was removed during sync."));
+            abortWithError(SyncFileItem::SoftError, tr("O arquivo local foi removido durante a sincronização."));
             return;
         } else {
             propagator()->_anotherSyncNeeded = true;
@@ -250,7 +250,7 @@ void PropagateUploadFileV1::slotPutFinished()
     if (!FileSystem::verifyFileUnchanged(fullFilePath, _item->_size, _item->_modtime)) {
         propagator()->_anotherSyncNeeded = true;
         if (!_finished) {
-            abortWithError(SyncFileItem::SoftError, tr("Local file changed during sync."));
+            abortWithError(SyncFileItem::SoftError, tr("Arquivo local modificado durante a sincronização."));
             // FIXME:  the legacy code was retrying for a few seconds.
             //         and also checking that after the last chunk, and removed the file in case of INSTRUCTION_NEW
             return;
@@ -264,7 +264,7 @@ void PropagateUploadFileV1::slotPutFinished()
                 // just wait for the other job to finish.
                 return;
             }
-            done(SyncFileItem::NormalError, tr("The server did not acknowledge the last chunk. (No e-tag was present)"));
+            done(SyncFileItem::NormalError, tr("O servidor não reconheceu o último pedaço. (Nenhuma e-tag estava presente)"));
             return;
         }
 

@@ -55,14 +55,14 @@
      <item>
       <widget class="QCheckBox" name="permissionShare">
        <property name="text">
-        <string>can share</string>
+        <string>pode compartilhar</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QCheckBox" name="permissionsEdit">
        <property name="text">
-        <string>can edit</string>
+        <string>pode editar</string>
        </property>
       </widget>
      </item>

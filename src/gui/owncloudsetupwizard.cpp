@@ -252,7 +252,7 @@ void OwncloudSetupWizard::slotFoundServer(const QUrl &url, const QJsonObject &in
 {
     auto serverVersion = CheckServerJob::version(info);
 
-    _ocWizard->appendToConfigurationLog(tr("<font color=\"green\">Successfully connected to %1: %2 version %3 (%4)</font><br/><br/>")
+    _ocWizard->appendToConfigurationLog(tr("&lt;font color=&quot;green&quot;&gt;Conectado com sucesso a %1: %2 versão %3 (%4)&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;")
                                             .arg(Utility::escape(url.toString()),
                                                 Utility::escape(Theme::instance()->appNameGUI()),
                                                 Utility::escape(CheckServerJob::versionString(info)),
@@ -280,9 +280,9 @@ void OwncloudSetupWizard::slotNoServerFound(QNetworkReply *reply)
     // Do this early because reply might be deleted in message box event loop
     QString msg;
     if (!_ocWizard->account()->url().isValid()) {
-        msg = tr("Invalid URL");
+        msg = tr("URL inválida");
     } else {
-        msg = tr("Failed to connect to %1 at %2:<br/>%3")
+        msg = tr("Falha ao se conectar com %1 em %2:<br/>%3")
                   .arg(Utility::escape(Theme::instance()->appNameGUI()),
                       Utility::escape(_ocWizard->account()->url().toString()),
                       Utility::escape(job->errorString()));
@@ -299,9 +299,9 @@ void OwncloudSetupWizard::slotNoServerFound(QNetworkReply *reply)
         QString serverError = reply->peek(1024 * 20);
         qCDebug(lcWizard) << serverError;
         QMessageBox messageBox(_ocWizard);
-        messageBox.setText(tr("The server reported the following error:"));
+        messageBox.setText(tr("O servidor informou o seguinte erro:"));
         messageBox.setInformativeText(serverError);
-        messageBox.addButton(QMessageBox::Ok);
+        messageBox.addButton(tr("ACEITAR"),QMessageBox::Ok);
         messageBox.setTextFormat(Qt::RichText);
         messageBox.exec();
     }
@@ -317,7 +317,7 @@ void OwncloudSetupWizard::slotNoServerFound(QNetworkReply *reply)
 void OwncloudSetupWizard::slotNoServerFoundTimeout(const QUrl &url)
 {
     _ocWizard->displayError(
-        tr("Timeout while trying to connect to %1 at %2.")
+        tr("O tempo expirou ao tentar contactar %1 e %2.")
             .arg(Utility::escape(Theme::instance()->appNameGUI()), Utility::escape(url.toString())),
                 false);
 }
@@ -336,7 +336,7 @@ void OwncloudSetupWizard::slotConnectToOCUrl(const QString &url)
     AbstractCredentials *creds = _ocWizard->getCredentials();
     _ocWizard->account()->setCredentials(creds);
     _ocWizard->setField(QLatin1String("OCUrl"), url);
-    _ocWizard->appendToConfigurationLog(tr("Trying to connect to %1 at %2...")
+    _ocWizard->appendToConfigurationLog(tr("Tentando conectar a %1 em %2...")
                                             .arg(Theme::instance()->appNameGUI())
                                             .arg(url));
 
@@ -387,8 +387,8 @@ void OwncloudSetupWizard::slotAuthError()
             testOwnCloudConnect();
             return;
         }
-        errorMsg = tr("The authenticated request to the server was redirected to "
-                      "'%1'. The URL is bad, the server is misconfigured.")
+        errorMsg = tr("A solicitação de autenticação ao servidor foi direcionada para "
+                      "&apos;%1&apos;. A URL está errada, a configuração do servidor está errada.")
                        .arg(Utility::escape(redirectUrl.toString()));
 
         // A 404 is actually a success: we were authorized to know that the folder does
@@ -400,8 +400,8 @@ void OwncloudSetupWizard::slotAuthError()
         // Provide messages for other errors, such as invalid credentials.
     } else if (reply->error() != QNetworkReply::NoError) {
         if (!_ocWizard->account()->credentials()->stillValid(reply)) {
-            errorMsg = tr("Access forbidden by server. To verify that you have proper access, "
-                          "<a href=\"%1\">click here</a> to access the service with your browser.")
+            errorMsg = tr("Acesso proibido pelo servidor. Para verificar se você tem acesso adequado,  "
+                          "&lt;a href=&quot;%1&quot;&gt;clique aqui&lt;/a&gt; para acessar o serviço com o seu navegador.")
                            .arg(Utility::escape(_ocWizard->account()->url().toString()));
         } else {
             errorMsg = job->errorStringParsingBody();
@@ -409,7 +409,7 @@ void OwncloudSetupWizard::slotAuthError()
 
         // Something else went wrong, maybe the response was 200 but with invalid data.
     } else {
-        errorMsg = tr("There was an invalid response to an authenticated webdav request");
+        errorMsg = tr("Houve uma resposta inválida a um pedido de autenticação WebDAV");
     }
 
     _ocWizard->show();
@@ -454,10 +454,10 @@ void OwncloudSetupWizard::slotCreateLocalAndRemoteFolders(const QString &localFo
         // there is an existing local folder. If its non empty, it can only be synced if the
         // ownCloud is newly created.
         _ocWizard->appendToConfigurationLog(
-            tr("Local sync folder %1 already exists, setting it up for sync.<br/><br/>")
+            tr("Pasta local de sincronização %1 já existe, configurando para sincronização. &lt;br/&gt;&lt;br/&gt;")
                 .arg(Utility::escape(localFolder)));
     } else {
-        QString res = tr("Creating local sync folder %1...").arg(localFolder);
+        QString res = tr("Criação de pasta de sincronização local %1...").arg(localFolder);
         if (fi.mkpath(localFolder)) {
             FileSystem::setFolderMinimumPermissions(localFolder);
             Utility::setupFavLink(localFolder);
@@ -465,7 +465,7 @@ void OwncloudSetupWizard::slotCreateLocalAndRemoteFolders(const QString &localFo
         } else {
             res += tr("failed.");
             qCWarning(lcWizard) << "Failed to create " << fi.path();
-            _ocWizard->displayError(tr("Could not create local folder %1").arg(Utility::escape(localFolder)), false);
+            _ocWizard->displayError(tr("Não foi possível criar pasta local %1").arg(Utility::escape(localFolder)), false);
             nextStep = false;
         }
         _ocWizard->appendToConfigurationLog(res);
@@ -491,13 +491,13 @@ void OwncloudSetupWizard::slotRemoteFolderExists(QNetworkReply *reply)
         qCInfo(lcWizard) << "Remote folder found, all cool!";
     } else if (errId == QNetworkReply::ContentNotFoundError) {
         if (_remoteFolder.isEmpty()) {
-            error = tr("No remote folder specified!");
+            error = tr("Nenhuma pasta remota foi especificada!");
             ok = false;
         } else {
             createRemoteFolder();
         }
     } else {
-        error = tr("Error: %1").arg(job->errorString());
+        error = tr("Erro: %1").arg(job->errorString());
         ok = false;
     }
 
@@ -510,7 +510,7 @@ void OwncloudSetupWizard::slotRemoteFolderExists(QNetworkReply *reply)
 
 void OwncloudSetupWizard::createRemoteFolder()
 {
-    _ocWizard->appendToConfigurationLog(tr("creating folder on ownCloud: %1").arg(_remoteFolder));
+    _ocWizard->appendToConfigurationLog(tr("criar pasta no Result Cloud Storage: %1").arg(_remoteFolder));
 
     MkColJob *job = new MkColJob(_ocWizard->account(), _remoteFolder, this);
     connect(job, SIGNAL(finished(QNetworkReply::NetworkError)), SLOT(slotCreateRemoteFolderFinished(QNetworkReply::NetworkError)));
@@ -526,25 +526,25 @@ void OwncloudSetupWizard::slotCreateRemoteFolderFinished(QNetworkReply::NetworkE
     bool success = true;
 
     if (error == QNetworkReply::NoError) {
-        _ocWizard->appendToConfigurationLog(tr("Remote folder %1 created successfully.").arg(_remoteFolder));
+        _ocWizard->appendToConfigurationLog(tr("Pasta remota %1 criada com sucesso.").arg(_remoteFolder));
     } else if (error == 202) {
-        _ocWizard->appendToConfigurationLog(tr("The remote folder %1 already exists. Connecting it for syncing.").arg(_remoteFolder));
+        _ocWizard->appendToConfigurationLog(tr("Pasta remota %1 já existe. Conectando para sincronizar.").arg(_remoteFolder));
     } else if (error > 202 && error < 300) {
-        _ocWizard->displayError(tr("The folder creation resulted in HTTP error code %1").arg((int)error), false);
+        _ocWizard->displayError(tr("A criação da pasta resultou em um erro do código HTTP %1").arg((int)error), false);
 
-        _ocWizard->appendToConfigurationLog(tr("The folder creation resulted in HTTP error code %1").arg((int)error));
+        _ocWizard->appendToConfigurationLog(tr("A criação da pasta resultou em um erro do código HTTP %1").arg((int)error));
     } else if (error == QNetworkReply::OperationCanceledError) {
-        _ocWizard->displayError(tr("The remote folder creation failed because the provided credentials "
-                                   "are wrong!"
-                                   "<br/>Please go back and check your credentials.</p>"),
+        _ocWizard->displayError(tr("A criação da pasta remota falhou porque as credenciais fornecidas "
+                                   "estão erradas!"
+                                   "&lt;br/&gt;Por favor, volte e verifique suas credenciais.&lt;/p&gt;"),
             false);
-        _ocWizard->appendToConfigurationLog(tr("<p><font color=\"red\">Remote folder creation failed probably because the provided credentials are wrong.</font>"
-                                               "<br/>Please go back and check your credentials.</p>"));
+        _ocWizard->appendToConfigurationLog(tr("&lt;p&gt;&lt;font color=&quot;red&quot;&gt;A criação remota de pasta falhou provavelmente as causas da falha na criação da pasta remota são credenciais erradas&lt;/font&gt;"
+                                               "&lt;br/&gt;Volte e verifique suas credenciais, por favor.&lt;/p&gt;"));
         _remoteFolder.clear();
         success = false;
     } else {
-        _ocWizard->appendToConfigurationLog(tr("Remote folder %1 creation failed with error <tt>%2</tt>.").arg(Utility::escape(_remoteFolder)).arg(error));
-        _ocWizard->displayError(tr("Remote folder %1 creation failed with error <tt>%2</tt>.").arg(Utility::escape(_remoteFolder)).arg(error), false);
+        _ocWizard->appendToConfigurationLog(tr("Falha na criação da pasta remota %1 com erro &lt;tt&gt;%2&lt;/tt&gt;.").arg(Utility::escape(_remoteFolder)).arg(error));
+        _ocWizard->displayError(tr("Falha na criação da pasta remota %1 com erro &lt;tt&gt;%2&lt;/tt&gt;.").arg(Utility::escape(_remoteFolder)).arg(error), false);
         _remoteFolder.clear();
         success = false;
     }
@@ -561,19 +561,19 @@ void OwncloudSetupWizard::finalizeSetup(bool success)
     if (success) {
         if (!(localFolder.isEmpty() || _remoteFolder.isEmpty())) {
             _ocWizard->appendToConfigurationLog(
-                tr("A sync connection from %1 to remote directory %2 was set up.")
+                tr("Uma conexão de sincronização de %1 para o diretório remoto %2 foi realizada.")
                     .arg(localFolder, _remoteFolder));
         }
         _ocWizard->appendToConfigurationLog(QLatin1String(" "));
         _ocWizard->appendToConfigurationLog(QLatin1String("<p><font color=\"green\"><b>")
-            + tr("Successfully connected to %1!")
+            + tr("Conectado com sucesso a %1!")
                   .arg(Theme::instance()->appNameGUI())
             + QLatin1String("</b></font></p>"));
         _ocWizard->successfulStep();
     } else {
         // ### this is not quite true, pass in the real problem as optional parameter
         _ocWizard->appendToConfigurationLog(QLatin1String("<p><font color=\"red\">")
-            + tr("Connection to %1 could not be established. Please check again.")
+            + tr("Conexão à %1 não foi estabelecida. Por favor, verifique novamente.")
                   .arg(Theme::instance()->appNameGUI())
             + QLatin1String("</font></p>"));
     }
@@ -587,9 +587,9 @@ bool OwncloudSetupWizard::ensureStartFromScratch(const QString &localFolder)
         renameOk = FolderMan::instance()->startFromScratch(localFolder);
         if (!renameOk) {
             QMessageBox::StandardButton but;
-            but = QMessageBox::question(0, tr("Folder rename failed"),
-                tr("Can't remove and back up the folder because the folder or a file in it is open in another program."
-                   " Please close the folder or file and hit retry or cancel the setup."),
+            but = QMessageBox::question(0, tr("Falha no nome da pasta"),
+                tr("Não é possível remover e fazer backup da pasta porque a pasta ou um arquivo que está nesta pasta está aberto em outro programa. "
+                   "Por favor, feche a pasta ou arquivo e clique tentar novamente ou cancelar a operação."),
                 QMessageBox::Retry | QMessageBox::Abort, QMessageBox::Retry);
             if (but == QMessageBox::Abort) {
                 break;
@@ -638,7 +638,7 @@ void OwncloudSetupWizard::slotAssistantFinished(int result)
                         QStringList() << QLatin1String("/"));
                 }
             }
-            _ocWizard->appendToConfigurationLog(tr("<font color=\"green\"><b>Local sync folder %1 successfully created!</b></font>").arg(localFolder));
+            _ocWizard->appendToConfigurationLog(tr("&lt;font color=&quot;green&quot;&gt;&lt;b&gt;Pasta de sincronização local %1 criada com sucesso!&lt;/b&gt;&lt;/font&gt;").arg(localFolder));
         }
     }
 

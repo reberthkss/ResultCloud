@@ -62,7 +62,7 @@ SslErrorDialog::SslErrorDialog(AccountPtr account, QWidget *parent)
 {
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     _ui->setupUi(this);
-    setWindowTitle(tr("Untrusted Certificate"));
+    setWindowTitle(tr("Certificado Não Confiável"));
     QPushButton *okButton =
         _ui->_dialogButtonBox->button(QDialogButtonBox::Ok);
     QPushButton *cancelButton =
@@ -129,7 +129,7 @@ bool SslErrorDialog::checkFailingCertsKnown(const QList<QSslError> &errors)
     msg += QL("</head><body>");
 
     auto host = _account->url().host();
-    msg += QL("<h3>") + tr("Cannot connect securely to <i>%1</i>:").arg(host) + QL("</h3>");
+    msg += QL("<h3>") + tr("Não é possível conectar com segurança a &lt;i&gt;%1&lt;/i&gt;:").arg(host) + QL("</h3>");
     // loop over the unknown certs and line up their errors.
     msg += QL("<div id=\"ca_errors\">");
     foreach (const QSslCertificate &cert, _unknownCerts) {
@@ -163,7 +163,7 @@ QString SslErrorDialog::certDiv(QSslCertificate cert) const
 {
     QString msg;
     msg += QL("<div id=\"cert\">");
-    msg += QL("<h3>") + tr("with Certificate %1").arg(Utility::escape(cert.subjectInfo(QSslCertificate::CommonName))) + QL("</h3>");
+    msg += QL("<h3>") + tr("com Certificado %1").arg(Utility::escape(cert.subjectInfo(QSslCertificate::CommonName))) + QL("</h3>");
 
     msg += QL("<div id=\"ccert\">");
     QStringList li;
@@ -172,14 +172,14 @@ QString SslErrorDialog::certDiv(QSslCertificate cert) const
     QString unit = Utility::escape(cert.subjectInfo(QSslCertificate::OrganizationalUnitName));
     QString country = Utility::escape(cert.subjectInfo(QSslCertificate::CountryName));
     if (unit.isEmpty())
-        unit = tr("&lt;not specified&gt;");
+        unit = tr("&amp;lt;não especificado&amp;gt;");
     if (org.isEmpty())
-        org = tr("&lt;not specified&gt;");
+        org = tr("&amp;lt;não especificado&amp;gt;");
     if (country.isEmpty())
-        country = tr("&lt;not specified&gt;");
-    li << tr("Organization: %1").arg(org);
-    li << tr("Unit: %1").arg(unit);
-    li << tr("Country: %1").arg(country);
+        country = tr("&amp;lt;não especificado&amp;gt;");
+    li << tr("Organização: %1").arg(org);
+    li << tr("Unidade: %1").arg(unit);
+    li << tr("País: %1").arg(country);
     msg += QL("<p>") + li.join(QL("<br/>")) + QL("</p>");
 
     msg += QL("<p>");
@@ -189,17 +189,17 @@ QString SslErrorDialog::certDiv(QSslCertificate cert) const
     msg += tr("Fingerprint (MD5): <tt>%1</tt>").arg(md5sum) + QL("<br/>");
     msg += tr("Fingerprint (SHA1): <tt>%1</tt>").arg(sha1sum) + QL("<br/>");
     msg += QL("<br/>");
-    msg += tr("Effective Date: %1").arg(cert.effectiveDate().toString()) + QL("<br/>");
-    msg += tr("Expiration Date: %1").arg(cert.expiryDate().toString()) + QL("</p>");
+    msg += tr("Data efetiva: %1").arg(cert.effectiveDate().toString()) + QL("<br/>");
+    msg += tr("Data de Vencimento: %1").arg(cert.expiryDate().toString()) + QL("</p>");
 
     msg += QL("</div>");
 
-    msg += QL("<h3>") + tr("Issuer: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::CommonName))) + QL("</h3>");
+    msg += QL("<h3>") + tr("Emissor: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::CommonName))) + QL("</h3>");
     msg += QL("<div id=\"issuer\">");
     li.clear();
-    li << tr("Organization: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::Organization)));
-    li << tr("Unit: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::OrganizationalUnitName)));
-    li << tr("Country: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::CountryName)));
+    li << tr("Organização: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::Organization)));
+    li << tr("Unidade: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::OrganizationalUnitName)));
+    li << tr("País: %1").arg(Utility::escape(cert.issuerInfo(QSslCertificate::CountryName)));
     msg += QL("<p>") + li.join(QL("<br/>")) + QL("</p>");
     msg += QL("</div>");
     msg += QL("</div>");

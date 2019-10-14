@@ -97,7 +97,7 @@ void PropagateLocalRemove::start()
     qCDebug(lcPropagateLocalRemove) << filename;
 
     if (propagator()->localFileNameClash(_item->_file)) {
-        done(SyncFileItem::NormalError, tr("Could not remove %1 because of a local file name clash").arg(QDir::toNativeSeparators(filename)));
+        done(SyncFileItem::NormalError, tr("Não foi possível remover %1 porque o nome do arquivo deu erro").arg(QDir::toNativeSeparators(filename)));
         return;
     }
 
@@ -144,7 +144,7 @@ void PropagateLocalMkdir::start()
             QString removeError;
             if (!FileSystem::remove(newDirStr, &removeError)) {
                 done(SyncFileItem::NormalError,
-                    tr("could not delete file %1, error: %2")
+                    tr("não foi possível apagar o arquivo %1, erro: %2")
                         .arg(newDirStr, removeError));
                 return;
             }
@@ -159,13 +159,13 @@ void PropagateLocalMkdir::start()
 
     if (Utility::fsCasePreserving() && propagator()->localFileNameClash(_item->_file)) {
         qCWarning(lcPropagateLocalMkdir) << "New folder to create locally already exists with different case:" << _item->_file;
-        done(SyncFileItem::NormalError, tr("Attention, possible case sensitivity clash with %1").arg(newDirStr));
+        done(SyncFileItem::NormalError, tr("Atenção, possível caso de sensibilidade de minúscula/maiúscula, choque com %1").arg(newDirStr));
         return;
     }
     emit propagator()->touchedFile(newDirStr);
     QDir localDir(propagator()->_localDir);
     if (!localDir.mkpath(_item->_file)) {
-        done(SyncFileItem::NormalError, tr("could not create folder %1").arg(newDirStr));
+        done(SyncFileItem::NormalError, tr("não foi possível criar a pasta %1").arg(newDirStr));
         return;
     }
 
@@ -177,7 +177,7 @@ void PropagateLocalMkdir::start()
     SyncFileItem newItem(*_item);
     newItem._etag = "_invalid_";
     if (!propagator()->updateMetadata(newItem)) {
-        done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+        done(SyncFileItem::FatalError, tr("Ocorreu um erro ao escrever metadados ao banco de dados"));
         return;
     }
     propagator()->_journal->commit("localMkdir");
@@ -215,7 +215,7 @@ void PropagateLocalRename::start()
             // Fixme: the file that is the reason for the clash could be named here,
             // it would have to come out the localFileNameClash function
             done(SyncFileItem::NormalError,
-                tr("File %1 can not be renamed to %2 because of a local file name clash")
+                tr("arquivo %1 não pode ser renomeado para %2 porque o nome do arquivo é invalido")
                     .arg(QDir::toNativeSeparators(_item->_file))
                     .arg(QDir::toNativeSeparators(_item->_renameTarget)));
             return;
@@ -246,19 +246,19 @@ void PropagateLocalRename::start()
             newItem._checksumHeader = oldRecord._checksumHeader;
         }
         if (!propagator()->updateMetadata(newItem)) {
-            done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+            done(SyncFileItem::FatalError, tr("Erro ao escrever a metadata para o banco de dados"));
             return;
         }
     } else {
         propagator()->_renamedDirectories.insert(oldFile, _item->_renameTarget);
         if (!PropagateRemoteMove::adjustSelectiveSync(propagator()->_journal, oldFile, _item->_renameTarget)) {
-            done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+            done(SyncFileItem::FatalError, tr("Erro ao escrever a metadata para o banco de dados"));
             return;
         }
     }
     if (pinState && *pinState != PinState::Inherited
         && !vfs->setPinState(_item->_renameTarget, *pinState)) {
-        done(SyncFileItem::NormalError, tr("Error setting pin state"));
+        done(SyncFileItem::NormalError, tr("Erro ao configurar o estado do pin"));
         return;
     }
 

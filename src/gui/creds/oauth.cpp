@@ -112,42 +112,42 @@ void OAuth::start()
                         QString errorReason;
                         QString errorFromJson = json["error"].toString();
                         if (!errorFromJson.isEmpty()) {
-                            errorReason = tr("Error returned from the server: <em>%1</em>")
+                            errorReason = tr("Erro retornado do servidor: &lt;em&gt;%1&lt;/em&gt;")
                                               .arg(errorFromJson.toHtmlEscaped());
                         } else if (reply->error() != QNetworkReply::NoError) {
-                            errorReason = tr("There was an error accessing the 'token' endpoint: <br><em>%1</em>")
+                            errorReason = tr("Ocorreu um erro ao acessar o ponto final do token: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;")
                                               .arg(reply->errorString().toHtmlEscaped());
                         } else if (jsonData.isEmpty()) {
                             // Can happen if a funky load balancer strips away POST data, e.g. BigIP APM my.policy
-                            errorReason = tr("Empty JSON from OAuth2 redirect");
+                            errorReason = tr("JSON vazio do redirecionamento OAuth2");
                             // We explicitly have this as error case since the json qcWarning output below is misleading,
                             // it will show a fake json will null values that actually never was received like this as
                             // soon as you access json["whatever"] the debug output json will claim to have "whatever":null
                         } else if (jsonParseError.error != QJsonParseError::NoError) {
-                            errorReason = tr("Could not parse the JSON returned from the server: <br><em>%1</em>")
+                            errorReason = tr("Não foi possível analisar o JSON retornado do servidor: &lt;br&gt;&lt;em&gt;%1&lt;/em&gt;")
                                               .arg(jsonParseError.errorString());
                         } else {
-                            errorReason = tr("The reply from the server did not contain all expected fields");
+                            errorReason = tr("A resposta do servidor não continha todos os campos esperados");
                         }
                         qCWarning(lcOauth) << "Error when getting the accessToken" << json << errorReason;
                         httpReplyAndClose(socket, "500 Internal Server Error",
-                            tr("<h1>Login Error</h1><p>%1</p>").arg(errorReason).toUtf8().constData());
+                            tr("&lt;h1&gt;Erro de Login&lt;/h1&gt;&lt;p&gt;%1&lt;/p&gt;").arg(errorReason).toUtf8().constData());
                         emit result(Error);
                         return;
                     }
                     if (!_expectedUser.isNull() && user != _expectedUser) {
                         // Connected with the wrong user
-                        QString message = tr("<h1>Wrong user</h1>"
-                                             "<p>You logged-in with user <em>%1</em>, but must login with user <em>%2</em>.<br>"
-                                             "Please log out of %3 in another tab, then <a href='%4'>click here</a> "
-                                             "and log in as user %2</p>")
+                        QString message = tr("&lt;h1&gt;Usuário errado&lt;/h1&gt;"
+                                             "&lt;p&gt;Você fez logon com o usuário &lt;em&gt;%1&lt;/em&gt;, mas deve fazer login com o usuário &lt;em&gt;%2&lt;/em&gt;.&lt;br&gt;"
+                                             "Faça o logout de %3 em outra guia, então&lt;a href=&apos;%4&apos;&gt;clique aqui&lt;/a&gt; "
+                                             "e faça o login como usuário%2&lt;/p&gt;")
                                               .arg(user, _expectedUser, Theme::instance()->appNameGUI(),
                                                   authorisationLink().toString(QUrl::FullyEncoded));
                         httpReplyAndClose(socket, "200 OK", message.toUtf8().constData());
                         // We are still listening on the socket so we will get the new connection
                         return;
                     }
-                    const char *loginSuccessfullHtml = "<h1>Login Successful</h1><p>You can close this window.</p>";
+                    const char *loginSuccessfullHtml = "<h1>Logado com sucesso! </h1><p>Você pode fechar está janela</p>";
                     if (messageUrl.isValid()) {
                         httpReplyAndClose(socket, "303 See Other", loginSuccessfullHtml,
                             QByteArray("Location: " + messageUrl.toEncoded()).constData());

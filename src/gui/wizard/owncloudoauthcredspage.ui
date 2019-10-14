@@ -33,7 +33,7 @@
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Please switch to your browser to proceed.</string>
+      <string>Mude para o seu navegador para prosseguir.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -43,7 +43,7 @@
    <item>
     <widget class="QLabel" name="errorLabel">
      <property name="text">
-      <string>An error occurred while connecting. Please try again.</string>
+      <string>Ocorreu um erro durante a conexão. Por favor, tente novamente.</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -53,7 +53,7 @@
    <item>
     <widget class="QCommandLinkButton" name="openLinkButton">
      <property name="text">
-      <string>Re-open Browser</string>
+      <string>Reabrir o navegador</string>
      </property>
     </widget>
    </item>

@@ -60,7 +60,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
     _isFile = fi.isFile();
 
     // Note: the share name cannot be longer than 64 characters
-    _ui->nameLineEdit->setText(tr("Public link"));
+    _ui->nameLineEdit->setText(tr("Linque público"));
 
     // the following progress indicator widgets are added to layouts which makes them
     // automatically deleted once the dialog dies.
@@ -91,10 +91,10 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
 
     bool sharingPossible = true;
     if (!_account->capabilities().sharePublicLink()) {
-        displayError(tr("Link shares have been disabled"));
+        displayError(tr("Os compartilhamentos de linque foram desativados"));
         sharingPossible = false;
     } else if (!(maxSharingPermissions & SharePermissionShare)) {
-        displayError(tr("The file can not be shared because it was shared without sharing permission."));
+        displayError(tr("O arquivo não pode ser partilhado, pois foi compartilhado sem permissão de compartilhamento."));
         sharingPossible = false;
     }
     if (!sharingPossible) {
@@ -105,7 +105,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
     // Older servers don't support multiple public link shares
     if (!_account->capabilities().sharePublicLinkMultiple()) {
         _namesSupported = false;
-        _ui->createShareButton->setText(tr("Create public link share"));
+        _ui->createShareButton->setText(tr("Criar linque de compartilhamento público"));
         _ui->nameLineEdit->hide();
         _ui->nameLineEdit->clear(); // so we don't send a name
         _ui->nameLabel->hide();
@@ -116,7 +116,7 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
     _ui->pushButton_setPassword->setEnabled(false);
     _ui->lineEdit_password->setEnabled(false);
     _ui->pushButton_setPassword->setEnabled(false);
-    _ui->checkBox_password->setText(tr("P&assword protect"));
+    _ui->checkBox_password->setText(tr("S&amp;enha de proteção"));
 
     _ui->calendar->setMinimumDate(QDate::currentDate().addDays(1));
     _ui->calendar->setEnabled(false);
@@ -149,24 +149,25 @@ ShareLinkWidget::ShareLinkWidget(AccountPtr account,
         _expiryRequired = true;
     }
 
-    // File can't have public upload set; we also hide it if the capability isn't there
-    _ui->widget_editing->setVisible(
-        !_isFile && _account->capabilities().sharePublicLinkAllowUpload());
-    _ui->radio_uploadOnly->setVisible(
-        _account->capabilities().sharePublicLinkSupportsUploadOnly());
-
+    // Hide permissions that are unavailable for files or disabled by capability.
+    bool rwVisible = !_isFile && _account->capabilities().sharePublicLinkAllowUpload();
+    bool uploadOnlyVisible = rwVisible && _account->capabilities().sharePublicLinkSupportsUploadOnly();
+    _ui->radio_readWrite->setVisible(rwVisible);
+    _ui->label_readWrite->setVisible(rwVisible);
+    _ui->radio_uploadOnly->setVisible(uploadOnlyVisible);
+    _ui->label_uploadOnly->setVisible(uploadOnlyVisible);
 
     // Prepare sharing menu
 
     _linkContextMenu = new QMenu(this);
     connect(_linkContextMenu, &QMenu::triggered,
         this, &ShareLinkWidget::slotLinkContextMenuActionTriggered);
-    _openLinkAction = _linkContextMenu->addAction(tr("Open link in browser"));
-    _copyLinkAction = _linkContextMenu->addAction(tr("Copy link to clipboard"));
-    _copyDirectLinkAction = _linkContextMenu->addAction(tr("Copy link to clipboard (direct download)"));
-    _emailLinkAction = _linkContextMenu->addAction(tr("Send link by email"));
-    _emailDirectLinkAction = _linkContextMenu->addAction(tr("Send link by email (direct download)"));
-    _deleteLinkAction = _linkContextMenu->addAction(tr("Delete"));
+    _openLinkAction = _linkContextMenu->addAction(tr("Abrir linque no navegador"));
+    _copyLinkAction = _linkContextMenu->addAction(tr("Copiar o linque para a área de transferência"));
+    _copyDirectLinkAction = _linkContextMenu->addAction(tr("Copiar o linque para a área de transferência (download direto)"));
+    _emailLinkAction = _linkContextMenu->addAction(tr("Enviar linque por e-mail"));
+    _emailDirectLinkAction = _linkContextMenu->addAction(tr("Enviar linque por e-mail (download direto)"));
+    _deleteLinkAction = _linkContextMenu->addAction(tr("Excluir"));
 
     /*
      * Create the share manager and connect it properly
@@ -267,7 +268,7 @@ void ShareLinkWidget::slotSharesFetched(const QList<QSharedPointer<Share>> &shar
         auto deleteButton = new QToolButton;
         deleteButton->setIcon(deleteIcon);
         deleteButton->setProperty(propertyShareC, QVariant::fromValue(linkShare));
-        deleteButton->setToolTip(tr("Delete link share"));
+        deleteButton->setToolTip(tr("Excluir linque de compartilhamento"));
         connect(deleteButton, &QAbstractButton::clicked, this, &ShareLinkWidget::slotDeleteShareClicked);
         table->setCellWidget(row, 2, deleteButton);
 
@@ -283,7 +284,7 @@ void ShareLinkWidget::slotSharesFetched(const QList<QSharedPointer<Share>> &shar
         table->insertRow(row);
         auto createItem = new QTableWidgetItem;
         createItem->setFlags(createItem->flags() & ~Qt::ItemIsEditable);
-        createItem->setText(tr("Create new..."));
+        createItem->setText(tr("Criar novo..."));
         auto font = createItem->font();
         font.setItalic(true);
         createItem->setFont(font);
@@ -339,7 +340,7 @@ void ShareLinkWidget::slotShareSelectionChanged()
 
     // Password state
     _ui->pushButton_setPassword->setVisible(!createNew);
-    _ui->checkBox_password->setText(tr("P&assword protect"));
+    _ui->checkBox_password->setText(tr("S&amp;enha de proteção"));
     if (!selectionUnchanged) {
         if (share && share->isPasswordSet()) {
             _ui->checkBox_password->setChecked(true);
@@ -347,7 +348,7 @@ void ShareLinkWidget::slotShareSelectionChanged()
             _ui->lineEdit_password->setEnabled(true);
         } else if (createNew && _passwordRequired) {
             _ui->checkBox_password->setChecked(true);
-            _ui->lineEdit_password->setPlaceholderText(tr("Please Set Password"));
+            _ui->lineEdit_password->setPlaceholderText(tr("Por favor, Definir senha"));
             _ui->lineEdit_password->setEnabled(true);
         } else {
             _ui->checkBox_password->setChecked(false);
@@ -376,17 +377,15 @@ void ShareLinkWidget::slotShareSelectionChanged()
         _ui->calendar->setEnabled(false);
     }
 
-    // Public upload state (box is hidden for files)
-    if (!_isFile) {
-        if (share && share->getPublicUpload()) {
-            if (share->getShowFileListing()) {
-                _ui->radio_readWrite->setChecked(true);
-            } else {
-                _ui->radio_uploadOnly->setChecked(true);
-            }
+    // Public upload state
+    if (share && share->getPublicUpload()) {
+        if (share->getShowFileListing()) {
+            _ui->radio_readWrite->setChecked(true);
         } else {
-            _ui->radio_readOnly->setChecked(true);
+            _ui->radio_uploadOnly->setChecked(true);
         }
+    } else {
+        _ui->radio_readOnly->setChecked(true);
     }
 
     // Name and create button
@@ -527,7 +526,7 @@ void ShareLinkWidget::slotCheckBoxPasswordClicked()
     if (_ui->checkBox_password->checkState() == Qt::Checked) {
         _ui->lineEdit_password->setEnabled(true);
         _ui->pushButton_setPassword->setEnabled(true);
-        _ui->lineEdit_password->setPlaceholderText(tr("Please Set Password"));
+        _ui->lineEdit_password->setPlaceholderText(tr("Por favor, Definir senha"));
         _ui->lineEdit_password->setFocus();
     } else {
         setPassword(QString());
@@ -559,7 +558,7 @@ void ShareLinkWidget::emailShareLink(const QUrl &url)
 {
     QString fileName = _sharePath.mid(_sharePath.lastIndexOf('/') + 1);
     Utility::openEmailComposer(
-        tr("I shared %1 with you").arg(fileName),
+        tr("Eu compartilhei %1 com você").arg(fileName),
         url.toString(),
         this);
 }
@@ -573,15 +572,15 @@ void ShareLinkWidget::confirmAndDeleteShare(const QSharedPointer<LinkShare> &sha
 {
     auto messageBox = new QMessageBox(
         QMessageBox::Question,
-        tr("Confirm Link Share Deletion"),
-        tr("<p>Do you really want to delete the public link share <i>%1</i>?</p>"
-           "<p>Note: This action cannot be undone.</p>")
+        tr("Confirmar o Link de Eliminação de Compartilhamento"),
+        tr("&lt;p&gt;Você realmente deseja excluir o compartilhamento de links públicos &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
+           "&lt;p&gt;Nota: Esta ação não pode ser desfeita.&lt;/p&gt;")
             .arg(shareName(*share)),
         QMessageBox::NoButton,
         this);
     QPushButton *yesButton =
-        messageBox->addButton(tr("Delete"), QMessageBox::YesRole);
-    messageBox->addButton(tr("Cancel"), QMessageBox::NoRole);
+        messageBox->addButton(tr("Excluir"), QMessageBox::YesRole);
+    messageBox->addButton(tr("Cancelar"), QMessageBox::NoRole);
 
     connect(messageBox, &QMessageBox::finished, this,
         [messageBox, yesButton, share]() {
@@ -597,7 +596,7 @@ QString ShareLinkWidget::shareName(const LinkShare &share) const
     if (!name.isEmpty())
         return name;
     if (!_namesSupported)
-        return tr("Public link");
+        return tr("Linque público");
     return share.getToken();
 }
 

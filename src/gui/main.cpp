@@ -35,11 +35,11 @@ using namespace OCC;
 
 void warnSystray()
 {
-    QMessageBox::critical(0, qApp->translate("main.cpp", "System Tray not available"),
-        qApp->translate("main.cpp", "%1 requires on a working system tray. "
-                                    "If you are running XFCE, please follow "
-                                    "<a href=\"http://docs.xfce.org/xfce/xfce4-panel/systray\">these instructions</a>. "
-                                    "Otherwise, please install a system tray application such as 'trayer' and try again.")
+    QMessageBox::critical(0, qApp->translate("main.cpp", "Área de notificação não disponível"),
+        qApp->translate("main.cpp", "%1 requer uma área de notificação em funcionamento."
+                                    " Se você estiver executando o XFCE, siga"
+                                    " &lt;a href=&quot;http://docs.xfce.org/xfce/xfce4-panel/systray&quot;&gt; estas instruções&lt;/a&gt;."
+                                    " Caso contrário, instale um aplicativo de área de notificação, como o &apos;trayer&apos; e tente novamente.")
             .arg(Theme::instance()->appNameGUI()));
 }
 

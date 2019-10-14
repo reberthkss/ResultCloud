@@ -183,7 +183,7 @@ bool SyncEngine::checkErrorBlacklisting(SyncFileItem &item)
     item._status = SyncFileItem::BlacklistedError;
 
     auto waitSecondsStr = Utility::durationToDescriptiveString1(1000 * waitSeconds);
-    item._errorString = tr("%1 (skipped due to earlier error, trying again in %2)").arg(entry._errorString, waitSecondsStr);
+    item._errorString = tr("%1 (ignorado devido a um erro anterior, tentando novamente em %2)").arg(entry._errorString, waitSecondsStr);
 
     if (entry._errorCategory == SyncJournalErrorBlacklistRecord::InsufficientRemoteStorage) {
         slotInsufficientRemoteStorage();
@@ -352,7 +352,7 @@ void OCC::SyncEngine::slotItemDiscovered(const OCC::SyncFileItemPtr &item)
                 QString error;
                 if (!_syncOptions._vfs->updateMetadata(filePath, item->_modtime, item->_size, item->_fileId, &error)) {
                     item->_instruction = CSYNC_INSTRUCTION_ERROR;
-                    item->_errorString = tr("Could not update virtual file metadata: %1").arg(error);
+                    item->_errorString = tr("Não foi possível atualizar os metadados do arquivo virtual: %1").arg(error);
                     return;
                 }
             }
@@ -374,7 +374,7 @@ void OCC::SyncEngine::slotItemDiscovered(const OCC::SyncFileItemPtr &item)
             // For uploaded conflict files, files with no action performed on them should
             // be displayed: but we mustn't overwrite the instruction if something happens
             // to the file!
-            item->_errorString = tr("Unresolved conflict.");
+            item->_errorString = tr("Conflito não solucionado.");
             item->_instruction = CSYNC_INSTRUCTION_IGNORE;
             item->_status = SyncFileItem::Conflict;
         }
@@ -396,7 +396,11 @@ void OCC::SyncEngine::slotItemDiscovered(const OCC::SyncFileItemPtr &item)
     // if the item is on blacklist, the instruction was set to ERROR
     checkErrorBlacklisting(*item);
     _needsUpdate = true;
-    _syncItems.append(item);
+
+    // Insert sorted
+    auto it = std::lower_bound( _syncItems.begin(), _syncItems.end(), item ); // the _syncItems is sorted
+    _syncItems.insert( it, item );
+
     slotNewItem(item);
 
     if (item->isDirectory()) {
@@ -451,7 +455,7 @@ void SyncEngine::startSync()
             qCWarning(lcEngine()) << "Too little space available at" << _localPath << ". Have"
                                   << freeBytes << "bytes and require at least" << minFree << "bytes";
             _anotherSyncNeeded = DelayedFollowUp;
-            syncError(tr("Only %1 are available, need at least %2 to start",
+            syncError(tr("Apenas %1 estão disponíveis, precisamos de pelo menos %2 para começar",
                 "Placeholders are postfixed with file sizes using Utility::octetsToString()")
                           .arg(
                               Utility::octetsToString(freeBytes),
@@ -484,7 +488,7 @@ void SyncEngine::startSync()
     // This creates the DB if it does not exist yet.
     if (!_journal->open()) {
         qCWarning(lcEngine) << "No way to create a sync journal!";
-        syncError(tr("Unable to open or create the local sync database. Make sure you have write access in the sync folder."));
+        syncError(tr("Não é possível abrir ou criar o banco de dados de sincronização local. Certifique-se de ter acesso de gravação na pasta de sincronização."));
         finalize(false);
         return;
         // database creation error!
@@ -500,7 +504,7 @@ void SyncEngine::startSync()
     _lastLocalDiscoveryStyle = _localDiscoveryStyle;
 
     if (_syncOptions._vfs->mode() == Vfs::WithSuffix && _syncOptions._vfs->fileSuffix().isEmpty()) {
-        syncError(tr("Using virtual files with suffix, but suffix is not set"));
+        syncError(tr("Usando arquivos virtuais com sufixo, mas o sufixo não está definido"));
         finalize(false);
         return;
     }
@@ -512,7 +516,7 @@ void SyncEngine::startSync()
         qCInfo(lcEngine) << (usingSelectiveSync ? "Using Selective Sync" : "NOT Using Selective Sync");
     } else {
         qCWarning(lcEngine) << "Could not retrieve selective sync list from DB";
-        syncError(tr("Unable to read the blacklist from the local database"));
+        syncError(tr("Não é possível ler a lista negra a partir do banco de dados local"));
         finalize(false);
         return;
     }
@@ -543,7 +547,7 @@ void SyncEngine::startSync()
     _discoveryPhase->setSelectiveSyncWhiteList(_journal->getSelectiveSyncList(SyncJournalDb::SelectiveSyncWhiteList, &ok));
     if (!ok) {
         qCWarning(lcEngine) << "Unable to read selective sync list, aborting.";
-        syncError(tr("Unable to read from the sync journal."));
+        syncError(tr("Não é possível ler a partir do relatório de sincronização."));
         finalize(false);
         return;
     }
@@ -627,7 +631,7 @@ void SyncEngine::slotDiscoveryFinished()
     // Sanity check
     if (!_journal->open()) {
         qCWarning(lcEngine) << "Bailing out, DB failure";
-        syncError(tr("Cannot open the sync journal"));
+        syncError(tr("Não é possível abrir o arquivo de sincronização"));
         finalize(false);
         return;
     } else {
@@ -668,13 +672,20 @@ void SyncEngine::slotDiscoveryFinished()
         restoreOldFiles(_syncItems);
     }
 
-    // Sort items per destination
-    std::sort(_syncItems.begin(), _syncItems.end());
+    if (_discoveryPhase->_anotherSyncNeeded && _anotherSyncNeeded == NoFollowUpSync) {
+        _anotherSyncNeeded = ImmediateFollowUp;
+    }
+
+    Q_ASSERT(std::is_sorted(_syncItems.begin(), _syncItems.end()));
+
+    qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate) #################################################### " << _stopWatch.addLapTime(QLatin1String("Reconcile (aboutToPropagate)")) << "ms";
 
     _localDiscoveryPaths.clear();
 
     // To announce the beginning of the sync
     emit aboutToPropagate(_syncItems);
+
+    qCInfo(lcEngine) << "#### Reconcile (aboutToPropagate OK) #################################################### "<< _stopWatch.addLapTime(QLatin1String("Reconcile (aboutToPropagate OK)")) << "ms";
 
     // it's important to do this before ProgressInfo::start(), to announce start of new sync
     _progressInfo->_status = ProgressInfo::Propagation;
@@ -1000,7 +1011,7 @@ void SyncEngine::abort()
         disconnect(_discoveryPhase.data(), 0, this, 0);
         _discoveryPhase.take()->deleteLater();
 
-        syncError(tr("Aborted"));
+        syncError(tr("Abortado"));
         finalize(false);
     }
 }
@@ -1017,14 +1028,14 @@ void SyncEngine::slotSummaryError(const QString &message)
 void SyncEngine::slotInsufficientLocalStorage()
 {
     slotSummaryError(
-        tr("Disk space is low: Downloads that would reduce free space "
-           "below %1 were skipped.")
+        tr("O espaço em disco é pequeno: Os downloads que reduzam o espaço livre "
+           "abaixo de %1 foram ignorados.")
             .arg(Utility::octetsToString(freeSpaceLimit())));
 }
 
 void SyncEngine::slotInsufficientRemoteStorage()
 {
-    auto msg = tr("There is insufficient space available on the server for some uploads.");
+    auto msg = tr("Há espaço disponível no servidor para alguns envios.");
     if (_uniqueErrors.contains(msg))
         return;
 

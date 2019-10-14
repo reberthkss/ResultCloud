@@ -89,8 +89,8 @@ ActivityWidget::ActivityWidget(QWidget *parent)
             showLabels();
     });
 
-    _copyBtn = _ui->_dialogButtonBox->addButton(tr("Copy"), QDialogButtonBox::ActionRole);
-    _copyBtn->setToolTip(tr("Copy the activity list to the clipboard."));
+    _copyBtn = _ui->_dialogButtonBox->addButton(tr("Copiar"), QDialogButtonBox::ActionRole);
+    _copyBtn->setToolTip(tr("Copiar a lista de atividades para a área de transferência."));
     connect(_copyBtn, &QAbstractButton::clicked, this, &ActivityWidget::copyToClipboard);
 
     connect(_model, &QAbstractItemModel::rowsInserted, this, &ActivityWidget::rowsInserted);
@@ -133,16 +133,16 @@ void ActivityWidget::slotRemoveAccount(AccountState *ptr)
 
 void ActivityWidget::showLabels()
 {
-    QString t = tr("Server Activities");
+    QString t = tr("Atividades do Servidor");
     _ui->_headerLabel->setTextFormat(Qt::RichText);
     _ui->_headerLabel->setText(t);
 
-    _ui->_notifyLabel->setText(tr("Action Required: Notifications"));
+    _ui->_notifyLabel->setText(tr("Ação Requerida: Notificações"));
 
     t.clear();
     QSetIterator<QString> i(_accountsWithoutActivities);
     while (i.hasNext()) {
-        t.append(tr("<br/>Account %1 does not have activities enabled.").arg(i.next()));
+        t.append(tr("&lt;br/&gt;A conta %1 não tem atividades ativadas.").arg(i.next()));
     }
     _ui->_bottomLabel->setTextFormat(Qt::RichText);
     _ui->_bottomLabel->setText(t);
@@ -346,20 +346,20 @@ void ActivityWidget::slotBuildNotificationDisplay(const ActivityList &list)
         _guiLogTimer.start();
 
         // Assemble a tray notification
-        QString msg = tr("You received %n new notification(s) from %2.", "", accNotified[accNotified.keys().at(0)]).arg(accNotified.keys().at(0));
+        QString msg = tr("Você recebeu %n notificações de %2.", "", accNotified[accNotified.keys().at(0)]).arg(accNotified.keys().at(0));
 
         if (newGuiLogCount >= 2) {
             QString acc1 = accNotified.keys().at(0);
             QString acc2 = accNotified.keys().at(1);
             if (newGuiLogCount == 2) {
                 int notiCount = accNotified[acc1] + accNotified[acc2];
-                msg = tr("You received %n new notification(s) from %1 and %2.", "", notiCount).arg(acc1, acc2);
+                msg = tr("Você recebeu %n nova notificação de %1 e %2.", "", notiCount).arg(acc1, acc2);
             } else {
-                msg = tr("You received new notifications from %1, %2 and other accounts.").arg(acc1, acc2);
+                msg = tr("Você recebeu novas notificações de %1, %2 e outras contas.").arg(acc1, acc2);
             }
         }
 
-        const QString log = tr("%1 Notifications - Action Required").arg(Theme::instance()->appNameGUI());
+        const QString log = tr("%1 Notificações - Ação Requerida").arg(Theme::instance()->appNameGUI());
         emit guiLog(log, msg);
     }
 
@@ -512,14 +512,14 @@ ActivitySettings::ActivitySettings(QWidget *parent)
     _tab = new QTabWidget(this);
     hbox->addWidget(_tab);
     _activityWidget = new ActivityWidget(this);
-    _activityTabId = _tab->addTab(_activityWidget, Theme::instance()->applicationIcon(), tr("Server Activity"));
+    _activityTabId = _tab->addTab(_activityWidget, Theme::instance()->applicationIcon(), tr("Atividade do Servidor"));
     connect(_activityWidget, &ActivityWidget::copyToClipboard, this, &ActivitySettings::slotCopyToClipboard);
     connect(_activityWidget, &ActivityWidget::hideActivityTab, this, &ActivitySettings::setActivityTabHidden);
     connect(_activityWidget, &ActivityWidget::guiLog, this, &ActivitySettings::guiLog);
     connect(_activityWidget, &ActivityWidget::newNotification, this, &ActivitySettings::slotShowActivityTab);
 
     _protocolWidget = new ProtocolWidget(this);
-    _protocolTabId = _tab->addTab(_protocolWidget, Theme::instance()->syncStateIcon(SyncResult::Success), tr("Sync Protocol"));
+    _protocolTabId = _tab->addTab(_protocolWidget, Theme::instance()->syncStateIcon(SyncResult::Success), tr("Protocolo de Sincronização"));
     connect(_protocolWidget, &ProtocolWidget::copyToClipboard, this, &ActivitySettings::slotCopyToClipboard);
 
     _issuesWidget = new IssuesWidget(this);
@@ -560,7 +560,7 @@ void ActivitySettings::setActivityTabHidden(bool hidden)
     }
 
     if (!hidden && _activityTabId == -1) {
-        _activityTabId = _tab->insertTab(0, _activityWidget, Theme::instance()->applicationIcon(), tr("Server Activity"));
+        _activityTabId = _tab->insertTab(0, _activityWidget, Theme::instance()->applicationIcon(), tr("Atividade do Servidor"));
         _protocolTabId += 1;
         _syncIssueTabId += 1;
     }
@@ -568,10 +568,10 @@ void ActivitySettings::setActivityTabHidden(bool hidden)
 
 void ActivitySettings::slotShowIssueItemCount(int cnt)
 {
-    QString cntText = tr("Not Synced");
+    QString cntText = tr("Não Sincronizado");
     if (cnt) {
         //: %1 is the number of not synced files.
-        cntText = tr("Not Synced (%1)").arg(cnt);
+        cntText = tr("Não sincronizada (%1)").arg(cnt);
     }
     _tab->setTabText(_syncIssueTabId, cntText);
 }
@@ -603,19 +603,19 @@ void ActivitySettings::slotCopyToClipboard()
     if (idx == _activityTabId) {
         // the activity widget
         _activityWidget->storeActivityList(ts);
-        message = tr("The server activity list has been copied to the clipboard.");
+        message = tr("A lista de atividades do servidor tem sido copiados para o clipboard.");
     } else if (idx == _protocolTabId) {
         // the protocol widget
         _protocolWidget->storeSyncActivity(ts);
-        message = tr("The sync activity list has been copied to the clipboard.");
+        message = tr("A lista de atividades do servidor foi copiada para a área de transferência.");
     } else if (idx == _syncIssueTabId) {
         // issues Widget
-        message = tr("The list of unsynced items has been copied to the clipboard.");
+        message = tr("A lista de itens não sincronizados foi copiada para a área de transferência.");
         _issuesWidget->storeSyncIssues(ts);
     }
 
     QApplication::clipboard()->setText(text);
-    emit guiLog(tr("Copied to clipboard"), message);
+    emit guiLog(tr("Copiado para área de transferência"), message);
 }
 
 void ActivitySettings::slotRemoveAccount(AccountState *ptr)

@@ -14,13 +14,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>SSL client certificate authentication</string>
+   <string>Cerificado SSL de autenticação de cliente</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0" colspan="4">
     <widget class="QLabel" name="labelErrorMessage">
      <property name="text">
-      <string>This server probably requires a SSL client certificate.</string>
+      <string>Este servidor provavelmente requer um certificado SSL de cliente.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -30,7 +30,7 @@
    <item row="1" column="0" colspan="2">
     <widget class="QLabel" name="labelCertificateFile">
      <property name="text">
-      <string>Certificate &amp; Key (pkcs12) :</string>
+      <string>Chave &amp; Certificado (pkcs12) :</string>
      </property>
     </widget>
    </item>
@@ -44,14 +44,14 @@
    <item row="1" column="3">
     <widget class="QPushButton" name="pushButtonBrowseCertificate">
      <property name="text">
-      <string>Browse...</string>
+      <string>Procurar...</string>
      </property>
     </widget>
    </item>
    <item row="2" column="1">
     <widget class="QLabel" name="labelPWDCertificate">
      <property name="text">
-      <string>Certificate password :</string>
+      <string>Senha do certificado:</string>
      </property>
     </widget>
    </item>
@@ -68,7 +68,7 @@
    <item row="3" column="0" colspan="4">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>An encrypted pkcs12 bundle is strongly recommended as a copy will be stored in the configuration file.</string>
+      <string>Um pacote criptografado pkcs12 é altamente recomendado, pois uma cópia será armazenada no arquivo de configuração.</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>

@@ -30,35 +30,35 @@ QString Progress::asResultString(const SyncFileItem &item)
     case CSYNC_INSTRUCTION_TYPE_CHANGE:
         if (item._direction != SyncFileItem::Up) {
             if (item._type == ItemTypeVirtualFile) {
-                return QCoreApplication::translate("progress", "Virtual file created");
+                return QCoreApplication::translate("progress", "Arquivo virtual criado");
             } else if (item._type == ItemTypeVirtualFileDehydration) {
-                return QCoreApplication::translate("progress", "Replaced by virtual file");
+                return QCoreApplication::translate("progress", "Substituído por arquivo virtual");
             } else {
-                return QCoreApplication::translate("progress", "Downloaded");
+                return QCoreApplication::translate("progress", "Baixado");
             }
         } else {
-            return QCoreApplication::translate("progress", "Uploaded");
+            return QCoreApplication::translate("progress", "Enviado");
         }
     case CSYNC_INSTRUCTION_CONFLICT:
-        return QCoreApplication::translate("progress", "Server version downloaded, copied changed local file into conflict file");
+        return QCoreApplication::translate("progress", "Versão do servidor baixada, copiada a modificação do local do arquivo dentro do arquivo de conflito");
     case CSYNC_INSTRUCTION_REMOVE:
-        return QCoreApplication::translate("progress", "Deleted");
+        return QCoreApplication::translate("progress", "Excluído");
     case CSYNC_INSTRUCTION_EVAL_RENAME:
     case CSYNC_INSTRUCTION_RENAME:
-        return QCoreApplication::translate("progress", "Moved to %1").arg(item._renameTarget);
+        return QCoreApplication::translate("progress", "Movido para %1").arg(item._renameTarget);
     case CSYNC_INSTRUCTION_IGNORE:
-        return QCoreApplication::translate("progress", "Ignored");
+        return QCoreApplication::translate("progress", "Ignorado");
     case CSYNC_INSTRUCTION_STAT_ERROR:
-        return QCoreApplication::translate("progress", "Filesystem access error");
+        return QCoreApplication::translate("progress", "Erro ao acesso do sistema de arquivos");
     case CSYNC_INSTRUCTION_ERROR:
-        return QCoreApplication::translate("progress", "Error");
+        return QCoreApplication::translate("progress", "Erro");
     case CSYNC_INSTRUCTION_UPDATE_METADATA:
-        return QCoreApplication::translate("progress", "Updated local metadata");
+        return QCoreApplication::translate("progress", "Metadado local enviado");
     case CSYNC_INSTRUCTION_NONE:
     case CSYNC_INSTRUCTION_EVAL:
-        return QCoreApplication::translate("progress", "Unknown");
+        return QCoreApplication::translate("progress", "Desconhecido");
     }
-    return QCoreApplication::translate("progress", "Unknown");
+    return QCoreApplication::translate("progress", "Desconhecido");
 }
 
 QString Progress::asActionString(const SyncFileItem &item)
@@ -69,22 +69,22 @@ QString Progress::asActionString(const SyncFileItem &item)
     case CSYNC_INSTRUCTION_NEW:
     case CSYNC_INSTRUCTION_TYPE_CHANGE:
         if (item._direction != SyncFileItem::Up)
-            return QCoreApplication::translate("progress", "downloading");
+            return QCoreApplication::translate("progress", "baixando");
         else
-            return QCoreApplication::translate("progress", "uploading");
+            return QCoreApplication::translate("progress", "enviando");
     case CSYNC_INSTRUCTION_REMOVE:
-        return QCoreApplication::translate("progress", "deleting");
+        return QCoreApplication::translate("progress", "deletando");
     case CSYNC_INSTRUCTION_EVAL_RENAME:
     case CSYNC_INSTRUCTION_RENAME:
-        return QCoreApplication::translate("progress", "moving");
+        return QCoreApplication::translate("progress", "movendo");
     case CSYNC_INSTRUCTION_IGNORE:
-        return QCoreApplication::translate("progress", "ignoring");
+        return QCoreApplication::translate("progress", "ignorando");
     case CSYNC_INSTRUCTION_STAT_ERROR:
-        return QCoreApplication::translate("progress", "error");
+        return QCoreApplication::translate("progress", "erro");
     case CSYNC_INSTRUCTION_ERROR:
-        return QCoreApplication::translate("progress", "error");
+        return QCoreApplication::translate("progress", "ero");
     case CSYNC_INSTRUCTION_UPDATE_METADATA:
-        return QCoreApplication::translate("progress", "updating local metadata");
+        return QCoreApplication::translate("progress", "atualizando local da metadata");
     case CSYNC_INSTRUCTION_NONE:
     case CSYNC_INSTRUCTION_EVAL:
         break;

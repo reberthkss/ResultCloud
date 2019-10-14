@@ -112,7 +112,7 @@ void FolderWatcher::startNotificationTestWhenReady()
 
     QTimer::singleShot(5000, this, [this]() {
         if (!_testNotificationPath.isEmpty())
-            emit becameUnreliable(tr("The watcher did not receive a test notification."));
+            emit becameUnreliable(tr("O observador não recebeu uma notificação de teste."));
         _testNotificationPath.clear();
     });
 }

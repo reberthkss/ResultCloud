@@ -17,30 +17,30 @@
    <item>
     <widget class="QGroupBox" name="generalGroupBox">
      <property name="title">
-      <string>General Settings</string>
+      <string>Configuração Geral</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
        <widget class="QCheckBox" name="autostartCheckBox">
         <property name="text">
-         <string>&amp;Launch on System Startup</string>
+         <string>&amp;Executar na Inicialização do Sistema</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
        <widget class="QCheckBox" name="desktopNotificationsCheckBox">
         <property name="text">
-         <string>Show &amp;Desktop Notifications</string>
+         <string>Mostrar Notificações no &amp;Desktop</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QCheckBox" name="monoIconsCheckBox">
         <property name="toolTip">
-         <string>For System Tray</string>
+         <string>Para Bandeja do Sistema</string>
         </property>
         <property name="text">
-         <string>Use &amp;Monochrome Icons</string>
+         <string>Usar Icones &amp;Monocromáticos</string>
         </property>
        </widget>
       </item>
@@ -50,7 +50,7 @@
    <item>
     <widget class="QGroupBox" name="advancedGroupBox">
      <property name="title">
-      <string>Advanced</string>
+      <string>Avançado</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -58,7 +58,7 @@
         <item>
          <widget class="QPushButton" name="ignoredFilesButton">
           <property name="text">
-           <string>Edit &amp;Ignored Files</string>
+           <string>Editar Arquivos &amp;Ignorados</string>
           </property>
          </widget>
         </item>
@@ -82,7 +82,7 @@
         <item>
          <widget class="QCheckBox" name="newFolderLimitCheckBox">
           <property name="text">
-           <string>Ask for confirmation before synchronizing folders larger than</string>
+           <string>Solicite confirmação antes de sincronizar pastas maiores que</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -126,7 +126,7 @@
         <item>
          <widget class="QCheckBox" name="newExternalStorage">
           <property name="text">
-           <string>Ask for confirmation before synchronizing external storages</string>
+           <string>Pedir confirmação antes de sincronizar os armazenamentos externos</string>
           </property>
          </widget>
         </item>
@@ -137,7 +137,7 @@
         <item>
          <widget class="QCheckBox" name="showInExplorerNavigationPaneCheckBox">
           <property name="text">
-           <string>Show sync folders in &amp;Explorer's Navigation Pane</string>
+           <string>Mostrar pastas de sincronização no &amp;Painel de navegação do Explorer</string>
           </property>
          </widget>
         </item>
@@ -154,7 +154,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>S&amp;how crash reporter</string>
+           <string>M&amp;ostrar relatório de acidente</string>
           </property>
          </widget>
         </item>
@@ -174,7 +174,7 @@
         <item>
          <widget class="QCheckBox" name="deltaSyncCheckBox">
           <property name="text">
-           <string>Enable Delta-Synchronization for files larger than</string>
+           <string>Ative a Sincronização-Delta para arquivos maiores que</string>
           </property>
          </widget>
         </item>
@@ -213,7 +213,7 @@
    <item>
     <widget class="QGroupBox" name="versionGroupBox">
      <property name="title">
-      <string>Version</string>
+      <string>Versão</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
@@ -240,7 +240,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&amp;Update Channel</string>
+            <string>&amp;Atualizar o Canal</string>
            </property>
            <property name="buddy">
             <cstring>updateChannel</cstring>
@@ -257,7 +257,7 @@
            </property>
            <item>
             <property name="text">
-             <string>stable</string>
+             <string>estável</string>
             </property>
            </item>
            <item>
@@ -289,7 +289,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>&amp;Restart &amp;&amp; Update</string>
+            <string>&amp;Reiniciar &amp;&amp; Atualização</string>
            </property>
           </widget>
          </item>

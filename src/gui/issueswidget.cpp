@@ -88,10 +88,10 @@ IssuesWidget::IssuesWidget(QWidget *parent)
 
     // Adjust copyToClipboard() when making changes here!
     QStringList header;
-    header << tr("Time");
-    header << tr("File");
-    header << tr("Folder");
-    header << tr("Issue");
+    header << tr("Horário");
+    header << tr("Arquivo");
+    header << tr("Pasta");
+    header << tr("Problemas");
 
     int timestampColumnExtra = 0;
 #ifdef Q_OS_WIN
@@ -123,7 +123,7 @@ IssuesWidget::IssuesWidget(QWidget *parent)
 
     _ui->_conflictHelp->hide();
     _ui->_conflictHelp->setText(
-        tr("There were conflicts. <a href=\"%1\">Check the documentation on how to resolve them.</a>")
+        tr("Houve conflitos.&lt;a href=&quot;%1&quot;&gt;Verifique a documentação sobre como resolvê-los.&lt;/a&gt;")
             .arg(Theme::instance()->conflictHelpUrl()));
 }
 
@@ -515,7 +515,7 @@ void IssuesWidget::addErrorWidget(QTreeWidgetItem *item, const QString &message,
         label->setElideMode(Qt::ElideMiddle);
         layout->addWidget(label);
 
-        auto button = new QPushButton("Retry all uploads", widget);
+        auto button = new QPushButton("Tentar enviar todos arquivos", widget);
         button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Expanding);
         auto folderAlias = ProtocolItem::extraData(item).folderName;
         connect(button, &QPushButton::clicked,

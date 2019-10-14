@@ -46,9 +46,9 @@ QString FormatWarningsWizardPage::formatWarnings(const QStringList &warnings) co
 {
     QString ret;
     if (warnings.count() == 1) {
-        ret = tr("<b>Warning:</b> %1").arg(warnings.first());
+        ret = tr("&lt;b&gt;Alerta:&lt;/b&gt; %1").arg(warnings.first());
     } else if (warnings.count() > 1) {
-        ret = tr("<b>Warning:</b>") + " <ul>";
+        ret = tr("&lt;b&gt;Alerta:&lt;/b&gt;") + " <ul>";
         Q_FOREACH (QString warning, warnings) {
             ret += QString::fromLatin1("<li>%1</li>").arg(warning);
         }
@@ -65,14 +65,14 @@ FolderWizardLocalPath::FolderWizardLocalPath(const AccountPtr &account)
     _ui.setupUi(this);
     registerField(QLatin1String("sourceFolder*"), _ui.localFolderLineEdit);
     connect(_ui.localFolderChooseBtn, &QAbstractButton::clicked, this, &FolderWizardLocalPath::slotChooseLocalFolder);
-    _ui.localFolderChooseBtn->setToolTip(tr("Click to select a local folder to sync."));
+    _ui.localFolderChooseBtn->setToolTip(tr("Clique para selecionar uma pasta local para sincronização."));
 
     QUrl serverUrl = _account->url();
     serverUrl.setUserName(_account->credentials()->user());
     QString defaultPath = QDir::homePath() + QLatin1Char('/') + Theme::instance()->appName();
     defaultPath = FolderMan::instance()->findGoodPathForNewSyncFolder(defaultPath, serverUrl);
     _ui.localFolderLineEdit->setText(QDir::toNativeSeparators(defaultPath));
-    _ui.localFolderLineEdit->setToolTip(tr("Enter the path to the local folder."));
+    _ui.localFolderLineEdit->setToolTip(tr("Entre com o caminha para a pasta local."));
 
     _ui.warnLabel->setTextFormat(Qt::RichText);
     _ui.warnLabel->hide();
@@ -133,7 +133,7 @@ void FolderWizardLocalPath::slotChooseLocalFolder()
         sf += "/" + dirs.at(0); // Take the first dir in home dir.
 
     QString dir = QFileDialog::getExistingDirectory(this,
-        tr("Select the source folder"),
+        tr("Selecione a pasta de origem"),
         sf);
     if (!dir.isEmpty()) {
         // set the last directory component name as alias
@@ -181,8 +181,8 @@ void FolderWizardRemotePath::slotAddRemoteFolder()
 
     QInputDialog *dlg = new QInputDialog(this);
 
-    dlg->setWindowTitle(tr("Create Remote Folder"));
-    dlg->setLabelText(tr("Enter the name of the new folder to be created below '%1':")
+    dlg->setWindowTitle(tr("Criar uma Pasta Remota"));
+    dlg->setLabelText(tr("Entre com o nome da nova pasta a ser criada abaixo &apos;%1&apos;:")
                           .arg(parent));
     dlg->open(this, SLOT(slotCreateRemoteFolder(QString)));
     dlg->setAttribute(Qt::WA_DeleteOnClose);
@@ -212,7 +212,7 @@ void FolderWizardRemotePath::slotCreateRemoteFolderFinished(QNetworkReply::Netwo
 {
     if (error == QNetworkReply::NoError) {
         qCDebug(lcWizard) << "webdav mkdir request finished";
-        showWarn(tr("Folder was successfully created on %1.").arg(Theme::instance()->appNameGUI()));
+        showWarn(tr("Pasta foi criada com sucesso em %1.").arg(Theme::instance()->appNameGUI()));
         slotRefreshFolders();
         _ui.folderEntry->setText(static_cast<MkColJob *>(sender())->path());
         slotLsColFolderEntry();
@@ -223,9 +223,9 @@ void FolderWizardRemotePath::slotHandleMkdirNetworkError(QNetworkReply *reply)
 {
     qCWarning(lcWizard) << "webdav mkdir request failed:" << reply->error();
     if (!_account->credentials()->stillValid(reply)) {
-        showWarn(tr("Authentication failed accessing %1").arg(Theme::instance()->appNameGUI()));
+        showWarn(tr("Falha na autenticação acessando %1").arg(Theme::instance()->appNameGUI()));
     } else {
-        showWarn(tr("Failed to create the folder on %1. Please check manually.")
+        showWarn(tr("Falha ao criar a pasta em %1. Por favor, verifique manualmente.")
                      .arg(Theme::instance()->appNameGUI()));
     }
 }
@@ -234,7 +234,7 @@ void FolderWizardRemotePath::slotHandleLsColNetworkError(QNetworkReply * /*reply
 {
     auto job = qobject_cast<LsColJob *>(sender());
     ASSERT(job);
-    showWarn(tr("Failed to list a folder. Error: %1")
+    showWarn(tr("Falha ao listar uma pasta. Erro: %1")
                  .arg(job->errorStringParsingBody()));
 }
 
@@ -315,7 +315,7 @@ void FolderWizardRemotePath::slotUpdateDirectories(const QStringList &list)
         root = new QTreeWidgetItem(_ui.folderTreeWidget);
         root->setText(0, Theme::instance()->appNameGUI());
         root->setIcon(0, Theme::instance()->applicationIcon());
-        root->setToolTip(0, tr("Choose this to sync the entire account"));
+        root->setToolTip(0, tr("Escolha esta opção para sincronizar a conta inteira"));
         root->setData(0, Qt::UserRole, "/");
     }
     QStringList sortedList = list;
@@ -442,9 +442,9 @@ bool FolderWizardRemotePath::isComplete() const
         }
         QString curDir = f->remotePathTrailingSlash();
         if (QDir::cleanPath(dir) == QDir::cleanPath(curDir)) {
-            warnStrings.append(tr("This folder is already being synced."));
+            warnStrings.append(tr("Esta pasta já está sendo sincronizada."));
         } else if (dir.startsWith(curDir)) {
-            warnStrings.append(tr("You are already syncing <i>%1</i>, which is a parent folder of <i>%2</i>.").arg(Utility::escape(curDir), Utility::escape(dir)));
+            warnStrings.append(tr("Você já está sincronizando &lt;i&gt;%1&lt;/i&gt;, que é uma pasta mãe de &lt;i&gt;%2&lt;/i&gt;.").arg(Utility::escape(curDir), Utility::escape(dir)));
         }
     }
 
@@ -483,7 +483,8 @@ FolderWizardSelectiveSync::FolderWizardSelectiveSync(const AccountPtr &account)
     layout->addWidget(_selectiveSync);
 
     if (Theme::instance()->showVirtualFilesOption() && bestAvailableVfsMode() != Vfs::Off) {
-        _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately (experimental)"));
+        _virtualFilesCheckBox = new QCheckBox(tr("Use virtual files instead of downloading content immediately %1").arg(
+                                                  bestAvailableVfsMode() == Vfs::WindowsCfApi ? tr("(tech preview)") : tr("(experimental)")));
         connect(_virtualFilesCheckBox, &QCheckBox::clicked, this, &FolderWizardSelectiveSync::virtualFilesCheckboxClicked);
         connect(_virtualFilesCheckBox, &QCheckBox::stateChanged, this, [this](int state) {
             _selectiveSync->setEnabled(state == Qt::Unchecked);
@@ -568,9 +569,9 @@ FolderWizard::FolderWizard(AccountPtr account, QWidget *parent)
     }
     setPage(Page_SelectiveSync, _folderWizardSelectiveSyncPage);
 
-    setWindowTitle(tr("Add Folder Sync Connection"));
+    setWindowTitle(tr("Adicionar Conexão de Sincronização de pasta"));
     setOptions(QWizard::CancelButtonOnLeft);
-    setButtonText(QWizard::FinishButton, tr("Add Sync Connection"));
+    setButtonText(QWizard::FinishButton, tr("Adicionar Conexão de Sincronização"));
 }
 
 FolderWizard::~FolderWizard()

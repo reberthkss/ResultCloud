@@ -89,7 +89,7 @@ SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
 
     // Note: all the actions have a '\n' because the account name is in two lines and
     // all buttons must have the same size in order to keep a good layout
-    _activityAction = createColorAwareAction(QLatin1String(":/client/resources/activity.png"), tr("Activity"));
+    _activityAction = createColorAwareAction(QLatin1String(":/client/resources/activity.png"), tr("Atividade"));
     _actionGroup->addAction(_activityAction);
     _toolBar->addAction(_activityAction);
     _activitySettings = new ActivitySettings;
@@ -98,14 +98,14 @@ SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
         &ownCloudGui::slotShowOptionalTrayMessage);
     _activitySettings->setNotificationRefreshInterval(cfg.notificationRefreshInterval());
 
-    QAction *generalAction = createColorAwareAction(QLatin1String(":/client/resources/settings.png"), tr("General"));
+    QAction *generalAction = createColorAwareAction(QLatin1String(":/client/resources/settings.png"), tr("Geral"));
     _actionGroup->addAction(generalAction);
     _toolBar->addAction(generalAction);
     GeneralSettings *generalSettings = new GeneralSettings;
     _ui->stack->addWidget(generalSettings);
     QObject::connect(generalSettings, &GeneralSettings::showAbout, gui, &ownCloudGui::slotAbout);
 
-    QAction *networkAction = createColorAwareAction(QLatin1String(":/client/resources/network.png"), tr("Network"));
+    QAction *networkAction = createColorAwareAction(QLatin1String(":/client/resources/network.png"), tr("Rede"));
     _actionGroup->addAction(networkAction);
     _toolBar->addAction(networkAction);
     NetworkSettings *networkSettings = new NetworkSettings;
@@ -148,6 +148,11 @@ SettingsDialog::SettingsDialog(ownCloudGui *gui, QWidget *parent)
 SettingsDialog::~SettingsDialog()
 {
     delete _ui;
+}
+
+QWidget* SettingsDialog::currentPage()
+{
+    return _ui->stack->currentWidget();
 }
 
 // close event is not being called here
@@ -216,7 +221,7 @@ void SettingsDialog::accountAdded(AccountState *s)
 
     QAction *accountAction;
     QImage avatar = s->account()->avatar();
-    const QString actionText = brandingSingleAccount ? tr("Account") : s->account()->displayName();
+    const QString actionText = brandingSingleAccount ? tr("Conta") : s->account()->displayName();
     if (avatar.isNull()) {
         accountAction = createColorAwareAction(QLatin1String(":/client/resources/account.png"),
             actionText);
@@ -231,7 +236,11 @@ void SettingsDialog::accountAdded(AccountState *s)
     }
     _toolBar->insertAction(_toolBar->actions().at(0), accountAction);
     auto accountSettings = new AccountSettings(s, this);
-    _ui->stack->insertWidget(0, accountSettings);
+    QString objectName = QLatin1String("accountSettings_");
+    objectName += s->account()->displayName();
+    accountSettings->setObjectName(objectName);
+    _ui->stack->insertWidget(0 , accountSettings);
+
     _actionGroup->addAction(accountAction);
     _actionGroupWidgets.insert(accountAction, accountSettings);
     _actionForAccount.insert(s->account().data(), accountAction);
@@ -363,6 +372,10 @@ public:
         }
 
         QToolButton *btn = new QToolButton(parent);
+        QString objectName = QLatin1String("settingsdialog_toolbutton_");
+        objectName += text();
+        btn->setObjectName(objectName);
+
         btn->setDefaultAction(this);
         btn->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
         btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);

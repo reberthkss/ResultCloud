@@ -137,9 +137,9 @@ void ActivityItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     QString timeStr;
     if (accountOnline) {
-        timeStr = tr("%1 on %2").arg(timeText, accountRole);
+        timeStr = tr("%1 em %2").arg(timeText, accountRole);
     } else {
-        timeStr = tr("%1 on %2 (disconnected)").arg(timeText, accountRole);
+        timeStr = tr("%1 em %2 (disconectado)").arg(timeText, accountRole);
         QPalette p = option.palette;
         painter->setPen(p.color(QPalette::Disabled, QPalette::Text));
     }

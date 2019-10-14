@@ -85,27 +85,27 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
 
     stream << QLatin1String("<html><body>");
 
-    stream << tr("<h3>Certificate Details</h3>");
+    stream << tr("&lt;h3&gt; Detalhes do Certificado &lt;/h3&gt;");
 
     stream << QLatin1String("<table>");
-    stream << addCertDetailsField(tr("Common Name (CN):"), Utility::escape(cn));
-    stream << addCertDetailsField(tr("Subject Alternative Names:"), Utility::escape(sna).replace(" ", "<br/>"));
-    stream << addCertDetailsField(tr("Organization (O):"), Utility::escape(org));
-    stream << addCertDetailsField(tr("Organizational Unit (OU):"), Utility::escape(ou));
-    stream << addCertDetailsField(tr("State/Province:"), Utility::escape(state));
-    stream << addCertDetailsField(tr("Country:"), Utility::escape(country));
-    stream << addCertDetailsField(tr("Serial:"), Utility::escape(serial));
+    stream << addCertDetailsField(tr("Nome Comum (CN):"), Utility::escape(cn));
+    stream << addCertDetailsField(tr("Assunto Nomes Alternativos:"), Utility::escape(sna).replace(" ", "<br/>"));
+    stream << addCertDetailsField(tr("Organização (O):"), Utility::escape(org));
+    stream << addCertDetailsField(tr("Unidade Organizacional (OU):"), Utility::escape(ou));
+    stream << addCertDetailsField(tr("Estado/Província:"), Utility::escape(state));
+    stream << addCertDetailsField(tr("País:"), Utility::escape(country));
+    stream << addCertDetailsField(tr("Série:"), Utility::escape(serial));
     stream << QLatin1String("</table>");
 
-    stream << tr("<h3>Issuer</h3>");
+    stream << tr("&lt;h3&gt;Emissor&lt;/h3&gt;");
 
     stream << QLatin1String("<table>");
-    stream << addCertDetailsField(tr("Issuer:"), Utility::escape(issuer));
-    stream << addCertDetailsField(tr("Issued on:"), Utility::escape(effectiveDate));
-    stream << addCertDetailsField(tr("Expires on:"), Utility::escape(expiryDate));
+    stream << addCertDetailsField(tr("Emissor:"), Utility::escape(issuer));
+    stream << addCertDetailsField(tr("Emitido em:"), Utility::escape(effectiveDate));
+    stream << addCertDetailsField(tr("Expira em:"), Utility::escape(expiryDate));
     stream << QLatin1String("</table>");
 
-    stream << tr("<h3>Fingerprints</h3>");
+    stream << tr("&lt;h3&gt;Impressões Digitais&lt;/h3&gt;");
 
     stream << QLatin1String("<table>");
 
@@ -114,7 +114,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
     stream << QLatin1String("</table>");
 
     if (userApproved.contains(cert)) {
-        stream << tr("<p><b>Note:</b> This certificate was manually approved</p>");
+        stream << tr("&lt;p&gt;&lt;b&gt; Nota:&lt;/b&gt;Este certificado foi aprovado manualmente&lt;/p&gt;");
     }
     stream << QLatin1String("</body></html>");
 
@@ -134,7 +134,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
         txt += certId;
     } else {
         if (isSelfSigned(cert)) {
-            txt += tr("%1 (self-signed)").arg(certId);
+            txt += tr("%1 (auto-assinado)").arg(certId);
         } else {
             txt += tr("%1").arg(certId);
         }
@@ -171,10 +171,10 @@ void SslButton::updateAccountState(AccountState *accountState)
     if (account->url().scheme() == QLatin1String("https")) {
         setIcon(QIcon(QLatin1String(":/client/resources/lock-https.png")));
         QSslCipher cipher = account->_sessionCipher;
-        setToolTip(tr("This connection is encrypted using %1 bit %2.\n").arg(cipher.usedBits()).arg(cipher.name()));
+        setToolTip(tr("Esta conexão é criptografada usando %1 bit %2.").arg(cipher.usedBits()).arg(cipher.name()));
     } else {
         setIcon(QIcon(QLatin1String(":/client/resources/lock-http.png")));
-        setToolTip(tr("This connection is NOT secure as it is not encrypted.\n"));
+        setToolTip(tr("Esta conexão NÃO é criptografada\n"));
     }
 }
 
@@ -188,7 +188,7 @@ void SslButton::slotUpdateMenu()
 
     AccountPtr account = _accountState->account();
 
-    _menu->addAction(tr("Server version: %1").arg(account->serverVersion()))->setEnabled(false);
+    _menu->addAction(tr("Versão do servidor: %1").arg(account->serverVersion()))->setEnabled(false);
 
     if (account->isHttp2Supported()) {
         _menu->addAction("HTTP/2")->setEnabled(false);
@@ -202,7 +202,7 @@ void SslButton::slotUpdateMenu()
         _menu->addAction(sslVersion)->setEnabled(false);
 
         if (account->_sessionTicket.isEmpty()) {
-            _menu->addAction(tr("No support for SSL session tickets/identifiers"))->setEnabled(false);
+            _menu->addAction(tr("Não há suporte para sessão SSL tickets/identificadores"))->setEnabled(false);
         }
 
         QList<QSslCertificate> chain = account->_peerCertificateChain;
@@ -212,7 +212,7 @@ void SslButton::slotUpdateMenu()
             return;
         }
 
-        _menu->addAction(tr("Certificate information:"))->setEnabled(false);
+        _menu->addAction(tr("Informações do certificado:"))->setEnabled(false);
 
         const auto systemCerts = QSslConfiguration::systemCaCertificates();
 
@@ -241,7 +241,7 @@ void SslButton::slotUpdateMenu()
             i++;
         }
     } else {
-        _menu->addAction(tr("The connection is not secure"))->setEnabled(false);
+        _menu->addAction(tr("A conexão não é segura"))->setEnabled(false);
     }
 }
 

@@ -44,7 +44,7 @@ ConnectionValidator::ConnectionValidator(AccountPtr account, QObject *parent)
 void ConnectionValidator::checkServerAndAuth()
 {
     if (!_account) {
-        _errors << tr("No ownCloud account configured");
+        _errors << tr("Nenhuma conta Result Cloud Storage configurada");
         reportResult(NotConfigured);
         return;
     }
@@ -147,7 +147,7 @@ void ConnectionValidator::slotNoStatusFound(QNetworkReply *reply)
 
     if (!_account->credentials()->stillValid(reply)) {
         // Note: Why would this happen on a status.php request?
-        _errors.append(tr("Authentication error: Either username or password are wrong."));
+        _errors.append(tr("Erro de autenticação. Ou nome de usuário ou senha está errada."));
     } else {
         //_errors.append(tr("Unable to connect to %1").arg(_account->url().toString()));
         _errors.append(job->errorString());
@@ -159,7 +159,7 @@ void ConnectionValidator::slotJobTimeout(const QUrl &url)
 {
     Q_UNUSED(url);
     //_errors.append(tr("Unable to connect to %1").arg(url.toString()));
-    _errors.append(tr("timeout"));
+    _errors.append(tr("tempo limite"));
     reportResult(Timeout);
 }
 
@@ -196,7 +196,7 @@ void ConnectionValidator::slotAuthFailed(QNetworkReply *reply)
     } else if (reply->error() == QNetworkReply::AuthenticationRequiredError
         || !_account->credentials()->stillValid(reply)) {
         qCWarning(lcConnectionValidator) << "******** Password is wrong!" << reply->error() << job->errorString();
-        _errors << tr("The provided credentials are not correct");
+        _errors << tr("As credenciais fornecidas não estão corretas");
         stat = CredentialsWrong;
 
     } else if (reply->error() != QNetworkReply::NoError) {
@@ -285,8 +285,8 @@ bool ConnectionValidator::setAndCheckServerVersion(const QString &version)
     // We cannot deal with servers < 7.0.0
     if (_account->serverVersionInt()
         && _account->serverVersionInt() < Account::makeServerVersion(7, 0, 0)) {
-        _errors.append(tr("The configured server for this client is too old"));
-        _errors.append(tr("Please update to the latest server and restart the client."));
+        _errors.append(tr("O servidor configurado para este cliente é muito antigo"));
+        _errors.append(tr("Por favor, atualize para o último servidor e reinicie o cliente."));
         reportResult(ServerVersionMismatch);
         return false;
     }

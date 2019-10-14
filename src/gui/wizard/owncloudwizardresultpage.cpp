@@ -33,11 +33,11 @@ OwncloudWizardResultPage::OwncloudWizardResultPage()
     _ui.setupUi(this);
     // no fields to register.
 
-    setTitle(WizardCommon::subTitleTemplate().arg(tr("Everything set up!")));
+    setTitle(WizardCommon::subTitleTemplate().arg(tr("Tudo configurado!")));
     // required to show header in QWizard's modern style
     setSubTitle(QLatin1String(" "));
 
-    _ui.pbOpenLocal->setText(tr("Open Local Folder"));
+    _ui.pbOpenLocal->setText(tr("Abrir Pasta Local"));
     _ui.pbOpenLocal->setIcon(QIcon(QLatin1String(":/client/resources/folder-sync.png")));
     _ui.pbOpenLocal->setIconSize(QSize(48, 48));
     _ui.pbOpenLocal->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -45,7 +45,7 @@ OwncloudWizardResultPage::OwncloudWizardResultPage()
 
     Theme *theme = Theme::instance();
     QIcon appIcon = theme->applicationIcon();
-    _ui.pbOpenServer->setText(tr("Open %1 in Browser").arg(theme->appNameGUI()));
+    _ui.pbOpenServer->setText(tr("Abrir %1 no Navegador").arg(theme->appNameGUI()));
     _ui.pbOpenServer->setIcon(appIcon.pixmap(48));
     _ui.pbOpenServer->setIconSize(QSize(48, 48));
     _ui.pbOpenServer->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);

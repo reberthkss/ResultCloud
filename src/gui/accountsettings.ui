@@ -39,7 +39,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Connected with &lt;server&gt; as &lt;user&gt;</string>
+         <string>Conectado com &lt;server&gt; como &lt;user&gt;</string>
         </property>
         <property name="textFormat">
          <enum>Qt::RichText</enum>
@@ -76,7 +76,7 @@
         <string/>
        </property>
        <property name="text">
-        <string>Storage space: ...</string>
+        <string>Espaço de armazenamento: ...</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -149,7 +149,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Unchecked folders will be &lt;b&gt;removed&lt;/b&gt; from your local file system and will not be synchronized to this computer anymore</string>
+           <string>Pastas não marcadas serão &lt;b&gt;removidos&lt;/b&gt; de seu sistema de arquivos local e não serão mais sincronizadas com este computador</string>
           </property>
           <property name="textFormat">
            <enum>Qt::RichText</enum>
@@ -195,21 +195,21 @@
              <item>
               <widget class="QPushButton" name="bigFolderSyncAll">
                <property name="text">
-                <string>Synchronize all</string>
+                <string>Sincronizar tudo</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="bigFolderSyncNone">
                <property name="text">
-                <string>Synchronize none</string>
+                <string>Não sincronizar</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QPushButton" name="bigFolderApply">
                <property name="text">
-                <string>Apply manual changes</string>
+                <string>Aplicar alterações manuais</string>
                </property>
               </widget>
              </item>
@@ -244,7 +244,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Cancel</string>
+            <string>Cancelar</string>
            </property>
           </widget>
          </item>
@@ -257,7 +257,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Apply</string>
+            <string>Aplicar</string>
            </property>
           </widget>
          </item>

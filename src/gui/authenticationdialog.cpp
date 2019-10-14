@@ -27,15 +27,15 @@ AuthenticationDialog::AuthenticationDialog(const QString &realm, const QString &
     , _user(new QLineEdit)
     , _password(new QLineEdit)
 {
-    setWindowTitle(tr("Authentication Required"));
+    setWindowTitle(tr("Autenticação é Requerida"));
     QVBoxLayout *lay = new QVBoxLayout(this);
-    QLabel *label = new QLabel(tr("Enter username and password for '%1' at %2.").arg(realm, domain));
+    QLabel *label = new QLabel(tr("Entrar com o nome do usuário e senha para &apos;%1&apos; em %2.").arg(realm, domain));
     label->setTextFormat(Qt::PlainText);
     lay->addWidget(label);
 
     QFormLayout *form = new QFormLayout;
-    form->addRow(tr("&User:"), _user);
-    form->addRow(tr("&Password:"), _password);
+    form->addRow(tr("&amp;Usuário:"), _user);
+    form->addRow(tr("&amp;Senha:"), _password);
     lay->addLayout(form);
     _password->setEchoMode(QLineEdit::Password);
 

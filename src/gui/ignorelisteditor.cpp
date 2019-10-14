@@ -39,15 +39,15 @@ IgnoreListEditor::IgnoreListEditor(QWidget *parent)
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     ui->setupUi(this);
 
-    ui->descriptionLabel->setText(tr("Files or folders matching a pattern will not be synchronized. "
-                                     "Changes take effect the next time folders are synchronized.\n\n"
-                                     "Items where deletion is allowed will be deleted if they prevent a "
-                                     "directory from being removed. "
-                                     "This is useful for meta data."));
+    ui->descriptionLabel->setText(tr("Arquivos ou pastas correspondentes a um padrão não serão sincronizados. "
+                                     "As alterações terão efeito na próxima vez que as pastas forem sincronizadas.\n\n"
+                                     "Os itens em que a exclusão é permitida serão excluídos se impedirem que "
+                                     "um diretório seja removido. "
+                                     "Isso é útil para metadados."));
 
     ConfigFile cfgFile;
-    readOnlyTooltip = tr("This entry is provided by the system at '%1' "
-                         "and cannot be modified in this view.")
+    readOnlyTooltip = tr("Esta entrada é fornecida pelo sistema em &apos;%1&apos; "
+                         " e não pode ser modificado aqui.")
                           .arg(QDir::toNativeSeparators(cfgFile.excludeFile(ConfigFile::SystemScope)));
 
     addPattern(".csync_journal.db*", /*deletable=*/false, /*readonly=*/true, /*global=*/true);
@@ -122,8 +122,8 @@ void IgnoreListEditor::slotUpdateLocalIgnoreList()
             ignores.write(prepend + patternItem->text().toUtf8() + '\n');
         }
     } else {
-        QMessageBox::warning(this, tr("Could not open file"),
-            tr("Cannot write changes to '%1'.").arg(ignoreFile));
+        QMessageBox::warning(this, tr("Não foi possível abrir o arquivo"),
+            tr("Não é possível gravar as alterações em &apos;%1&apos;.").arg(ignoreFile));
     }
     ignores.close(); //close the file before reloading stuff.
 
@@ -149,8 +149,8 @@ void IgnoreListEditor::slotUpdateLocalIgnoreList()
 void IgnoreListEditor::slotAddPattern()
 {
     bool okClicked;
-    QString pattern = QInputDialog::getText(this, tr("Add Ignore Pattern"),
-        tr("Add a new ignore pattern:"),
+    QString pattern = QInputDialog::getText(this, tr("Adicionar Ignorar Padrão"),
+        tr("Adicionar um novo padrão ignorar: "),
         QLineEdit::Normal, QString(), &okClicked);
 
     if (!okClicked || pattern.isEmpty())

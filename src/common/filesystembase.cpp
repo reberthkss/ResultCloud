@@ -390,7 +390,7 @@ bool FileSystem::moveToTrash(const QString &fileName, QString *errorString)
     trashInfoPath = trashPath + "info/"; // trash info path contain delete files information
 
     if (!(QDir().mkpath(trashFilePath) && QDir().mkpath(trashInfoPath))) {
-        *errorString = QCoreApplication::translate("FileSystem", "Could not make directories in trash");
+        *errorString = QCoreApplication::translate("FileSystem", "Não foi possível criar diretórios na lixeira");
         return false; //mkpath will return true if path exists
     }
 
@@ -404,13 +404,13 @@ bool FileSystem::moveToTrash(const QString &fileName, QString *errorString)
             suffix_number++;
         }
         if (!file.rename(f.absoluteFilePath(), path + QString::number(suffix_number))) { // rename(file old path, file trash path)
-            *errorString = QCoreApplication::translate("FileSystem", "Could not move '%1' to '%2'")
+            *errorString = QCoreApplication::translate("FileSystem", "Não foi possível mover &apos;%1&apos; para &apos;%2&apos;")
                                .arg(f.absoluteFilePath(), path + QString::number(suffix_number));
             return false;
         }
     } else {
         if (!file.rename(f.absoluteFilePath(), trashFilePath + f.fileName())) { // rename(file old path, file trash path)
-            *errorString = QCoreApplication::translate("FileSystem", "Could not move '%1' to '%2'")
+            *errorString = QCoreApplication::translate("FileSystem", "Não foi possível mover &apos;%1&apos; para &apos;%2&apos;")
                                .arg(f.absoluteFilePath(), trashFilePath + f.fileName());
             return false;
         }
@@ -447,7 +447,7 @@ bool FileSystem::moveToTrash(const QString &fileName, QString *errorString)
     return true;
 #else
     Q_UNUSED(fileName)
-    *errorString = QCoreApplication::translate("FileSystem", "Moving to the trash is not implemented on this platform");
+    *errorString = QCoreApplication::translate("FileSystem", "Mover para o lixo não está implementado nesta plataforma");
     return false;
 #endif
 }

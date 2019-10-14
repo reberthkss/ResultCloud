@@ -55,7 +55,7 @@ GeneralSettings::GeneralSettings(QWidget *parent)
     if(Utility::hasSystemLaunchOnStartup(Theme::instance()->appName())) {
         _ui->autostartCheckBox->setChecked(true);
         _ui->autostartCheckBox->setDisabled(true);
-        _ui->autostartCheckBox->setToolTip(tr("You cannot disable autostart because system-wide autostart is enabled."));
+        _ui->autostartCheckBox->setToolTip(tr("Não é possível desativar a inicialização automática porque a inicialização automática em todo o sistema está ativada."));
     } else {
         _ui->autostartCheckBox->setChecked(Utility::hasLaunchOnStartup(Theme::instance()->appName()));
         connect(_ui->autostartCheckBox, &QAbstractButton::toggled, this, &GeneralSettings::slotToggleLaunchOnStartup);
@@ -188,22 +188,22 @@ void GeneralSettings::slotUpdateChannelChanged(int index)
 
     auto msgBox = new QMessageBox(
         QMessageBox::Warning,
-        tr("Change update channel?"),
-        tr("The update channel determines which client updates will be offered "
-           "for installation. The \"stable\" channel contains only upgrades that "
-           "are considered reliable, while the versions in the \"beta\" channel "
-           "may contain newer features and bugfixes, but have not yet been tested "
-           "thoroughly."
+        tr("Alterar canal de atualização?"),
+        tr("O canal de atualização determina quais atualizações de cliente serão oferecidas "
+           "para instalação.O canal &quot;estável&quot; contém apenas atualizações  "
+           "consideradas confiáveis, enquanto as versões no canal &quot;beta&quot; "
+           "podem conter recursos e correções de bugs mais recentes, mas ainda não foram totalmente "
+           "testados."
            "\n\n"
-           "Note that this selects only what pool upgrades are taken from, and that "
-           "there are no downgrades: So going back from the beta channel to "
-           "the stable channel usually cannot be done immediately and means waiting "
-           "for a stable version that is newer than the currently installed beta "
-           "version."),
+           "Observe que isso seleciona apenas de qual conjunto de atualizações são retiradas e "
+           " que não há rebaixamentos: Portanto, voltar do canal beta para o canal "
+           "estável geralmente não pode ser feito imediatamente e significa esperar "
+           "por uma versão estável que seja mais recente do que a versão beta atualmente  "
+           "instalada."),
         QMessageBox::NoButton,
         this);
-    msgBox->addButton(tr("Change update channel"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
+    msgBox->addButton(tr("Alterar canal de atualização"), QMessageBox::AcceptRole);
+    msgBox->addButton(tr("Cancelar"), QMessageBox::RejectRole);
     connect(msgBox, &QMessageBox::finished, msgBox, [this, channel, msgBox](int result) {
         msgBox->deleteLater();
         if (result == QMessageBox::AcceptRole) {

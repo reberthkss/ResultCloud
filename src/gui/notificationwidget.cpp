@@ -61,7 +61,7 @@ void NotificationWidget::setActivity(const Activity &activity)
     _ui._notifIcon->setMinimumHeight(64);
     _ui._notifIcon->show();
 
-    QString tText = tr("Created at %1").arg(Utility::timeAgoInWords(activity._dateTime));
+    QString tText = tr("Criada em %1").arg(Utility::timeAgoInWords(activity._dateTime));
     _ui._timeLabel->setText(tText);
 
     // always remove the buttons
@@ -71,13 +71,13 @@ void NotificationWidget::setActivity(const Activity &activity)
     // display buttons for the links
     if (activity._links.isEmpty()) {
         // in case there is no action defined, do a close button.
-        QPushButton *b = _ui._buttonBox->addButton(QDialogButtonBox::Close);
+        QPushButton *b = _ui._buttonBox->addButton(tr("FECHAR"),QDialogButtonBox::Close);
         b->setDefault(true);
         connect(b, &QAbstractButton::clicked, this, &NotificationWidget::slotButtonClicked);
         _buttons.append(b);
     } else {
         foreach (auto link, activity._links) {
-            QPushButton *b = _ui._buttonBox->addButton(link._label, QDialogButtonBox::AcceptRole);
+            QPushButton *b = _ui._buttonBox->addButton(tr("ACEITAR"), QDialogButtonBox::AcceptRole);
             b->setDefault(link._isPrimary);
             connect(b, &QAbstractButton::clicked, this, &NotificationWidget::slotButtonClicked);
             _buttons.append(b);
@@ -108,7 +108,7 @@ void NotificationWidget::slotButtonClicked()
         if (index > -1 && _myActivity._links.count() == 0) {
             // no links, that means it was the close button
             // empty link. Just close and remove the widget.
-            QString doneText = tr("Closing in a few seconds...");
+            QString doneText = tr("Fechando em poucos segundos...");
             _ui._timeLabel->setText(doneText);
             emit requestCleanupAndBlacklist(_myActivity);
             return;
@@ -142,13 +142,13 @@ void NotificationWidget::slotNotificationRequestFinished(int statusCode)
             _buttons.at(i)->setEnabled(true);
         }
         //: The second parameter is a time, such as 'failed at 09:58pm'
-        doneText = tr("%1 request failed at %2").arg(_actionLabel, timeStr);
+        doneText = tr("requisição %1 falhou em %2").arg(_actionLabel, timeStr);
     } else {
         // the call to the ocs API succeeded.
         _ui._buttonBox->hide();
 
         //: The second parameter is a time, such as 'selected at 09:58pm'
-        doneText = tr("'%1' selected at %2").arg(_actionLabel, timeStr);
+        doneText = tr("&apos;%1&apos; selecionada em %2").arg(_actionLabel, timeStr);
     }
     _ui._timeLabel->setText(doneText);
 

@@ -207,7 +207,7 @@ void ShareUserGroupWidget::slotSharesFetched(const QList<QSharedPointer<Share>> 
         }
     }
     if (layout->isEmpty()) {
-        layout->addWidget(new QLabel(tr("The item is not shared with any users or groups")));
+        layout->addWidget(new QLabel(tr("O item não está compartilhado com usuários ou grupos")));
     } else {
         layout->addStretch(1);
     }
@@ -238,11 +238,11 @@ void ShareUserGroupWidget::slotPrivateLinkShare()
     auto menu = new QMenu(this);
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
-    menu->addAction(tr("Open link in browser"),
+    menu->addAction(tr("Abrir linque no navegador"),
         this, SLOT(slotPrivateLinkOpenBrowser()));
-    menu->addAction(tr("Copy link to clipboard"),
+    menu->addAction(tr("Copiar o linque para a área de transferência"),
         this, SLOT(slotPrivateLinkCopy()));
-    menu->addAction(tr("Send link by email"),
+    menu->addAction(tr("Enviar linque por e-mail"),
         this, SLOT(slotPrivateLinkEmail()));
 
     menu->exec(QCursor::pos());
@@ -252,7 +252,7 @@ void ShareUserGroupWidget::slotShareesReady()
 {
     _pi_sharee.stopAnimation();
     if (_completerModel->rowCount() == 0) {
-        displayError(0, tr("No results for '%1'").arg(_completerModel->currentSearch()));
+        displayError(0, tr("Sem resultados para &apos;%1&apos;").arg(_completerModel->currentSearch()));
         return;
     }
     _completer->complete();
@@ -340,7 +340,7 @@ void ShareUserGroupWidget::slotPrivateLinkCopy()
 void ShareUserGroupWidget::slotPrivateLinkEmail()
 {
     Utility::openEmailComposer(
-        tr("I shared something with you"),
+        tr("Eu compartilhei algo com você"),
         _privateLinkUrl,
         this);
 }
@@ -360,13 +360,13 @@ ShareUserLine::ShareUserLine(QSharedPointer<Share> share,
 
     // Create detailed permissions menu
     QMenu *menu = new QMenu(this);
-    _permissionCreate = new QAction(tr("create"), this);
+    _permissionCreate = new QAction(tr("Criar"),this);
     _permissionCreate->setCheckable(true);
     _permissionCreate->setEnabled(maxSharingPermissions & SharePermissionCreate);
-    _permissionUpdate = new QAction(tr("change"), this);
+    _permissionUpdate = new QAction(tr("Mudar"), this);
     _permissionUpdate->setCheckable(true);
     _permissionUpdate->setEnabled(maxSharingPermissions & SharePermissionUpdate);
-    _permissionDelete = new QAction(tr("delete"), this);
+    _permissionDelete = new QAction(tr("Deletar"), this);
     _permissionDelete->setCheckable(true);
     _permissionDelete->setEnabled(maxSharingPermissions & SharePermissionDelete);
 

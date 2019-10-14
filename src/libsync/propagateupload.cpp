@@ -145,7 +145,7 @@ bool PollJob::finished()
     QJsonObject json = QJsonDocument::fromJson(jsonData, &jsonParseError).object();
     qCInfo(lcPollJob) << ">" << jsonData << "<" << reply()->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() << json << jsonParseError.errorString();
     if (jsonParseError.error != QJsonParseError::NoError) {
-        _item->_errorString = tr("Invalid JSON reply from the poll URL");
+        _item->_errorString = tr("Resposta JSON inválida a partir do conjunto de URL");
         _item->_status = SyncFileItem::NormalError;
         emit finishedSignal();
         return true;
@@ -193,7 +193,7 @@ void PropagateUploadFileCommon::start()
 
     // Check if the specific file can be accessed
     if (propagator()->hasCaseClashAccessibilityProblem(_item->_file)) {
-        done(SyncFileItem::NormalError, tr("File %1 cannot be uploaded because another file with the same name, differing only in case, exists").arg(QDir::toNativeSeparators(_item->_file)));
+        done(SyncFileItem::NormalError, tr("O arquivo %1 não pode ser enviado porque um outro arquivo com o mesmo nome, diferenciando apenas letras maiúsculas e minúsculas, existe").arg(QDir::toNativeSeparators(_item->_file)));
         return;
     }
 
@@ -204,7 +204,7 @@ void PropagateUploadFileCommon::start()
         // Necessary for blacklisting logic
         _item->_httpErrorCode = 507;
         emit propagator()->insufficientRemoteStorage();
-        done(SyncFileItem::DetailError, tr("Upload of %1 exceeds the quota for the folder").arg(Utility::octetsToString(_item->_size)));
+        done(SyncFileItem::DetailError, tr("Enviar %1 a pasta selecionada").arg(Utility::octetsToString(_item->_size)));
         return;
     }
 
@@ -300,7 +300,7 @@ void PropagateUploadFileCommon::slotStartUpload(const QByteArray &transmissionCh
     const QString fullFilePath = propagator()->getFilePath(_item->_file);
 
     if (!FileSystem::fileExists(fullFilePath)) {
-        done(SyncFileItem::SoftError, tr("File Removed"));
+        done(SyncFileItem::SoftError, tr("Arquivo Removido"));
         return;
     }
     time_t prevModtime = _item->_modtime; // the _item value was set in PropagateUploadFile::start()
@@ -310,7 +310,7 @@ void PropagateUploadFileCommon::slotStartUpload(const QByteArray &transmissionCh
     _item->_modtime = FileSystem::getModTime(fullFilePath);
     if (prevModtime != _item->_modtime) {
         propagator()->_anotherSyncNeeded = true;
-        done(SyncFileItem::SoftError, tr("Local file changed during syncing. It will be resumed."));
+        done(SyncFileItem::SoftError, tr("O diretorio do arquivo foi alterado durante a sincronização. Ele será resumido."));
         return;
     }
 
@@ -322,7 +322,7 @@ void PropagateUploadFileCommon::slotStartUpload(const QByteArray &transmissionCh
     // or not yet fully copied to the destination.
     if (fileIsStillChanging(*_item)) {
         propagator()->_anotherSyncNeeded = true;
-        done(SyncFileItem::SoftError, tr("Local file changed during sync."));
+        done(SyncFileItem::SoftError, tr("O diretorio do arquivo foi alterado durante a sincronização."));
         return;
     }
 
@@ -572,7 +572,7 @@ void PropagateUploadFileCommon::commonErrorHandling(AbstractNetworkJob *job)
 
         // Set up the error
         status = SyncFileItem::DetailError;
-        errorString = tr("Upload of %1 exceeds the quota for the folder").arg(Utility::octetsToString(_item->_size));
+        errorString = tr("Enviar %1 excede o limite da pasta").arg(Utility::octetsToString(_item->_size));
         emit propagator()->insufficientRemoteStorage();
     }
 
@@ -657,7 +657,7 @@ void PropagateUploadFileCommon::finalize()
 
     // Update the database entry
     if (!propagator()->updateMetadata(*_item)) {
-        done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+        done(SyncFileItem::FatalError, tr("Erro ao escrever a metadata no banco de dados"));
         return;
     }
 

@@ -41,8 +41,8 @@ OwncloudOAuthCredsPage::OwncloudOAuthCredsPage()
 
     WizardCommon::initErrorLabel(_ui.errorLabel);
 
-    setTitle(WizardCommon::titleTemplate().arg(tr("Connect to %1").arg(Theme::instance()->appNameGUI())));
-    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Login in your browser")));
+    setTitle(WizardCommon::titleTemplate().arg(tr("Conectar a %1").arg(Theme::instance()->appNameGUI())));
+    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Faça login no seu navegador")));
 
     connect(_ui.openLinkButton, &QCommandLinkButton::clicked, [this] {
         _ui.errorLabel->hide();
@@ -53,7 +53,7 @@ OwncloudOAuthCredsPage::OwncloudOAuthCredsPage()
     _ui.openLinkButton->setContextMenuPolicy(Qt::CustomContextMenu);
     QObject::connect(_ui.openLinkButton, &QWidget::customContextMenuRequested, [this](const QPoint &pos) {
         auto menu = new QMenu(_ui.openLinkButton);
-        menu->addAction(tr("Copy link to clipboard"), this, [this] {
+        menu->addAction(tr("Copiar o linque para a área de transferência"), this, [this] {
             if (_asyncAuth)
                 QApplication::clipboard()->setText(_asyncAuth->authorisationLink().toString(QUrl::FullyEncoded));
         });

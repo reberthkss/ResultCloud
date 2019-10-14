@@ -205,10 +205,10 @@ void ownCloudGui::slotTrayMessageIfServerUnsupported(Account *account)
 {
     if (account->serverVersionUnsupported()) {
         slotShowTrayMessage(
-            tr("Unsupported Server Version"),
-            tr("The server on account %1 runs an unsupported version %2. "
-               "Using this client with unsupported server versions is untested and "
-               "potentially dangerous. Proceed at your own risk.")
+            tr("Versão do Servidor Não Suportada"),
+            tr("O servidor na conta %1 executa uma versão não suportada %2."
+               " A utilização deste cliente com versões de servidor não suportadas não foi testada e  "
+               "é potencialmente perigosa. Prossiga por sua conta e risco.")
                 .arg(account->displayName(), account->serverVersion()));
     }
 }
@@ -245,9 +245,9 @@ void ownCloudGui::slotComputeOverallSyncStatus()
     if (!problemAccounts.empty()) {
         _tray->setIcon(Theme::instance()->folderOfflineIcon(true, contextMenuVisible()));
         if (allDisconnected) {
-            setStatusText(tr("Disconnected"));
+            setStatusText(tr("Desconectado"));
         } else {
-            setStatusText(tr("Disconnected from some accounts"));
+            setStatusText(tr("Desconectado de algumas contas"));
         }
 #ifdef Q_OS_WIN
         // Windows has a 128-char tray tooltip length limit.
@@ -255,12 +255,12 @@ void ownCloudGui::slotComputeOverallSyncStatus()
         foreach (AccountStatePtr a, problemAccounts) {
             accountNames.append(a->account()->displayName());
         }
-        _tray->setToolTip(tr("Disconnected from %1").arg(accountNames.join(QLatin1String(", "))));
+        _tray->setToolTip(tr("Desconectado de %1").arg(accountNames.join(QLatin1String(", "))));
 #else
         QStringList messages;
-        messages.append(tr("Disconnected from accounts:"));
+        messages.append(tr("Desconectado de contas:"));
         foreach (AccountStatePtr a, problemAccounts) {
-            QString message = tr("Account %1: %2").arg(a->account()->displayName(), a->stateString(a->state()));
+            QString message = tr("Conta %1: %2").arg(a->account()->displayName(), a->stateString(a->state()));
             if (!a->connectionErrors().empty()) {
                 message += QLatin1String("\n");
                 message += a->connectionErrors().join(QLatin1String("\n"));
@@ -274,13 +274,13 @@ void ownCloudGui::slotComputeOverallSyncStatus()
 
     if (allSignedOut) {
         _tray->setIcon(Theme::instance()->folderOfflineIcon(true, contextMenuVisible()));
-        _tray->setToolTip(tr("Please sign in"));
-        setStatusText(tr("Signed out"));
+        _tray->setToolTip(tr("Favor conectar"));
+        setStatusText(tr("Desconectado"));
         return;
     } else if (allPaused) {
         _tray->setIcon(Theme::instance()->syncStateIcon(SyncResult::Paused, true, contextMenuVisible()));
-        _tray->setToolTip(tr("Account synchronization is disabled"));
-        setStatusText(tr("Synchronization is paused"));
+        _tray->setToolTip(tr("A sincronização de conta está desativada"));
+        setStatusText(tr("A sincronização está pausada"));
         return;
     }
 
@@ -320,7 +320,7 @@ void ownCloudGui::slotComputeOverallSyncStatus()
                 folder->syncResult().status(),
                 folder->syncResult().hasUnresolvedConflicts(),
                 folder->syncPaused());
-            allStatusStrings += tr("Folder %1: %2").arg(folder->shortGuiLocalPath(), folderMessage);
+            allStatusStrings += tr("Pasta %1: %2").arg(folder->shortGuiLocalPath(), folderMessage);
         }
         trayMessage = allStatusStrings.join(QLatin1String("\n"));
 #endif
@@ -328,18 +328,18 @@ void ownCloudGui::slotComputeOverallSyncStatus()
 
         if (overallStatus == SyncResult::Success || overallStatus == SyncResult::Problem) {
             if (hasUnresolvedConflicts) {
-                setStatusText(tr("Unresolved conflicts"));
+                setStatusText(tr("Conflitos não resolvidos"));
             } else {
-                setStatusText(tr("Up to date"));
+                setStatusText(tr("Até a data"));
             }
         } else if (overallStatus == SyncResult::Paused) {
-            setStatusText(tr("Synchronization is paused"));
+            setStatusText(tr("A sincronização está pausada"));
         } else {
-            setStatusText(tr("Error during synchronization"));
+            setStatusText(tr("Erro durante a sincronização"));
         }
     } else {
-        _tray->setToolTip(tr("There are no sync folders configured."));
-        setStatusText(tr("No sync folders configured"));
+        _tray->setToolTip(tr("Não há pastas de sincronização configuradas."));
+        setStatusText(tr("Nenhuma pasta de sincronização configurada"));
     }
 }
 
@@ -347,9 +347,9 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
 {
     // Only show the name in the action if it's not part of an
     // account sub menu.
-    QString browserOpen = tr("Open in browser");
+    QString browserOpen = tr("Abrir no navegador");
     if (!separateMenu) {
-        browserOpen = tr("Open %1 in browser").arg(Theme::instance()->appNameGUI());
+        browserOpen = tr("Abrir %1 no navegador").arg(Theme::instance()->appNameGUI());
     }
     auto actionOpenoC = menu->addAction(browserOpen);
     actionOpenoC->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
@@ -374,10 +374,10 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
         if (firstFolder && !singleSyncFolder) {
             firstFolder = false;
             menu->addSeparator();
-            menu->addAction(tr("Managed Folders:"))->setDisabled(true);
+            menu->addAction(tr("Pastas Gerenciadas:"))->setDisabled(true);
         }
 
-        QAction *action = menu->addAction(tr("Open folder '%1'").arg(folder->shortGuiLocalPath()));
+        QAction *action = menu->addAction(tr("Abrir pasta &apos;%1&apos;").arg(folder->shortGuiLocalPath()));
         auto alias = folder->alias();
         connect(action, &QAction::triggered, this, [this, alias] { this->slotFolderOpenAction(alias); });
     }
@@ -385,22 +385,22 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
     menu->addSeparator();
     if (separateMenu) {
         if (onePaused) {
-            QAction *enable = menu->addAction(tr("Unpause all folders"));
+            QAction *enable = menu->addAction(tr("Retomar todas as pastas"));
             enable->setProperty(propertyAccountC, QVariant::fromValue(accountState));
             connect(enable, &QAction::triggered, this, &ownCloudGui::slotUnpauseAllFolders);
         }
         if (!allPaused) {
-            QAction *enable = menu->addAction(tr("Pause all folders"));
+            QAction *enable = menu->addAction(tr("Pausar todas as pastas"));
             enable->setProperty(propertyAccountC, QVariant::fromValue(accountState));
             connect(enable, &QAction::triggered, this, &ownCloudGui::slotPauseAllFolders);
         }
 
         if (accountState->isSignedOut()) {
-            QAction *signin = menu->addAction(tr("Log in..."));
+            QAction *signin = menu->addAction(tr("Entrar..."));
             signin->setProperty(propertyAccountC, QVariant::fromValue(accountState));
             connect(signin, &QAction::triggered, this, &ownCloudGui::slotLogin);
         } else {
-            QAction *signout = menu->addAction(tr("Log out"));
+            QAction *signout = menu->addAction(tr("Sair"));
             signout->setProperty(propertyAccountC, QVariant::fromValue(accountState));
             connect(signout, &QAction::triggered, this, &ownCloudGui::slotLogout);
         }
@@ -501,7 +501,7 @@ void ownCloudGui::setupContextMenu()
     _contextMenu.reset(new QMenu());
     _contextMenu->setTitle(Theme::instance()->appNameGUI());
 
-    _recentActionsMenu = new QMenu(tr("Recent Changes"), _contextMenu.data());
+    _recentActionsMenu = new QMenu(tr("Alterações Recentes"), _contextMenu.data());
 
     // this must be called only once after creating the context menu, or
     // it will trigger a bug in Ubuntu's SNI bridge patch (11.10, 12.04).
@@ -685,9 +685,9 @@ void ownCloudGui::updateContextMenu()
     if (atLeastOnePaused) {
         QString text;
         if (accountList.count() > 1) {
-            text = tr("Unpause all synchronization");
+            text = tr("Retomar toda a sincronizaçãon");
         } else {
-            text = tr("Unpause synchronization");
+            text = tr("Retomar sincronização");
         }
         QAction *action = _contextMenu->addAction(text);
         connect(action, &QAction::triggered, this, &ownCloudGui::slotUnpauseAllFolders);
@@ -695,26 +695,26 @@ void ownCloudGui::updateContextMenu()
     if (atLeastOneNotPaused) {
         QString text;
         if (accountList.count() > 1) {
-            text = tr("Pause all synchronization");
+            text = tr("Dar uma pausa em toda a sincronização");
         } else {
-            text = tr("Pause synchronization");
+            text = tr("Dar uma pausa na sincronização");
         }
         QAction *action = _contextMenu->addAction(text);
         connect(action, &QAction::triggered, this, &ownCloudGui::slotPauseAllFolders);
     }
     if (atLeastOneSignedIn) {
         if (accountList.count() > 1) {
-            _actionLogout->setText(tr("Log out of all accounts"));
+            _actionLogout->setText(tr("Desconectar todas as contas"));
         } else {
-            _actionLogout->setText(tr("Log out"));
+            _actionLogout->setText(tr("Sair"));
         }
         _contextMenu->addAction(_actionLogout);
     }
     if (atLeastOneSignedOut) {
         if (accountList.count() > 1) {
-            _actionLogin->setText(tr("Log in to all accounts..."));
+            _actionLogin->setText(tr("Conectar todas as contas..."));
         } else {
-            _actionLogin->setText(tr("Log in..."));
+            _actionLogin->setText(tr("Entrar..."));
         }
         _contextMenu->addAction(_actionLogin);
     }
@@ -794,11 +794,11 @@ void ownCloudGui::slotFolderOpenAction(const QString &alias)
 
 void ownCloudGui::setupActions()
 {
-    _actionStatus = new QAction(tr("Unknown status"), this);
+    _actionStatus = new QAction(tr("Status desconhecido"), this);
     _actionStatus->setEnabled(false);
-    _actionSettings = new QAction(tr("Settings..."), this);
-    _actionNewAccountWizard = new QAction(tr("New account..."), this);
-    _actionRecent = new QAction(tr("Details..."), this);
+    _actionSettings = new QAction(tr("Configurações..."), this);
+    _actionNewAccountWizard = new QAction(tr("Nova conta..."), this);
+    _actionRecent = new QAction(tr("Detalhes..."), this);
     _actionRecent->setEnabled(true);
 
     QObject::connect(_actionRecent, &QAction::triggered, this, &ownCloudGui::slotShowSyncProtocol);
@@ -806,14 +806,14 @@ void ownCloudGui::setupActions()
     QObject::connect(_actionNewAccountWizard, &QAction::triggered, this, &ownCloudGui::slotNewAccountWizard);
     _actionHelp = new QAction(tr("Help"), this);
     QObject::connect(_actionHelp, &QAction::triggered, this, &ownCloudGui::slotHelp);
-    _actionAbout = new QAction(tr("About %1").arg(Theme::instance()->appNameGUI()), this);
+    _actionAbout = new QAction(tr("Sobre %1").arg(Theme::instance()->appNameGUI()), this);
     QObject::connect(_actionAbout, &QAction::triggered, this, &ownCloudGui::slotAbout);
-    _actionQuit = new QAction(tr("Quit %1").arg(Theme::instance()->appNameGUI()), this);
+    _actionQuit = new QAction(tr("Sair %1").arg(Theme::instance()->appNameGUI()), this);
     QObject::connect(_actionQuit, SIGNAL(triggered(bool)), _app, SLOT(quit()));
 
-    _actionLogin = new QAction(tr("Log in..."), this);
+    _actionLogin = new QAction(tr("Entrar..."), this);
     connect(_actionLogin, &QAction::triggered, this, &ownCloudGui::slotLogin);
-    _actionLogout = new QAction(tr("Log out"), this);
+    _actionLogout = new QAction(tr("Sair"), this);
     connect(_actionLogout, &QAction::triggered, this, &ownCloudGui::slotLogout);
 
     if (_app->debugMode()) {
@@ -839,7 +839,7 @@ void ownCloudGui::slotRebuildRecentMenus()
         }
         _recentActionsMenu->addSeparator();
     } else {
-        _recentActionsMenu->addAction(tr("No items synced recently"))->setEnabled(false);
+        _recentActionsMenu->addAction(tr("Não há itens sincronizados recentemente"))->setEnabled(false);
     }
     // add a more... entry.
     _recentActionsMenu->addAction(_actionRecent);
@@ -861,10 +861,10 @@ void ownCloudGui::slotUpdateProgress(const QString &folder, const ProgressInfo &
 
     if (progress.status() == ProgressInfo::Discovery) {
         if (!progress._currentDiscoveredRemoteFolder.isEmpty()) {
-            _actionStatus->setText(tr("Checking for changes in remote '%1'")
+            _actionStatus->setText(tr("Verificando alterações remotamente &apos;%1&apos;")
                                        .arg(progress._currentDiscoveredRemoteFolder));
         } else if (!progress._currentDiscoveredLocalFolder.isEmpty()) {
-            _actionStatus->setText(tr("Checking for changes in local '%1'")
+            _actionStatus->setText(tr("Verificação de alterações local &apos;%1&apos;")
                                        .arg(progress._currentDiscoveredLocalFolder));
         }
     } else if (progress.status() == ProgressInfo::Done) {
@@ -879,12 +879,12 @@ void ownCloudGui::slotUpdateProgress(const QString &folder, const ProgressInfo &
         qint64 totalFileCount = qMax(progress.totalFiles(), currentFile);
         QString msg;
         if (progress.trustEta()) {
-            msg = tr("Syncing %1 of %2  (%3 left)")
+            msg = tr("Sincronizar %1 de %2 (%3 faltando)")
                       .arg(currentFile)
                       .arg(totalFileCount)
                       .arg(Utility::durationToDescriptiveString2(progress.totalProgress().estimatedEta));
         } else {
-            msg = tr("Syncing %1 of %2")
+            msg = tr("Sincronizando %1 de %2")
                       .arg(currentFile)
                       .arg(totalFileCount);
         }
@@ -893,10 +893,10 @@ void ownCloudGui::slotUpdateProgress(const QString &folder, const ProgressInfo &
         QString totalSizeStr = Utility::octetsToString(progress.totalSize());
         QString msg;
         if (progress.trustEta()) {
-            msg = tr("Syncing %1 (%2 left)")
+            msg = tr("Sincronizando %1 (%2 faltando)")
                       .arg(totalSizeStr, Utility::durationToDescriptiveString2(progress.totalProgress().estimatedEta));
         } else {
-            msg = tr("Syncing %1")
+            msg = tr("Sincronizando %1")
                       .arg(totalSizeStr);
         }
         _actionStatus->setText(msg);
@@ -1172,7 +1172,7 @@ void ownCloudGui::slotRemoveDestroyedShareDialogs()
 
 void ownCloudGui::slotAbout()
 {
-    QString title = tr("About %1").arg(Theme::instance()->appNameGUI());
+    QString title = tr("Sobre %1").arg(Theme::instance()->appNameGUI());
     QString about = Theme::instance()->about();
     QMessageBox *msgBox = new QMessageBox(this->_settingsDialog);
 #ifdef Q_OS_MAC

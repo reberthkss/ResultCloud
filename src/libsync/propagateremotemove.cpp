@@ -139,7 +139,7 @@ void PropagateRemoteMove::start()
         if (!FileSystem::fileExists(localTarget) && FileSystem::fileExists(localTargetAlt)) {
             QString error;
             if (!FileSystem::uncheckedRenameReplace(localTargetAlt, localTarget, &error)) {
-                done(SyncFileItem::NormalError, tr("Could not rename %1 to %2, error: %3")
+                done(SyncFileItem::NormalError, tr("Não foi possível renomear %1 para %2, erro: %3")
                      .arg(folderTargetAlt, folderTarget, error));
                 return;
             }
@@ -188,7 +188,7 @@ void PropagateRemoteMove::slotMoveJobFinished()
         // If it is not the case, it might be because of a proxy or gateway intercepting the request, so we must
         // throw an error.
         done(SyncFileItem::NormalError,
-            tr("Wrong HTTP code returned by server. Expected 201, but received \"%1 %2\".")
+            tr("Código HTTP retornado errado pelo servidor. 201 esperado, mas recebeu &quot;%1 %2&quot;.")
                 .arg(_item->_httpErrorCode)
                 .arg(_job->reply()->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
         return;
@@ -225,19 +225,19 @@ void PropagateRemoteMove::finalize()
         }
     }
     if (!propagator()->updateMetadata(newItem)) {
-        done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+        done(SyncFileItem::FatalError, tr("Ocorreu um erro ao escrever metadados ao banco de dados"));
         return;
     }
     if (pinState && *pinState != PinState::Inherited
         && !vfs->setPinState(newItem._renameTarget, *pinState)) {
-        done(SyncFileItem::NormalError, tr("Error setting pin state"));
+        done(SyncFileItem::NormalError, tr("Erro ao definir o estado do pin"));
         return;
     }
 
     if (_item->isDirectory()) {
         propagator()->_renamedDirectories.insert(_item->_file, _item->_renameTarget);
         if (!adjustSelectiveSync(propagator()->_journal, _item->_file, _item->_renameTarget)) {
-            done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+            done(SyncFileItem::FatalError, tr("Ocorreu um erro ao escrever metadados ao banco de dados"));
             return;
         }
     }

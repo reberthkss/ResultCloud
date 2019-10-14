@@ -17,13 +17,13 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Proxy authentication required</string>
+   <string>Autenticação via proxy é exigida</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Username:</string>
+      <string>Nome de usuário:</string>
      </property>
     </widget>
    </item>
@@ -40,14 +40,14 @@
    <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>The proxy server needs a username and password.</string>
+      <string>O servidor de proxy necessita de usuário e senha.</string>
      </property>
     </widget>
    </item>
    <item row="4" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
-      <string>Password:</string>
+      <string>Senha:</string>
      </property>
     </widget>
    </item>

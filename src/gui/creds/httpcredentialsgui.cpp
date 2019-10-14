@@ -104,10 +104,10 @@ void HttpCredentialsGui::asyncAuthResult(OAuth::Result r, const QString &user,
 
 void HttpCredentialsGui::showDialog()
 {
-    QString msg = tr("Please enter %1 password:<br>"
+    QString msg = tr("Por favor entre uma senha %1:"
                      "<br>"
-                     "User: %2<br>"
-                     "Account: %3<br>")
+                     "Usuário: %2&lt;br&gt;"
+                     "Conta: %3&lt;br&gt;")
                       .arg(Utility::escape(Theme::instance()->appNameGUI()),
                           Utility::escape(_user),
                           Utility::escape(_account->displayName()));
@@ -118,14 +118,14 @@ void HttpCredentialsGui::showDialog()
     }
     if (!_fetchErrorString.isEmpty()) {
         msg += QLatin1String("<br>")
-            + tr("Reading from keychain failed with error: '%1'")
+            + tr("Leitura de chaveiro falhou com o erro: &apos;%1&apos;")
                   .arg(Utility::escape(_fetchErrorString))
             + QLatin1String("<br>");
     }
 
     QInputDialog *dialog = new QInputDialog();
     dialog->setAttribute(Qt::WA_DeleteOnClose, true);
-    dialog->setWindowTitle(tr("Enter Password"));
+    dialog->setWindowTitle(tr("Entrar Senha"));
     dialog->setLabelText(msg);
     dialog->setTextValue(_previousPassword);
     dialog->setTextEchoMode(QLineEdit::Password);
@@ -164,7 +164,7 @@ QString HttpCredentialsGui::requestAppPasswordText(const Account *account)
     auto baseUrl = account->url().toString();
     if (baseUrl.endsWith('/'))
         baseUrl.chop(1);
-    return tr("<a href=\"%1\">Click here</a> to request an app password from the web interface.")
+    return tr("&lt;a href=&quot;%1&quot;&gt;Clique aqui&lt;/a&gt; para solicitar uma senha de aplicativo na interface da web.")
         .arg(baseUrl + path);
 }
 } // namespace OCC

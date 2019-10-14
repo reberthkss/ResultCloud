@@ -292,9 +292,9 @@ QByteArray AbstractNetworkJob::requestId()
 QString AbstractNetworkJob::errorString() const
 {
     if (_timedout) {
-        return tr("Connection timed out");
+        return tr("Conexão expirou");
     } else if (!reply()) {
-        return tr("Unknown error: network reply was deleted");
+        return tr("Erro desconhecido: a resposta da rede foi excluída");
     } else if (reply()->hasRawHeader("OC-ErrorString")) {
         return reply()->rawHeader("OC-ErrorString");
     } else {
@@ -446,7 +446,7 @@ QString networkReplyErrorString(const QNetworkReply &reply)
         return base;
     }
 
-    return AbstractNetworkJob::tr("Server replied \"%1 %2\" to \"%3 %4\"").arg(QString::number(httpStatus), httpReason, requestVerb(reply), reply.request().url().toDisplayString());
+    return AbstractNetworkJob::tr("Resposta do servidor &quot;%1 %2&quot; to &quot;%3 %4&quot;").arg(QString::number(httpStatus), httpReason, requestVerb(reply), reply.request().url().toDisplayString());
 }
 
 void AbstractNetworkJob::retry()

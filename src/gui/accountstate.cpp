@@ -116,23 +116,23 @@ QString AccountState::stateString(State state)
 {
     switch (state) {
     case SignedOut:
-        return tr("Signed out");
+        return tr("Desconectado");
     case Disconnected:
-        return tr("Disconnected");
+        return tr("Desconectado");
     case Connected:
-        return tr("Connected");
+        return tr("Conectado");
     case ServiceUnavailable:
-        return tr("Service unavailable");
+        return tr("Serviço indisponível");
     case MaintenanceMode:
-        return tr("Maintenance mode");
+        return tr("Modo de manutenção");
     case NetworkError:
-        return tr("Network error");
+        return tr("Erro de rede");
     case ConfigurationError:
-        return tr("Configuration error");
+        return tr("Erro de configuração");
     case AskingCredentials:
-        return tr("Asking Credentials");
+        return tr("Solicitando Credenciais");
     }
-    return tr("Unknown account state");
+    return tr("Estado da conta desconhecido");
 }
 
 bool AccountState::isSignedOut() const

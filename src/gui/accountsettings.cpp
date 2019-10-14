@@ -181,7 +181,7 @@ AccountSettings::AccountSettings(AccountState *accountState, QWidget *parent)
     QColor color = palette().highlight().color();
     ui->quotaProgressBar->setStyleSheet(QString::fromLatin1(progressBarStyleC).arg(color.name()));
 
-    ui->connectLabel->setText(tr("No account configured."));
+    ui->connectLabel->setText(tr("Nenhuma conta configurada."));
 
     connect(_accountState, &AccountState::stateChanged, this, &AccountSettings::slotAccountStateChanged);
     slotAccountStateChanged();
@@ -193,20 +193,21 @@ AccountSettings::AccountSettings(AccountState *accountState, QWidget *parent)
 
 void AccountSettings::createAccountToolbox()
 {
-    QMenu *menu = new QMenu();
-    _addAccountAction = new QAction(tr("Add new"), this);
+    QMenu *menu = new QMenu(ui->_accountToolbox);
+    _addAccountAction = new QAction(tr("Adicionar nova"), this);
+    _addAccountAction->setObjectName("addAccountAction");
     menu->addAction(_addAccountAction);
     connect(_addAccountAction, &QAction::triggered, this, &AccountSettings::slotOpenAccountWizard);
 
-    _toggleSignInOutAction = new QAction(tr("Log out"), this);
+    _toggleSignInOutAction = new QAction(tr("Sair"), this);
     connect(_toggleSignInOutAction, &QAction::triggered, this, &AccountSettings::slotToggleSignInState);
     menu->addAction(_toggleSignInOutAction);
 
-    QAction *action = new QAction(tr("Remove"), this);
+    QAction *action = new QAction(tr("Remover"), this);
     menu->addAction(action);
     connect(action, &QAction::triggered, this, &AccountSettings::slotDeleteAccount);
 
-    ui->_accountToolbox->setText(tr("Account") + QLatin1Char(' '));
+    ui->_accountToolbox->setText(tr("Conta") + QLatin1Char(' '));
     ui->_accountToolbox->setMenu(menu);
     ui->_accountToolbox->setPopupMode(QToolButton::InstantPopup);
 
@@ -273,7 +274,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         QMenu *menu = new QMenu(tv);
         menu->setAttribute(Qt::WA_DeleteOnClose);
 
-        QAction *ac = menu->addAction(tr("Open local folder"));
+        QAction *ac = menu->addAction(tr("Abrir pasta local"));
         connect(ac, &QAction::triggered, this, &AccountSettings::slotOpenCurrentLocalSubFolder);
 
         QString fileName = _model->data(index, FolderStatusDelegate::FolderPathRole).toString();
@@ -281,7 +282,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
             ac->setEnabled(false);
         }
 
-        ac = menu->addAction(tr("Open folder in browser"));
+        ac = menu->addAction(tr("Abra a pasta no navegador"));
         auto info = _model->infoForIndex(index);
         ASSERT(info);
         QString path = info->_folder->remotePathTrailingSlash();
@@ -314,32 +315,32 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
 
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
-    QAction *ac = menu->addAction(tr("Open folder"));
+    QAction *ac = menu->addAction(tr("Abrir pasta"));
     connect(ac, &QAction::triggered, this, &AccountSettings::slotOpenCurrentFolder);
 
     if (!ui->_folderList->isExpanded(index) && folder->supportsSelectiveSync()) {
-        ac = menu->addAction(tr("Choose what to sync"));
+        ac = menu->addAction(tr("Escolha o que quer sincronizar"));
         ac->setEnabled(folderConnected);
         connect(ac, &QAction::triggered, this, &AccountSettings::doExpand);
     }
 
     if (!folderPaused) {
-        ac = menu->addAction(tr("Force sync now"));
+        ac = menu->addAction(tr("Forçar sincronização agora"));
         if (folder && folder->isSyncRunning()) {
-            ac->setText(tr("Restart sync"));
+            ac->setText(tr("Reiniciar a sincronização"));
         }
         ac->setEnabled(folderConnected);
         connect(ac, &QAction::triggered, this, &AccountSettings::slotForceSyncCurrentFolder);
     }
 
-    ac = menu->addAction(folderPaused ? tr("Resume sync") : tr("Pause sync"));
+    ac = menu->addAction(folderPaused ? tr("Resumir sincronização") : tr("Pausar sincronização"));
     connect(ac, &QAction::triggered, this, &AccountSettings::slotEnableCurrentFolder);
 
-    ac = menu->addAction(tr("Remove folder sync connection"));
+    ac = menu->addAction(tr("Remover a conexão de sincronização de pastas"));
     connect(ac, &QAction::triggered, this, &AccountSettings::slotRemoveCurrentFolder);
 
     if (folder->supportsVirtualFiles()) {
-        auto availabilityMenu = menu->addMenu(tr("Availability"));
+        auto availabilityMenu = menu->addMenu(tr("Disponibilidade"));
         auto availability = folder->vfs().availability(QString());
         if (availability) {
             ac = availabilityMenu->addAction(Utility::vfsCurrentAvailabilityText(*availability));
@@ -356,7 +357,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
                     || *availability == VfsItemAvailability::AllDehydrated));
         connect(ac, &QAction::triggered, this, [this]() { slotSetCurrentFolderAvailability(PinState::OnlineOnly); });
 
-        ac = menu->addAction(tr("Disable virtual file support..."));
+        ac = menu->addAction(tr("Desativar o suporte a arquivos virtuais..."));
         connect(ac, &QAction::triggered, this, &AccountSettings::slotDisableVfsCurrentFolder);
     }
 
@@ -364,7 +365,7 @@ void AccountSettings::slotCustomContextMenuRequested(const QPoint &pos)
         && !folder->supportsVirtualFiles()
         && bestAvailableVfsMode() != Vfs::Off
         && !folder->isVfsOnOffSwitchPending()) {
-        ac = menu->addAction(tr("Enable virtual file support (experimental)..."));
+        ac = menu->addAction(tr("Enable virtual file support %1...").arg(bestAvailableVfsMode() == Vfs::WindowsCfApi ? tr("(tech preview)") : tr("(experimental)")));
         connect(ac, &QAction::triggered, this, &AccountSettings::slotEnableVfsCurrentFolder);
     }
 
@@ -443,8 +444,8 @@ void AccountSettings::slotFolderWizardAccepted()
         if (!dir.exists()) {
             qCInfo(lcAccountSettings) << "Creating folder" << definition.localPath;
             if (!dir.mkpath(".")) {
-                QMessageBox::warning(this, tr("Folder creation failed"),
-                    tr("<p>Could not create local folder <i>%1</i>.")
+                QMessageBox::warning(this, tr("Falha na criação de pasta"),
+                    tr("&lt;p&gt;Não foi possível criar pasta local &lt;i&gt;%1&lt;/i&gt;.")
                         .arg(QDir::toNativeSeparators(definition.localPath)));
                 return;
             }
@@ -500,15 +501,15 @@ void AccountSettings::slotRemoveCurrentFolder()
         QString shortGuiLocalPath = folder->shortGuiLocalPath();
 
         QMessageBox messageBox(QMessageBox::Question,
-            tr("Confirm Folder Sync Connection Removal"),
-            tr("<p>Do you really want to stop syncing the folder <i>%1</i>?</p>"
-               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
+            tr("Confirme a Remoção de Sincronização de Pasta"),
+            tr("&lt;p&gt;Você realmente deseja para a sincronização desta pasta &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
+               "&lt;p&gt;&lt;b&gt;Nota:&lt;/b&gt; Isto &lt;b&gt;não&lt;/b&gt; vai deletar qualquer arquivo.&lt;/p&gt;")
                 .arg(shortGuiLocalPath),
             QMessageBox::NoButton,
             this);
         QPushButton *yesButton =
-            messageBox.addButton(tr("Remove Folder Sync Connection"), QMessageBox::YesRole);
-        messageBox.addButton(tr("Cancel"), QMessageBox::NoRole);
+            messageBox.addButton(tr("Remover a Conexão de Sincronização de pasta"), QMessageBox::YesRole);
+        messageBox.addButton(tr("Cancelar"), QMessageBox::NoRole);
 
         messageBox.exec();
         if (messageBox.clickedButton() != yesButton) {
@@ -606,16 +607,16 @@ void AccountSettings::slotDisableVfsCurrentFolder()
 
     auto msgBox = new QMessageBox(
         QMessageBox::Question,
-        tr("Disable virtual file support?"),
-        tr("This action will disable virtual file support. As a consequence contents of folders that "
-           "are currently marked as 'available online only' will be downloaded."
+        tr("Desativar o suporte a arquivos virtuais?"),
+        tr("Esta ação desabilitará o suporte a arquivos virtuais. Como consequência, o conteúdo das pastas"
+           "atualmente marcadas como &apos;disponíveis apenas online&apos; será baixado."
            "\n\n"
-           "The only advantage of disabling virtual file support is that the selective sync feature "
-           "will become available again."
+           "A única vantagem de desativar o suporte a arquivos virtuais é que o recurso de sincronização seletiva"
+           " ficará disponível novamente."
            "\n\n"
-           "This action will abort any currently running synchronization."));
-    msgBox->addButton(tr("Disable support"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Cancel"), QMessageBox::RejectRole);
+           "Esta ação irá anular qualquer sincronização atualmente em execução."));
+    msgBox->addButton(tr("Desativar suporte"), QMessageBox::AcceptRole);
+    msgBox->addButton(tr("Cancelar"), QMessageBox::RejectRole);
     connect(msgBox, &QMessageBox::finished, msgBox, [this, msgBox, folder](int result) {
         msgBox->deleteLater();
         if (result != QMessageBox::AcceptRole || !folder)
@@ -719,8 +720,8 @@ void AccountSettings::slotEnableCurrentFolder()
                 QWidget *parent = 0;
                 Qt::WindowFlags flags = Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint; // default flags
 #endif
-                QMessageBox msgbox(QMessageBox::Question, tr("Sync Running"),
-                    tr("The syncing operation is running.<br/>Do you want to terminate it?"),
+                QMessageBox msgbox(QMessageBox::Question, tr("Sincronização Acontecendo"),
+                    tr("A operação de sincronização está acontecendo.&lt;br/&gt;Você deseja finaliza-la?"),
                     QMessageBox::Yes | QMessageBox::No, parent, flags);
                 msgbox.setDefaultButton(QMessageBox::Yes);
                 int reply = msgbox.exec();
@@ -802,8 +803,8 @@ void AccountSettings::slotUpdateQuota(qint64 total, qint64 used)
         QString usedStr = Utility::octetsToString(used);
         QString totalStr = Utility::octetsToString(total);
         QString percentStr = Utility::compactFormatDouble(percent, 1);
-        QString toolTip = tr("%1 (%3%) of %2 in use. Some folders, including network mounted or shared folders, might have different limits.").arg(usedStr, totalStr, percentStr);
-        ui->quotaInfoLabel->setText(tr("%1 of %2 in use").arg(usedStr, totalStr));
+        QString toolTip = tr("%1 (%3%) de%2 em uso. Algumas pastas, incluindo montadas na rede ou pastas compartilhadas, podem ter limites diferenes.").arg(usedStr, totalStr, percentStr);
+        ui->quotaInfoLabel->setText(tr("%1 de %2 em uso").arg(usedStr, totalStr));
         ui->quotaInfoLabel->setToolTip(toolTip);
         ui->quotaProgressBar->setToolTip(toolTip);
     } else {
@@ -812,10 +813,10 @@ void AccountSettings::slotUpdateQuota(qint64 total, qint64 used)
 
         /* -1 means not computed; -2 means unknown; -3 means unlimited  (#3940)*/
         if (total == 0 || total == -1) {
-            ui->quotaInfoLabel->setText(tr("Currently there is no storage usage information available."));
+            ui->quotaInfoLabel->setText(tr("Atualmente, não há informações de uso de armazenamento disponível."));
         } else {
             QString usedStr = Utility::octetsToString(used);
-            ui->quotaInfoLabel->setText(tr("%1 in use").arg(usedStr));
+            ui->quotaInfoLabel->setText(tr("%1 em uso").arg(usedStr));
         }
     }
 }
@@ -842,26 +843,26 @@ void AccountSettings::slotAccountStateChanged()
             if (user.isEmpty()) {
                 user = cred->user();
             }
-            serverWithUser = tr("%1 as <i>%2</i>").arg(server, Utility::escape(user));
+            serverWithUser = tr("%1 como &lt;i&gt;%2&lt;/i&gt;").arg(server, Utility::escape(user));
         }
 
         switch (state) {
         case AccountState::Connected: {
             QStringList errors;
             if (account->serverVersionUnsupported()) {
-                errors << tr("The server version %1 is unsupported! Proceed at your own risk.").arg(account->serverVersion());
+                errors << tr("A versão do servidor %1 não é suportada! Prossiga por sua conta e risco.").arg(account->serverVersion());
             }
-            showConnectionLabel(tr("Connected to %1.").arg(serverWithUser), errors);
+            showConnectionLabel(tr("Conectado a %1.").arg(serverWithUser), errors);
             break;
         }
         case AccountState::ServiceUnavailable:
-            showConnectionLabel(tr("Server %1 is temporarily unavailable.").arg(server));
+            showConnectionLabel(tr("O Servidor %1 está temporariamente indisponível.").arg(server));
             break;
         case AccountState::MaintenanceMode:
-            showConnectionLabel(tr("Server %1 is currently in maintenance mode.").arg(server));
+            showConnectionLabel(tr("Servidor %1 está atualmente em modo de manutenção.").arg(server));
             break;
         case AccountState::SignedOut:
-            showConnectionLabel(tr("Signed out from %1.").arg(serverWithUser));
+            showConnectionLabel(tr("Desconectado de %1.").arg(serverWithUser));
             break;
         case AccountState::AskingCredentials: {
             QUrl url;
@@ -871,16 +872,16 @@ void AccountSettings::slotAccountStateChanged()
                 url = cred->authorisationLink();
             }
             if (url.isValid()) {
-                showConnectionLabel(tr("Obtaining authorization from the browser. "
-                                       "<a href='%1'>Click here</a> to re-open the browser.")
+                showConnectionLabel(tr("Obtendo autorização do navegador."
+                                       " &lt;a href=&apos;%1&apos;&gt;Clique aqui&lt;/a&gt; para reabrir o navegador.")
                                         .arg(url.toString(QUrl::FullyEncoded)));
             } else {
-                showConnectionLabel(tr("Connecting to %1...").arg(serverWithUser));
+                showConnectionLabel(tr("Conectando a %1...").arg(serverWithUser));
             }
             break;
         }
         case AccountState::NetworkError:
-            showConnectionLabel(tr("No connection to %1 at %2.")
+            showConnectionLabel(tr("Sem conexão para %1 em %2.")
                                     .arg(Utility::escape(Theme::instance()->appNameGUI()), server),
                 _accountState->connectionErrors());
             break;
@@ -896,7 +897,7 @@ void AccountSettings::slotAccountStateChanged()
         }
     } else {
         // ownCloud is not yet configured.
-        showConnectionLabel(tr("No %1 connection configured.")
+        showConnectionLabel(tr("Sem %1 conexão configurada.")
                                 .arg(Utility::escape(Theme::instance()->appNameGUI())));
     }
 
@@ -919,9 +920,9 @@ void AccountSettings::slotAccountStateChanged()
     /* set the correct label for the Account toolbox button */
     if (_accountState) {
         if (_accountState->isSignedOut()) {
-            _toggleSignInOutAction->setText(tr("Log in"));
+            _toggleSignInOutAction->setText(tr("Entrar"));
         } else {
-            _toggleSignInOutAction->setText(tr("Log out"));
+            _toggleSignInOutAction->setText(tr("Sair"));
         }
     }
 }
@@ -1015,10 +1016,10 @@ void AccountSettings::refreshSelectiveSyncStatus()
 
         ConfigFile cfg;
         QString info = !cfg.confirmExternalStorage()
-            ? tr("There are folders that were not synchronized because they are too big: ")
+            ? tr("Existem pastas que não foram sincronizadas porque são muito grandes: ")
             : !cfg.newBigFolderSizeLimit().first
-                ? tr("There are folders that were not synchronized because they are external storages: ")
-                : tr("There are folders that were not synchronized because they are too big or external storages: ");
+                ? tr("Existem pastas que não foram sincronizadas porque são armazenamentos externos: ")
+                : tr("Existem pastas que não foram sincronizadas porque são muito grandes ou armazenamentos externos: ");
 
         ui->selectiveSyncNotification->setText(info + msg);
         ui->selectiveSyncButtons->setVisible(false);
@@ -1064,15 +1065,15 @@ void AccountSettings::slotDeleteAccount()
     // the QMessageBox should be destroyed before that happens.
     {
         QMessageBox messageBox(QMessageBox::Question,
-            tr("Confirm Account Removal"),
-            tr("<p>Do you really want to remove the connection to the account <i>%1</i>?</p>"
-               "<p><b>Note:</b> This will <b>not</b> delete any files.</p>")
+            tr("Confirmar a Remoção da Conta"),
+            tr("&lt;p&gt;Você realmente deseja remover a conexão desta conta&lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
+               "&lt;p&gt;&lt;b&gt;Nota:&lt;/b&gt; Isto &lt;b&gt;não&lt;/b&gt; irá deletar nenhum arquivo.&lt;/p&gt;")
                 .arg(_accountState->account()->displayName()),
             QMessageBox::NoButton,
             this);
         QPushButton *yesButton =
-            messageBox.addButton(tr("Remove connection"), QMessageBox::YesRole);
-        messageBox.addButton(tr("Cancel"), QMessageBox::NoRole);
+            messageBox.addButton(tr("Remover conexão"), QMessageBox::YesRole);
+        messageBox.addButton(tr("Cancelar"), QMessageBox::NoRole);
 
         messageBox.exec();
         if (messageBox.clickedButton() != yesButton) {

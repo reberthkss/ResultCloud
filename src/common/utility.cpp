@@ -317,12 +317,12 @@ namespace {
 #undef QT_TRANSLATE_NOOP
 #define QT_TRANSLATE_NOOP(ctx, str, ...) str
     Q_DECL_CONSTEXPR Period periods[] = {
-        { QT_TRANSLATE_NOOP("Utility", "%n year(s)", 0, _), 365 * 24 * 3600 * 1000LL },
-        { QT_TRANSLATE_NOOP("Utility", "%n month(s)", 0, _), 30 * 24 * 3600 * 1000LL },
-        { QT_TRANSLATE_NOOP("Utility", "%n day(s)", 0, _), 24 * 3600 * 1000LL },
-        { QT_TRANSLATE_NOOP("Utility", "%n hour(s)", 0, _), 3600 * 1000LL },
-        { QT_TRANSLATE_NOOP("Utility", "%n minute(s)", 0, _), 60 * 1000LL },
-        { QT_TRANSLATE_NOOP("Utility", "%n second(s)", 0, _), 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n ano", 0, _), 365 * 24 * 3600 * 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n mês", 0, _), 30 * 24 * 3600 * 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n dia(s)", 0, _), 24 * 3600 * 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n hora(s)", 0, _), 3600 * 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n minuto(s)", 0, _), 60 * 1000LL },
+        { QT_TRANSLATE_NOOP("Utility", "%n segundo(s)", 0, _), 1000LL },
         { 0, 0 }
     };
 } // anonymous namespace
@@ -445,28 +445,28 @@ QString Utility::timeAgoInWords(const QDateTime &dt, const QDateTime &from)
 
     if (dt.daysTo(now) > 0) {
         int dtn = dt.daysTo(now);
-        return QObject::tr("%n day(s) ago", "", dtn);
+        return QObject::tr("%n dia(s) atrás", "", dtn);
     } else {
         qint64 secs = dt.secsTo(now);
         if (secs < 0) {
-            return QObject::tr("in the future");
+            return QObject::tr("no futuro");
         }
         if (floor(secs / 3600.0) > 0) {
             int hours = floor(secs / 3600.0);
-            return (QObject::tr("%n hour(s) ago", "", hours));
+            return (QObject::tr("%n hora(s) atrás", "", hours));
         } else {
             int minutes = qRound(secs / 60.0);
             if (minutes == 0) {
                 if (secs < 5) {
-                    return QObject::tr("now");
+                    return QObject::tr("agora");
                 } else {
-                    return QObject::tr("Less than a minute ago");
+                    return QObject::tr("A menos de um minuto atrás");
                 }
             }
-            return (QObject::tr("%n minute(s) ago", "", minutes));
+            return (QObject::tr("%n minuto(s) atrás", "", minutes));
         }
     }
-    return QObject::tr("Some time ago");
+    return QObject::tr("Algum tempo atrás");
 }
 
 /* --------------------------------------------------------------------------- */

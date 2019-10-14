@@ -73,7 +73,7 @@ void PropagateUploadFileNG::slotZsyncSeedFinished(void *_zs)
         free(zbr);
     });
     if (!zbyterange) {
-        abortWithError(SyncFileItem::NormalError, tr("Failed to get zsync byte ranges."));
+        abortWithError(SyncFileItem::NormalError, tr("Falha ao obter os intervalos de bytes do zsync."));
         return;
     }
 
@@ -631,7 +631,7 @@ void PropagateUploadFileNG::slotZsyncGenerationFailed(const QString &errorString
 {
     qCWarning(lcZsyncPut) << "Failed to generate zsync metadata file:" << errorString;
 
-    abortWithError(SyncFileItem::SoftError, tr("Failed to generate zsync file."));
+    abortWithError(SyncFileItem::SoftError, tr("Falha ao gerar o arquivo zsync."));
 }
 
 void PropagateUploadFileNG::slotPutFinished()
@@ -698,7 +698,7 @@ void PropagateUploadFileNG::slotPutFinished()
     const QString fullFilePath(propagator()->getFilePath(_item->_file));
     if (!FileSystem::fileExists(fullFilePath)) {
         if (!_finished) {
-            abortWithError(SyncFileItem::SoftError, tr("The local file was removed during sync."));
+            abortWithError(SyncFileItem::SoftError, tr("O arquivo local foi removido durante a sincronização."));
             return;
         } else {
             propagator()->_anotherSyncNeeded = true;
@@ -709,7 +709,7 @@ void PropagateUploadFileNG::slotPutFinished()
     if (!FileSystem::verifyFileUnchanged(fullFilePath, _item->_size, _item->_modtime)) {
         propagator()->_anotherSyncNeeded = true;
         if (!_finished) {
-            abortWithError(SyncFileItem::SoftError, tr("Local file changed during sync."));
+            abortWithError(SyncFileItem::SoftError, tr("Arquivo local modificado durante a sincronização."));
             return;
         }
     }
@@ -748,7 +748,7 @@ void PropagateUploadFileNG::slotMoveJobFinished()
     if (_item->_httpErrorCode == 202) {
         QString path = QString::fromUtf8(job->reply()->rawHeader("OC-JobStatus-Location"));
         if (path.isEmpty()) {
-            done(SyncFileItem::NormalError, tr("Poll URL missing"));
+            done(SyncFileItem::NormalError, tr("Faltando conjunto de URL"));
             return;
         }
         _finished = true;
@@ -757,14 +757,14 @@ void PropagateUploadFileNG::slotMoveJobFinished()
     }
 
     if (_item->_httpErrorCode != 201 && _item->_httpErrorCode != 204) {
-        abortWithError(SyncFileItem::NormalError, tr("Unexpected return code from server (%1)").arg(_item->_httpErrorCode));
+        abortWithError(SyncFileItem::NormalError, tr("Código de retorno inesperado do servidor (%1)").arg(_item->_httpErrorCode));
         return;
     }
 
     QByteArray fid = job->reply()->rawHeader("OC-FileID");
     if (fid.isEmpty()) {
         qCWarning(lcPropagateUpload) << "Server did not return a OC-FileID" << _item->_file;
-        abortWithError(SyncFileItem::NormalError, tr("Missing File ID from server"));
+        abortWithError(SyncFileItem::NormalError, tr("Falta ID do arquivo do servidor"));
         return;
     } else {
         // the old file id should only be empty for new files uploaded
@@ -778,7 +778,7 @@ void PropagateUploadFileNG::slotMoveJobFinished()
     ;
     if (_item->_etag.isEmpty()) {
         qCWarning(lcPropagateUpload) << "Server did not return an ETAG" << _item->_file;
-        abortWithError(SyncFileItem::NormalError, tr("Missing ETag from server"));
+        abortWithError(SyncFileItem::NormalError, tr("Falta ETag do servidor"));
         return;
     }
     finalize();

@@ -112,7 +112,7 @@ void ZsyncSeedRunnable::run()
     zsync_unique_ptr<struct zsync_state> zs(zsync_begin(f.get(), tfname),
         [](struct zsync_state *zs) { zsync_end(zs); });
     if (!zs) {
-        QString errorString = tr("Unable to parse zsync file.");
+        QString errorString = tr("Não foi possível verificar o arquivo zsync");
         emit failedSignal(errorString);
         return;
     }
@@ -129,7 +129,7 @@ void ZsyncSeedRunnable::run()
         QFile file(_zsyncFilePath);
         QString error;
         if (!FileSystem::openAndSeekFileSharedRead(&file, &error, 0)) {
-            QString errorString = tr("Unable to open file: %1").arg(error);
+            QString errorString = tr("Não foi possível abrir o arquivo : %1").arg(error);
             emit failedSignal(errorString);
             return;
         }
@@ -183,7 +183,7 @@ void ZsyncGenerateRunnable::run()
     QString error;
     if (!FileSystem::openAndSeekFileSharedRead(&inFile, &error, 0)) {
         FileSystem::remove(zsyncmeta.fileName());
-        QString error = tr("Failed to open input file %1: %2").arg(_file, error);
+        QString error = tr("Falha ao abrir o arquivo de entrada %1: %2").arg(_file, error);
         emit failedSignal(error);
         return;
     }
@@ -192,7 +192,7 @@ void ZsyncGenerateRunnable::run()
     });
     if (!in) {
         FileSystem::remove(zsyncmeta.fileName());
-        QString error = tr("Failed to open input file: %1").arg(_file);
+        QString error = tr("Falha ao abrir o arquivo de entrada: %1").arg(_file);
         emit failedSignal(error);
         return;
     }
@@ -205,7 +205,7 @@ void ZsyncGenerateRunnable::run()
     /* Read the input file and construct the checksum of the whole file, and
      * the per-block checksums */
     if (zsyncfile_read_stream_write_blocksums(in.get(), tf.get(), /*no_look_inside=*/1, state.get()) != 0) {
-        QString error = QString(tr("Failed to write block sums:")) + _file;
+        QString error = QString(tr("Falha ao gravar somas de bloco:")) + _file;
         emit failedSignal(error);
         return;
     }
@@ -226,7 +226,7 @@ void ZsyncGenerateRunnable::run()
             0, 0, // Uurls
             state.get())
         != 0) {
-        QString error = QString(tr("Failed to write zsync metadata file:")) + _file;
+        QString error = QString(tr("Falha ao gravar o arquivo de metadados zsync:")) + _file;
         emit failedSignal(error);
         return;
     }

@@ -105,9 +105,9 @@ bool OCUpdater::performUpdate()
     if (!updateFile.isEmpty() && QFile(updateFile).exists()
         && !updateSucceeded() /* Someone might have run the updater manually between restarts */) {
         const QString name = Theme::instance()->appNameGUI();
-        if (QMessageBox::information(0, tr("New %1 Update Ready").arg(name),
-                tr("A new update for %1 is about to be installed. The updater may ask\n"
-                   "for additional privileges during the process.")
+        if (QMessageBox::information(0, tr("Nova %1 atualização pronta").arg(name),
+                tr("Uma nova atualização %1 sera iniciada. Talvez o programa solicite\n"
+                   "por privilegios adicionais durante a instalação.")
                     .arg(name),
                 QMessageBox::Ok)) {
             slotStartInstaller();
@@ -145,23 +145,23 @@ QString OCUpdater::statusString() const
 
     switch (downloadState()) {
     case Downloading:
-        return tr("Downloading %1. Please wait...").arg(updateVersion);
+        return tr("Baixando %1. Aguarde...").arg(updateVersion);
     case DownloadComplete:
-        return tr("%1 available. Restart application to start the update.").arg(Theme::instance()->appNameGUI(), updateVersion);
+        return tr("%1 Disponivel. Reinicie o aplicativo para atualizar.").arg(Theme::instance()->appNameGUI(), updateVersion);
     case DownloadFailed:
-        return tr("Could not download update. Please click <a href='%1'>here</a> to download the update manually.").arg(_updateInfo.web());
+        return tr("Não é possivel baixar. Por favor, clique <a href='%1'>aqui</a> para baixar manualmente").arg(_updateInfo.web());
     case DownloadTimedOut:
-        return tr("Could not check for new updates.");
+        return tr("Não foi possível verificar novas atualizações.");
     case UpdateOnlyAvailableThroughSystem:
-        return tr("New %1 available. Please use the system's update tool to install it.").arg(updateVersion);
+        return tr("Nova %1 disponivel. Por avor utilize a ferramente de atualização para prosseguir.").arg(updateVersion);
     case CheckingServer:
-        return tr("Checking update server...");
+        return tr("Checando atualizações no servidor...");
     case Unknown:
-        return tr("Update status is unknown: Did not check for new updates.");
+        return tr("Status da atualização: Não foi procurada novas atualizações.");
     case UpToDate:
     // fall through
     default:
-        return tr("No updates available. Your installation is at the latest version.");
+        return tr("Sem atualizações disponiveis. Sua instalação está na versão atual.");
     }
 }
 
@@ -180,7 +180,7 @@ void OCUpdater::setDownloadState(DownloadState state)
     // or once for system based updates.
     if (_state == OCUpdater::DownloadComplete || (oldState != OCUpdater::UpdateOnlyAvailableThroughSystem
                                                      && _state == OCUpdater::UpdateOnlyAvailableThroughSystem)) {
-        emit newUpdateAvailable(tr("Update Check"), statusString());
+        emit newUpdateAvailable(tr("Verificar atualização"), statusString());
     }
 }
 
@@ -333,8 +333,16 @@ void NSISUpdater::versionInfoArrived(const UpdateInfo &info)
     ConfigFile cfg;
     QSettings settings(cfg.configFile(), QSettings::IniFormat);
     qint64 infoVersion = Helper::stringVersionToInt(info.version());
-    qint64 seenVersion = Helper::stringVersionToInt(settings.value(seenVersionC).toString());
+    auto seenString = settings.value(seenVersionC).toString();
+    qint64 seenVersion = Helper::stringVersionToInt(seenString);
     qint64 currVersion = Helper::currentVersionToInt();
+    qCInfo(lcUpdater) << "Version info arrived:"
+            << "Your version:" << currVersion
+            << "Skipped version:" << seenVersion << seenString
+            << "Available version:" << infoVersion << info.version()
+            << "Available version string:" << info.versionString()
+            << "Web url:" << info.web()
+            << "Download url:" << info.downloadUrl();
     if (info.version().isEmpty())
     {
         qCInfo(lcUpdater) << "No version information available at the moment";
@@ -342,9 +350,6 @@ void NSISUpdater::versionInfoArrived(const UpdateInfo &info)
     } else if (infoVersion <= currVersion
                || infoVersion <= seenVersion) {
         qCInfo(lcUpdater) << "Client is on latest version!";
-        qCInfo(lcUpdater) << "Your version:" << currVersion;
-        qCInfo(lcUpdater) << "Skipped version:" << seenVersion;
-        qCInfo(lcUpdater) << "Available version:" << infoVersion;
         setDownloadState(UpToDate);
     } else {
         QString url = info.downloadUrl();
@@ -383,14 +388,14 @@ void NSISUpdater::showNoUrlDialog(const UpdateInfo &info)
     QHBoxLayout *hlayout = new QHBoxLayout;
     layout->addLayout(hlayout);
 
-    msgBox->setWindowTitle(tr("New Version Available"));
+    msgBox->setWindowTitle(tr("Nova Versão Disponínel"));
 
     QLabel *ico = new QLabel;
     ico->setFixedSize(iconSize, iconSize);
     ico->setPixmap(infoIcon.pixmap(iconSize));
     QLabel *lbl = new QLabel;
-    QString txt = tr("<p>A new version of the %1 Client is available.</p>"
-                     "<p><b>%2</b> is available for download. The installed version is %3.</p>")
+    QString txt = tr("&lt;p&gt;Uma nova versão %1 de Ciente está disponível.&lt;/p&gt;"
+                     "&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; está disponível para baixar. A versão instalada é a %3.&lt;/p&gt;")
                       .arg(Utility::escape(Theme::instance()->appNameGUI()),
                           Utility::escape(info.versionString()), Utility::escape(clientVersion()));
 
@@ -402,9 +407,9 @@ void NSISUpdater::showNoUrlDialog(const UpdateInfo &info)
     hlayout->addWidget(lbl);
 
     QDialogButtonBox *bb = new QDialogButtonBox;
-    QPushButton *skip = bb->addButton(tr("Skip this version"), QDialogButtonBox::ResetRole);
-    QPushButton *reject = bb->addButton(tr("Skip this time"), QDialogButtonBox::AcceptRole);
-    QPushButton *getupdate = bb->addButton(tr("Get update"), QDialogButtonBox::AcceptRole);
+    QPushButton *skip = bb->addButton(tr("Pule esta versão"), QDialogButtonBox::ResetRole);
+    QPushButton *reject = bb->addButton(tr("Pular desta vez"), QDialogButtonBox::AcceptRole);
+    QPushButton *getupdate = bb->addButton(tr("Atualizar"), QDialogButtonBox::AcceptRole);
 
     connect(skip, &QAbstractButton::clicked, msgBox, &QDialog::reject);
     connect(reject, &QAbstractButton::clicked, msgBox, &QDialog::reject);
@@ -433,14 +438,14 @@ void NSISUpdater::showUpdateErrorDialog(const QString &targetVersion)
     QHBoxLayout *hlayout = new QHBoxLayout;
     layout->addLayout(hlayout);
 
-    msgBox->setWindowTitle(tr("Update Failed"));
+    msgBox->setWindowTitle(tr("Atualização Falhou"));
 
     QLabel *ico = new QLabel;
     ico->setFixedSize(iconSize, iconSize);
     ico->setPixmap(infoIcon.pixmap(iconSize));
     QLabel *lbl = new QLabel;
-    QString txt = tr("<p>A new version of the %1 Client is available but the updating process failed.</p>"
-                     "<p><b>%2</b> has been downloaded. The installed version is %3.</p>")
+    QString txt = tr("&lt;p&gt;Uma nova versão do %1 Cliente está disponível, mas o processo de atualização falhou.&lt;/p&gt;&lt;p&gt;&lt;b&gt;%2&lt;/b&gt; "
+                     "foi baixado. A versão instalada é %3.&lt;/p&gt;")
                       .arg(Utility::escape(Theme::instance()->appNameGUI()),
                           Utility::escape(targetVersion), Utility::escape(clientVersion()));
 
@@ -452,10 +457,10 @@ void NSISUpdater::showUpdateErrorDialog(const QString &targetVersion)
     hlayout->addWidget(lbl);
 
     QDialogButtonBox *bb = new QDialogButtonBox;
-    QPushButton *skip = bb->addButton(tr("Skip this version"), QDialogButtonBox::ResetRole);
-    QPushButton *askagain = bb->addButton(tr("Ask again later"), QDialogButtonBox::ResetRole);
-    QPushButton *retry = bb->addButton(tr("Restart and update"), QDialogButtonBox::AcceptRole);
-    QPushButton *getupdate = bb->addButton(tr("Update manually"), QDialogButtonBox::AcceptRole);
+    QPushButton *skip = bb->addButton(tr("Pule esta versão"), QDialogButtonBox::ResetRole);
+    QPushButton *askagain = bb->addButton(tr("Pergunte novamente mais tarde"), QDialogButtonBox::ResetRole);
+    QPushButton *retry = bb->addButton(tr("Reinicie e atualize"), QDialogButtonBox::AcceptRole);
+    QPushButton *getupdate = bb->addButton(tr("Atualizar manualmente"), QDialogButtonBox::AcceptRole);
 
     connect(skip, &QAbstractButton::clicked, msgBox, &QDialog::reject);
     connect(askagain, &QAbstractButton::clicked, msgBox, &QDialog::reject);
@@ -487,18 +492,24 @@ bool NSISUpdater::handleStartup()
     QString updateFileName = settings.value(updateAvailableC).toString();
     // has the previous run downloaded an update?
     if (!updateFileName.isEmpty() && QFile(updateFileName).exists()) {
+        qCInfo(lcUpdater) << "An updater file is available";
         // did it try to execute the update?
         if (settings.value(autoUpdateAttemptedC, false).toBool()) {
             if (updateSucceeded()) {
                 // success: clean up
+                qCInfo(lcUpdater) << "The requested update attempt has succeeded"
+                        << Helper::currentVersionToInt();
                 wipeUpdateData();
                 return false;
             } else {
                 // auto update failed. Ask user what to do
+                qCInfo(lcUpdater) << "The requested update attempt has failed"
+                        << settings.value(updateTargetVersionC).toString();
                 showUpdateErrorDialog(settings.value(updateTargetVersionStringC).toString());
                 return false;
             }
         } else {
+            qCInfo(lcUpdater) << "Triggering an update";
             return performUpdate();
         }
     }

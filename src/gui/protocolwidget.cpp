@@ -139,7 +139,7 @@ void ProtocolItem::openContextMenu(QPoint globalPos, QTreeWidgetItem *item, QWid
 
     if (rec.isValid()) {
         // "Open in Browser" action
-        auto openInBrowser = menu->addAction(ProtocolWidget::tr("Open in browser"));
+        auto openInBrowser = menu->addAction(ProtocolWidget::tr("Abrir no navegador"));
         QObject::connect(openInBrowser, &QAction::triggered, parent, [parent, account, rec]() {
             fetchPrivateLinkUrl(account, rec._path, rec.legacyDeriveNumericFileId(), parent,
                 [parent](const QString &url) {
@@ -190,11 +190,11 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
 
     // Adjust copyToClipboard() when making changes here!
     QStringList header;
-    header << tr("Time");
-    header << tr("File");
-    header << tr("Folder");
-    header << tr("Action");
-    header << tr("Size");
+    header << tr("Tempo");
+    header << tr("Arquivo");
+    header << tr("Pasta");
+    header << tr("Ação");
+    header << tr("Tempo");
 
     int timestampColumnExtra = 0;
 #ifdef Q_OS_WIN
@@ -214,10 +214,10 @@ ProtocolWidget::ProtocolWidget(QWidget *parent)
 #if defined(Q_OS_MAC)
     _ui->_treeWidget->setMinimumWidth(400);
 #endif
-    _ui->_headerLabel->setText(tr("Local sync protocol"));
+    _ui->_headerLabel->setText(tr("Protocolo de sincronização local"));
 
-    QPushButton *copyBtn = _ui->_dialogButtonBox->addButton(tr("Copy"), QDialogButtonBox::ActionRole);
-    copyBtn->setToolTip(tr("Copy the activity list to the clipboard."));
+    QPushButton *copyBtn = _ui->_dialogButtonBox->addButton(tr("Copiar"), QDialogButtonBox::ActionRole);
+    copyBtn->setToolTip(tr("Copiar a lista de atividades para a área de transferência."));
     copyBtn->setEnabled(true);
     connect(copyBtn, &QAbstractButton::clicked, this, &ProtocolWidget::copyToClipboard);
 }

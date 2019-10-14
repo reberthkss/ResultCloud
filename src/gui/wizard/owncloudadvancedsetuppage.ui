@@ -88,7 +88,7 @@
        <item>
         <widget class="QLabel" name="lServer">
          <property name="text">
-          <string>Server</string>
+          <string>Servidor</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -147,7 +147,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>&amp;Local Folder</string>
+          <string>&amp;Pasta Local</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -190,7 +190,7 @@
         <item row="1" column="0" colspan="2">
          <widget class="QRadioButton" name="radioButton">
           <property name="text">
-           <string>&amp;Keep local data</string>
+           <string>&amp;Manter dados locais</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -200,10 +200,10 @@
         <item row="2" column="0" colspan="2">
          <widget class="QRadioButton" name="cbSyncFromScratch">
           <property name="toolTip">
-           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If this box is checked, existing content in the local folder will be erased to start a clean sync from the server.&lt;/p&gt;&lt;p&gt;Do not check this if the local content should be uploaded to the servers folder.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Se esta opção estiver marcada, os conteúdos existentes na pasta local serão apagados para iniciar uma sincronização limpa a partir do servidor.&lt;/p&gt;&lt;p&gt;Não marque esta opção se os conteúdos locais devem ser enviados para a pasta de servidores.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="text">
-           <string>Start a &amp;clean sync (Erases the local folder!)</string>
+           <string>Iniciar uma sincronização &amp;limpa (Elimina a pasta local!)</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -240,7 +240,7 @@
           <item>
            <widget class="QRadioButton" name="rSyncEverything">
             <property name="text">
-             <string>S&amp;ynchronize everything from server (recommended)</string>
+             <string>S&amp;incronizar tudo do servidor (recomendado)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -298,7 +298,7 @@
             <item>
              <widget class="QCheckBox" name="confCheckBoxSize">
               <property name="text">
-               <string>Ask for confirmation before synchroni&amp;zing folders larger than</string>
+               <string>Solicite confirmação antes de sincroni&amp;zar pastas maiores que</string>
               </property>
              </widget>
             </item>
@@ -324,7 +324,7 @@
           <item row="1" column="1">
            <widget class="QCheckBox" name="confCheckBoxExternal">
             <property name="text">
-             <string>Ask for confirmation before synchronizing e&amp;xternal storages</string>
+             <string>Solicitar confirmação antes de sincronizar os armazenamentos e&amp;xternos</string>
             </property>
            </widget>
           </item>
@@ -351,7 +351,7 @@
           <item>
            <widget class="QPushButton" name="bSelectiveSync">
             <property name="text">
-             <string>Choose what to sync</string>
+             <string>Escolha o que quer sincronizar</string>
             </property>
            </widget>
           </item>
@@ -391,13 +391,13 @@
              </sizepolicy>
             </property>
             <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is selected, the wizard will close without synchronizing anything. You can use the &amp;quot;Add Folder Sync Connection&amp;quot; button from the account settings to choose which pair of local and remote folder you wish to synchronize&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quando esta opção é selecionada, o assistente será fechado sem sincronizar nada. Você pode usar a &amp;quot; Adicionar conexão de sincronização de pastas &amp;quot; botão das configurações da conta para escolher qual par de pasta local e remota você deseja sincronizar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="whatsThis">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When this option is selected, the wizard will close without synchronizing anything. You can use the &amp;quot;Add Folder Sync Connection&amp;quot; button from the account settings to choose which pair of local and remote folder you wish to synchronize&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Quando esta opção é selecionada, o assistente será fechado sem sincronizar nada. Você pode usar a &amp;quot; Adicionar conexão de sincronização de pastas &amp;quot; botão das configurações da conta para escolher qual par de pasta local e remota você deseja sincronizar&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
-             <string>Manually create folder sync connections </string>
+             <string>Criar manualmente conexões de sincronização de pasta</string>
             </property>
            </widget>
           </item>
@@ -427,7 +427,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Use virtual files instead of downloading content immediately (e&amp;xperimental)</string>
+             <string notr="true">Utilizar &amp;arquivos virtuais !PLACEHOLDER!</string>
             </property>
             <property name="checkable">
              <bool>false</bool>
@@ -457,7 +457,7 @@
    <item>
     <widget class="QLabel" name="syncModeLabel">
      <property name="text">
-      <string>Status message</string>
+      <string>Mensagem de status</string>
      </property>
      <property name="textFormat">
       <enum>Qt::RichText</enum>
@@ -487,7 +487,7 @@
         <x>0</x>
         <y>0</y>
         <width>899</width>
-        <height>68</height>
+        <height>164</height>
        </rect>
       </property>
       <property name="sizePolicy">

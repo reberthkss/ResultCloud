@@ -333,7 +333,7 @@ ComputeChecksum *ValidateChecksumHeader::prepareStart(const QByteArray &checksum
 
     if (!parseChecksumHeader(checksumHeader, &_expectedChecksumType, &_expectedChecksum)) {
         qCWarning(lcChecksums) << "Checksum header malformed:" << checksumHeader;
-        emit validationFailed(tr("The checksum header is malformed."));
+        emit validationFailed(tr("O cabeçalho da soma de verificação está incorreto."));
         return nullptr;
     }
 
@@ -360,11 +360,11 @@ void ValidateChecksumHeader::slotChecksumCalculated(const QByteArray &checksumTy
     const QByteArray &checksum)
 {
     if (checksumType != _expectedChecksumType) {
-        emit validationFailed(tr("The checksum header contained an unknown checksum type '%1'").arg(QString::fromLatin1(_expectedChecksumType)));
+        emit validationFailed(tr("A cabeçalho da soma de verificação continha um tipo de soma de verificação desconhecido &apos;%1&apos;").arg(QString::fromLatin1(_expectedChecksumType)));
         return;
     }
     if (checksum != _expectedChecksum) {
-        emit validationFailed(tr("The downloaded file does not match the checksum, it will be resumed."));
+        emit validationFailed(tr("O arquivo baixado não coincide com o checksum, ele será retomado."));
         return;
     }
     emit validated(checksumType, checksum);

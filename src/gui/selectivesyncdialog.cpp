@@ -70,13 +70,13 @@ SelectiveSyncWidget::SelectiveSyncWidget(AccountPtr account, QWidget *parent)
     , _inserting(false)
     , _folderTree(new QTreeWidget(this))
 {
-    _loading = new QLabel(tr("Loading ..."), _folderTree);
+    _loading = new QLabel(tr("Carregando..."), _folderTree);
 
     auto layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
 
     auto header = new QLabel(this);
-    header->setText(tr("Deselect remote folders you do not wish to synchronize."));
+    header->setText(tr("Desmarque as pastas remotas que não deseja sincronizar."));
     header->setWordWrap(true);
     layout->addWidget(header);
 
@@ -92,8 +92,8 @@ SelectiveSyncWidget::SelectiveSyncWidget(AccountPtr account, QWidget *parent)
     _folderTree->header()->setSectionResizeMode(0, QHeaderView::QHeaderView::ResizeToContents);
     _folderTree->header()->setSectionResizeMode(1, QHeaderView::QHeaderView::ResizeToContents);
     _folderTree->header()->setStretchLastSection(true);
-    _folderTree->headerItem()->setText(0, tr("Name"));
-    _folderTree->headerItem()->setText(1, tr("Size"));
+    _folderTree->headerItem()->setText(0, tr("Nome"));
+    _folderTree->headerItem()->setText(1, tr("Tamanho"));
 
     ConfigFile::setupDefaultExcludeFilePaths(_excludedFiles);
     _excludedFiles.reloadExcludeFiles();
@@ -224,7 +224,7 @@ void SelectiveSyncWidget::slotUpdateDirectories(QStringList list)
     }
 
     if (!root && list.size() <= 1) {
-        _loading->setText(tr("No subfolders currently on the server."));
+        _loading->setText(tr("Nenhuma sub-pasta atualmente no servidor."));
         _loading->resize(_loading->sizeHint()); // because it's not in a layout
         return;
     } else {
@@ -274,9 +274,9 @@ void SelectiveSyncWidget::slotUpdateDirectories(QStringList list)
 void SelectiveSyncWidget::slotLscolFinishedWithError(QNetworkReply *r)
 {
     if (r->error() == QNetworkReply::ContentNotFoundError) {
-        _loading->setText(tr("No subfolders currently on the server."));
+        _loading->setText(tr("Nenhuma sub-pasta atualmente no servidor."));
     } else {
-        _loading->setText(tr("An error occurred while loading the list of sub folders."));
+        _loading->setText(tr("Ocorreu um erro enquanto carregava a lista de subpastas."));
     }
     _loading->resize(_loading->sizeHint()); // because it's not in a layout
 }
@@ -456,15 +456,15 @@ SelectiveSyncDialog::SelectiveSyncDialog(AccountPtr account, const QString &fold
 
 void SelectiveSyncDialog::init(const AccountPtr &account)
 {
-    setWindowTitle(tr("Choose What to Sync"));
+    setWindowTitle(tr("Escolher o que Sincronizar"));
     QVBoxLayout *layout = new QVBoxLayout(this);
     _selectiveSync = new SelectiveSyncWidget(account, this);
     layout->addWidget(_selectiveSync);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(Qt::Horizontal);
-    _okButton = buttonBox->addButton(QDialogButtonBox::Ok);
+    _okButton = buttonBox->addButton(tr("ACEITAR"),QDialogButtonBox::Ok);
     connect(_okButton, &QPushButton::clicked, this, &SelectiveSyncDialog::accept);
     QPushButton *button;
-    button = buttonBox->addButton(QDialogButtonBox::Cancel);
+    button = buttonBox->addButton(tr("CANCELAR"),QDialogButtonBox::Cancel);
     connect(button, &QAbstractButton::clicked, this, &QDialog::reject);
     layout->addWidget(buttonBox);
 }

@@ -136,7 +136,7 @@ void LibCloudProvidersPrivate::exportFolder(Folder *folder)
     auto menu = g_menu_new();
     // The "cloudprovider" scope is hardcoded into the gtk code that uses this data.
     // Different scopes will not work.
-    g_menu_append(menu, tr("Settings").toUtf8().constData(), "cloudprovider.settings");
+    g_menu_append(menu, tr("Configurações").toUtf8().constData(), "cloudprovider.settings");
 
     auto actionGroup = g_simple_action_group_new();
     const GActionEntry entries[] = {

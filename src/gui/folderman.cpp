@@ -350,10 +350,10 @@ bool FolderMan::ensureJournalGone(const QString &journalDbFile)
     // remove the old journal file
     while (QFile::exists(journalDbFile) && !QFile::remove(journalDbFile)) {
         qCWarning(lcFolderMan) << "Could not remove old db file at" << journalDbFile;
-        int ret = QMessageBox::warning(0, tr("Could not reset folder state"),
-            tr("An old sync journal '%1' was found, "
-               "but could not be removed. Please make sure "
-               "that no application is currently using it.")
+        int ret = QMessageBox::warning(0, tr("Não foi possível redefinir o estado da pasta"),
+            tr("Uma velha revista de sincronização &apos;%1&apos; foi encontrada, "
+               " mas não pôde ser removida. Por favor,  "
+               "certifique-se de que nenhuma aplicação está a usá-la.")
                 .arg(QDir::fromNativeSeparators(QDir::cleanPath(journalDbFile))),
             QMessageBox::Retry | QMessageBox::Abort);
         if (ret == QMessageBox::Abort) {
@@ -1318,41 +1318,41 @@ QString FolderMan::trayTooltipStatusString(
     QString folderMessage;
     switch (syncStatus) {
     case SyncResult::Undefined:
-        folderMessage = tr("Undefined State.");
+        folderMessage = tr("Estado indefinido.");
         break;
     case SyncResult::NotYetStarted:
-        folderMessage = tr("Waiting to start syncing.");
+        folderMessage = tr("À espera do início da sincronização.");
         break;
     case SyncResult::SyncPrepare:
-        folderMessage = tr("Preparing for sync.");
+        folderMessage = tr("Preparando para sincronização.");
         break;
     case SyncResult::SyncRunning:
-        folderMessage = tr("Sync is running.");
+        folderMessage = tr("A sincronização está ocorrendo.");
         break;
     case SyncResult::Success:
     case SyncResult::Problem:
         if (hasUnresolvedConflicts) {
-            folderMessage = tr("Sync was successful, unresolved conflicts.");
+            folderMessage = tr("A sincronização foi bem-sucedida, conflitos não resolvidos.");
         } else {
-            folderMessage = tr("Last Sync was successful.");
+            folderMessage = tr("A última sincronização foi feita com sucesso.");
         }
         break;
     case SyncResult::Error:
         break;
     case SyncResult::SetupError:
-        folderMessage = tr("Setup Error.");
+        folderMessage = tr("Erro de Configuração.");
         break;
     case SyncResult::SyncAbortRequested:
-        folderMessage = tr("User Abort.");
+        folderMessage = tr("Usuário Abortou.");
         break;
     case SyncResult::Paused:
-        folderMessage = tr("Sync is paused.");
+        folderMessage = tr("Sincronização pausada.");
         break;
         // no default case on purpose, check compiler warnings
     }
     if (paused) {
         // sync is disabled.
-        folderMessage = tr("%1 (Sync is paused)").arg(folderMessage);
+        folderMessage = tr("%1 (Pausa na Sincronização)").arg(folderMessage);
     }
     return folderMessage;
 }
@@ -1360,7 +1360,7 @@ QString FolderMan::trayTooltipStatusString(
 static QString checkPathValidityRecursive(const QString &path)
 {
     if (path.isEmpty()) {
-        return FolderMan::tr("No valid folder selected!");
+        return FolderMan::tr("Nenhuma pasta válida selecionada!");
     }
 
     QFileInfo selFile(path);
@@ -1369,15 +1369,15 @@ static QString checkPathValidityRecursive(const QString &path)
         QString parentPath = selFile.dir().path();
         if (parentPath != path)
             return checkPathValidityRecursive(parentPath);
-        return FolderMan::tr("The selected path does not exist!");
+        return FolderMan::tr("O caminho selecionado não existe!");
     }
 
     if (!selFile.isDir()) {
-        return FolderMan::tr("The selected path is not a folder!");
+        return FolderMan::tr("O caminho selecionado não é uma pasta!");
     }
 
     if (!selFile.isWritable()) {
-        return FolderMan::tr("You have no permission to write to the selected folder!");
+        return FolderMan::tr("Voce não tem permissão para escrita na pasta selecionada!");
     }
     return QString();
 }
@@ -1422,14 +1422,14 @@ QString FolderMan::checkPathValidityForNewFolder(const QString &path, const QUrl
 
         bool differentPaths = QString::compare(folderDir, userDir, cs) != 0;
         if (differentPaths && folderDir.startsWith(userDir, cs)) {
-            return tr("The local folder %1 already contains a folder used in a folder sync connection. "
-                      "Please pick another one!")
+            return tr("A pasta local %1 já contém uma pasta utilizada numa ligação de sincronização de pasta.  "
+                      "Por favor, escolha outra!")
                 .arg(QDir::toNativeSeparators(path));
         }
 
         if (differentPaths && userDir.startsWith(folderDir, cs)) {
-            return tr("The local folder %1 is already contained in a folder used in a folder sync connection. "
-                      "Please pick another one!")
+            return tr("A pasta local %1 já está contida em uma pasta usada em uma conexão de sincronização de pastas. "
+                      "Por favor, escolha outra!")
                 .arg(QDir::toNativeSeparators(path));
         }
 
@@ -1442,8 +1442,8 @@ QString FolderMan::checkPathValidityForNewFolder(const QString &path, const QUrl
             folderUrl.setUserName(user);
 
             if (serverUrl == folderUrl) {
-                return tr("There is already a sync from the server to this local folder. "
-                          "Please pick another local folder!");
+                return tr("Já existe uma sincronização do servidor para esta pasta local.  "
+                          "Por favor, escolha uma outra pasta local!");
             }
         }
     }

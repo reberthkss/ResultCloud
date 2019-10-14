@@ -98,7 +98,7 @@ void PropagateRemoteMkdir::slotMkcolJobFinished()
         // If it is not the case, it might be because of a proxy or gateway intercepting the request, so we must
         // throw an error.
         done(SyncFileItem::NormalError,
-            tr("Wrong HTTP code returned by server. Expected 201, but received \"%1 %2\".")
+            tr("Código HTTP retornado errado  pelo servidor. 201 esperado, mas recebeu &quot;%1 %2&quot;.")
                 .arg(_item->_httpErrorCode)
                 .arg(_job->reply()->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString()));
         return;
@@ -148,7 +148,7 @@ void PropagateRemoteMkdir::success()
 {
     // save the file id already so we can detect rename or remove
     if (!propagator()->updateMetadata(*_item)) {
-        done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+        done(SyncFileItem::FatalError, tr("Ocorreu um erro ao escrever metadados ao banco de dados"));
         return;
     }
 

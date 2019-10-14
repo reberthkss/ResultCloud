@@ -43,7 +43,7 @@ FolderStatusDelegate::FolderStatusDelegate()
 
 QString FolderStatusDelegate::addFolderText()
 {
-    return tr("Add Folder Sync Connection");
+    return tr("Adicionar Pasta a Sincronizar");
 }
 
 // allocate each item size in listview.
@@ -244,7 +244,7 @@ void FolderStatusDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     if (!showProgess) {
         painter->setFont(subFont);
         QString elidedRemotePathText = subFm.elidedText(
-            tr("Synchronizing with local folder"),
+            tr("Sincronizando com a pasta local"),
             Qt::ElideRight, remotePathRect.width());
         painter->drawText(QStyle::visualRect(option.direction, option.rect, remotePathRect),
             textAlign, elidedRemotePathText);
@@ -295,7 +295,7 @@ void FolderStatusDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 
     // Sync File Progress Bar: Show it if syncFile is not empty.
     if (showProgess) {
-        int fileNameTextHeight = subFm.boundingRect(tr("File")).height();
+        int fileNameTextHeight = subFm.boundingRect(tr("Arquivo")).height();
         int barHeight = 7; // same height as quota bar
         int overallWidth = option.rect.right() - aliasMargin - optionsButtonVisualRect.width() - nextToIcon;
 

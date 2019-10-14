@@ -168,13 +168,13 @@ void Folder::checkLocalPath()
     } else {
         // Check directory again
         if (!FileSystem::fileExists(_definition.localPath, fi)) {
-            _syncResult.appendErrorString(tr("Local folder %1 does not exist.").arg(_definition.localPath));
+            _syncResult.appendErrorString(tr("A pasta local %1 não existe.").arg(_definition.localPath));
             _syncResult.setStatus(SyncResult::SetupError);
         } else if (!fi.isDir()) {
-            _syncResult.appendErrorString(tr("%1 should be a folder but is not.").arg(_definition.localPath));
+            _syncResult.appendErrorString(tr("%1 deve ser uma pasta, mas não é.").arg(_definition.localPath));
             _syncResult.setStatus(SyncResult::SetupError);
         } else if (!fi.isReadable()) {
-            _syncResult.appendErrorString(tr("%1 is not readable.").arg(_definition.localPath));
+            _syncResult.appendErrorString(tr("%1 não pode ser lido.").arg(_definition.localPath));
             _syncResult.setStatus(SyncResult::SetupError);
         }
     }
@@ -409,57 +409,57 @@ void Folder::createGuiLog(const QString &filename, LogStatus status, int count,
         switch (status) {
         case LogStatusRemove:
             if (count > 1) {
-                text = tr("%1 and %n other file(s) have been removed.", "", count - 1).arg(file);
+                text = tr("%1 e %n outro arquivo foi removido.", "", count - 1).arg(file);
             } else {
-                text = tr("%1 has been removed.", "%1 names a file.").arg(file);
+                text = tr("%1 foi removido.", "%1 names a file.").arg(file);
             }
             break;
         case LogStatusNew:
             if (count > 1) {
-                text = tr("%1 and %n other file(s) have been added.", "", count - 1).arg(file);
+                text = tr("%1 e %n outros arquivo(s) foram adicionados.", "", count - 1).arg(file);
             } else {
-                text = tr("%1 has been added.", "%1 names a file.").arg(file);
+                text = tr("%1 foi adicionado.", "%1 names a file.").arg(file);
             }
             break;
         case LogStatusUpdated:
             if (count > 1) {
-                text = tr("%1 and %n other file(s) have been updated.", "", count - 1).arg(file);
+                text = tr("%1 e %n outro arquivo foi atualizado.", "", count - 1).arg(file);
             } else {
-                text = tr("%1 has been updated.", "%1 names a file.").arg(file);
+                text = tr("%1 foi atualizado.", "%1 names a file.").arg(file);
             }
             break;
         case LogStatusRename:
             if (count > 1) {
-                text = tr("%1 has been renamed to %2 and %n other file(s) have been renamed.", "", count - 1).arg(file, renameTarget);
+                text = tr("%1 foi renomeado para %2 e %n outro arquivo foi renomeado.", "", count - 1).arg(file, renameTarget);
             } else {
-                text = tr("%1 has been renamed to %2.", "%1 and %2 name files.").arg(file, renameTarget);
+                text = tr("%1 foi renomeado para %2.", "%1 and %2 name files.").arg(file, renameTarget);
             }
             break;
         case LogStatusMove:
             if (count > 1) {
-                text = tr("%1 has been moved to %2 and %n other file(s) have been moved.", "", count - 1).arg(file, renameTarget);
+                text = tr("%1 foi movido para %2 e %n outro arquivo foi movido.", "", count - 1).arg(file, renameTarget);
             } else {
-                text = tr("%1 has been moved to %2.").arg(file, renameTarget);
+                text = tr("%1 foi movido para %2.").arg(file, renameTarget);
             }
             break;
         case LogStatusConflict:
             if (count > 1) {
-                text = tr("%1 has and %n other file(s) have sync conflicts.", "", count - 1).arg(file);
+                text = tr("%1 tem e %n outro arquivo tem conflito na sincronização.", "", count - 1).arg(file);
             } else {
-                text = tr("%1 has a sync conflict. Please check the conflict file!").arg(file);
+                text = tr("%1 tem um conflito na sincronização. Por favor verifique o arquivo de conflito!").arg(file);
             }
             break;
         case LogStatusError:
             if (count > 1) {
-                text = tr("%1 and %n other file(s) could not be synced due to errors. See the log for details.", "", count - 1).arg(file);
+                text = tr("%1 e %n outro arquivo não pode ser sincronizado devido a erros. Veja o log para detalhes.", "", count - 1).arg(file);
             } else {
-                text = tr("%1 could not be synced due to an error. See the log for details.").arg(file);
+                text = tr("%1 não pode ser sincronizado devido a um erro. Veja o log para obter detalhes.").arg(file);
             }
             break;
         }
 
         if (!text.isEmpty()) {
-            logger->postOptionalGuiLog(tr("Sync Activity"), text);
+            logger->postOptionalGuiLog(tr("Atividade de Sincronização"), text);
         }
     }
 }
@@ -803,7 +803,7 @@ void Folder::startSync(const QStringList &pathList)
     _fileLog->start(path());
 
     if (!reloadExcludes()) {
-        slotSyncError(tr("Could not read system exclude file"));
+        slotSyncError(tr("Não foi possível ler o sistema de arquivo de exclusão"));
         QMetaObject::invokeMethod(this, "slotSyncFinished", Qt::QueuedConnection, Q_ARG(bool, false));
         return;
     }
@@ -1051,11 +1051,11 @@ void Folder::slotNewBigFolderDiscovered(const QString &newF, bool isExternal)
             journal->setSelectiveSyncList(SyncJournalDb::SelectiveSyncUndecidedList, undecidedList);
             emit newBigFolderDiscovered(newFolder);
         }
-        QString message = !isExternal ? (tr("A new folder larger than %1 MB has been added: %2.\n")
+        QString message = !isExternal ? (tr("Uma nova pasta maior que %1 MB foi adicionada: %2. \n")
                                                 .arg(ConfigFile().newBigFolderSizeLimit().second)
                                                 .arg(newF))
-                                      : (tr("A folder from an external storage has been added.\n"));
-        message += tr("Please go in the settings to select it if you wish to download it.");
+                                      : (tr("Uma pasta de um armazenamento externo foi adicionada.\n"));
+        message += tr("Por favor, vá nas configurações para selecioná-lo se você deseja baixá-lo.");
 
         auto logger = Logger::instance();
         logger->postOptionalGuiLog(Theme::instance()->appNameGUI(), message);
@@ -1115,11 +1115,11 @@ void Folder::warnOnNewExcludedItem(const SyncJournalFileRecord &record, const QS
         return;
 
     const auto message = fi.isDir()
-        ? tr("The folder %1 was created but was excluded from synchronization previously. "
-             "Data inside it will not be synchronized.")
+        ? tr("A pasta %1 foi criada, mas foi excluída da sincronização anteriormente. "
+             " Os dados dentro dela não serão sincronizados.")
               .arg(fi.filePath())
-        : tr("The file %1 was created but was excluded from synchronization previously. "
-             "It will not be synchronized.")
+        : tr("A arquivo %1 foi criado, mas foi excluído da sincronização anteriormente.  "
+             "Ele não será sincronizado.")
               .arg(fi.filePath());
 
     Logger::instance()->postOptionalGuiLog(Theme::instance()->appNameGUI(), message);
@@ -1129,11 +1129,11 @@ void Folder::slotWatcherUnreliable(const QString &message)
 {
     qCWarning(lcFolder) << "Folder watcher for" << path() << "became unreliable:" << message;
     auto fullMessage =
-        tr("Changes in synchronized folders could not be tracked reliably.\n"
+        tr("As alterações nas pastas sincronizadas não puderam ser rastreadas de maneira confiável.\n"
            "\n"
-           "This means that the synchronization client might not upload local changes "
-           "immediately and will instead only scan for local changes and upload them "
-           "occasionally (every two hours by default).\n"
+           "Isso significa que o cliente de sincronização pode não fazer envios de alterações locais "
+           "imediatamente e, em vez disso, só varre as alterações locais e as carrega  "
+           "ocasionalmente (a cada duas horas, por padrão).\n"
            "\n"
            "%1").arg(message);
     Logger::instance()->postGuiLog(Theme::instance()->appNameGUI(), fullMessage);
@@ -1204,20 +1204,20 @@ void Folder::slotAboutToRemoveAllFiles(SyncFileItem::Direction dir, bool *cancel
     if (!cfgFile.promptDeleteFiles())
         return;
 
-    QString msg = dir == SyncFileItem::Down ? tr("All files in the sync folder '%1' folder were deleted on the server.\n"
-                                                 "These deletes will be synchronized to your local sync folder, making such files "
-                                                 "unavailable unless you have a right to restore. \n"
-                                                 "If you decide to keep the files, they will be re-synced with the server if you have rights to do so.\n"
-                                                 "If you decide to delete the files, they will be unavailable to you, unless you are the owner.")
-                                            : tr("All the files in your local sync folder '%1' were deleted. These deletes will be "
-                                                 "synchronized with your server, making such files unavailable unless restored.\n"
-                                                 "Are you sure you want to sync those actions with the server?\n"
-                                                 "If this was an accident and you decide to keep your files, they will be re-synced from the server.");
-    QMessageBox msgBox(QMessageBox::Warning, tr("Remove All Files?"),
+    QString msg = dir == SyncFileItem::Down ? tr("Todos os arquivos na pasta &apos;%1&apos; de sincronização foram excluídos no servidor. \n"
+                                                 "Essas exclusões serão sincronizadas com a pasta de sincronização local, tornando esses arquivos "
+                                                 "indisponíveis, a menos que você tenha o direito de restaurar. \n"
+                                                 "Se você decidir manter os arquivos, eles serão re-sincronizados com o servidor se você tiver direitos para fazê-lo. \n"
+                                                 "Se você decidir excluir os arquivos, eles não estarão disponíveis para você, a menos que você seja o proprietário.")
+                                            : tr("Todos os arquivos na pasta de sincronização local &apos;%1&apos; foram excluídos. Essas exclusões "
+                                                 "serão sincronizadas com o servidor, tornando tais arquivos indisponíveis, a menos que restaurados.\n"
+                                                 "Tem certeza de que deseja sincronizar essas ações com o servidor?\n"
+                                                 "Se isso foi um acidente e você decidir manter seus arquivos, eles serão re-sincronizados a partir do servidor.");
+    QMessageBox msgBox(QMessageBox::Warning, tr("Deseja Remover Todos os Arquivos?"),
         msg.arg(shortGuiLocalPath()));
     msgBox.setWindowFlags(msgBox.windowFlags() | Qt::WindowStaysOnTopHint);
-    msgBox.addButton(tr("Remove all files"), QMessageBox::DestructiveRole);
-    QPushButton *keepBtn = msgBox.addButton(tr("Keep files"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("Remover todos os arquivos"), QMessageBox::DestructiveRole);
+    QPushButton *keepBtn = msgBox.addButton(tr("Manter arquivos"), QMessageBox::AcceptRole);
     if (msgBox.exec() == -1) {
         *cancel = true;
         return;

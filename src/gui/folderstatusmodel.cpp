@@ -140,9 +140,9 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
             return QVariant(true);
         } else if (role == Qt::ToolTipRole) {
             if (!_accountState->isConnected()) {
-                return tr("You need to be connected to add a folder");
+                return tr("Você precisa estar conectado para adicionar uma pasta");
             }
-            return tr("Click this button to add a folder to synchronize.");
+            return tr("Clique nesse botão para adicionar uma pasta para sincronizar.");
         }
         return QVariant();
     }
@@ -177,10 +177,10 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         switch (role) {
         case Qt::DisplayRole:
             if (x->_hasError) {
-                return QVariant(tr("Error while loading the list of folders from the server.")
+                return QVariant(tr("Erro enquanto carregava a lista de pastas do servidor.")
                     + QString("\n") + x->_lastErrorString);
             } else {
-                return tr("Fetching folder list from server...");
+                return tr("Obtendo lista de pastas do servidor...");
             }
             break;
         default:
@@ -206,13 +206,13 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         return f->remotePath();
     case FolderStatusDelegate::FolderConflictMsg:
         return (f->syncResult().hasUnresolvedConflicts())
-            ? QStringList(tr("There are unresolved conflicts. Click for details."))
+            ? QStringList(tr("Existem conflitos não resolvidos. Clique para detalhes."))
             : QStringList();
     case FolderStatusDelegate::FolderErrorMsg:
         return f->syncResult().errorStrings();
     case FolderStatusDelegate::FolderInfoMsg:
         return f->supportsVirtualFiles()
-            ? QStringList(tr("Virtual file support is enabled."))
+            ? QStringList(tr("O suporte a arquivos virtuais está ativado."))
             : QStringList();
     case FolderStatusDelegate::SyncRunning:
         return f->syncResult().status() == SyncResult::SyncRunning;
@@ -232,7 +232,7 @@ QVariant FolderStatusModel::data(const QModelIndex &index, int role) const
         if (accountConnected)
             toolTip = Theme::instance()->statusHeaderText(f->syncResult().status());
         else
-            toolTip = tr("Signed out");
+            toolTip = tr("Desconectado");
         toolTip += "\n";
         toolTip += folderInfo._folder->path();
         return toolTip;
@@ -895,18 +895,18 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress)
 
     if (progress.status() == ProgressInfo::Discovery) {
         if (!progress._currentDiscoveredRemoteFolder.isEmpty()) {
-            pi->_overallSyncString = tr("Checking for changes in remote '%1'").arg(progress._currentDiscoveredRemoteFolder);
+            pi->_overallSyncString = tr("Verificando alterações remotamente &apos;%1&apos;").arg(progress._currentDiscoveredRemoteFolder);
             emit dataChanged(index(folderIndex), index(folderIndex), roles);
             return;
         } else if (!progress._currentDiscoveredLocalFolder.isEmpty()) {
-            pi->_overallSyncString = tr("Checking for changes in local '%1'").arg(progress._currentDiscoveredLocalFolder);
+            pi->_overallSyncString = tr("Verificação de alterações no local &apos;%1&apos;").arg(progress._currentDiscoveredLocalFolder);
             emit dataChanged(index(folderIndex), index(folderIndex), roles);
             return;
         }
     }
 
     if (progress.status() == ProgressInfo::Reconcile) {
-        pi->_overallSyncString = tr("Reconciling changes");
+        pi->_overallSyncString = tr("Reconciliando mudanças");
         emit dataChanged(index(folderIndex), index(folderIndex), roles);
         return;
     }
@@ -968,13 +968,13 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress)
                     Utility::octetsToString(estimatedBw) );
             */
             //: Example text: "Syncing 'foo.txt', 'bar.txt'"
-            fileProgressString = tr("Syncing %1").arg(allFilenames);
+            fileProgressString = tr("Sincronizando %1").arg(allFilenames);
             if (estimatedDownBw > 0) {
                 fileProgressString.append(tr(", "));
 // ifdefs: https://github.com/owncloud/client/issues/3095#issuecomment-128409294
 #ifdef Q_OS_WIN
                 //: Example text: "download 24Kb/s"   (%1 is replaced by 24Kb (translated))
-                fileProgressString.append(tr("download %1/s").arg(Utility::octetsToString(estimatedDownBw)));
+                fileProgressString.append(tr("baixar %1/s").arg(Utility::octetsToString(estimatedDownBw)));
 #else
                 fileProgressString.append(tr("\u2193 %1/s")
                                               .arg(Utility::octetsToString(estimatedDownBw)));
@@ -984,7 +984,7 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress)
                 fileProgressString.append(tr(", "));
 #ifdef Q_OS_WIN
                 //: Example text: "upload 24Kb/s"   (%1 is replaced by 24Kb (translated))
-                fileProgressString.append(tr("upload %1/s").arg(Utility::octetsToString(estimatedUpBw)));
+                fileProgressString.append(tr("enviar %1/s").arg(Utility::octetsToString(estimatedUpBw)));
 #else
                 fileProgressString.append(tr("\u2191 %1/s")
                                               .arg(Utility::octetsToString(estimatedUpBw)));
@@ -1013,7 +1013,7 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress)
 
         if (progress.trustEta()) {
             //: Example text: "5 minutes left, 12 MB of 345 MB, file 6 of 7"
-            overallSyncString = tr("%5 left, %1 of %2, file %3 of %4")
+            overallSyncString = tr("%5 restando, %1 de %2, arquivo %3 de %4")
                                     .arg(s1, s2)
                                     .arg(currentFile)
                                     .arg(totalFileCount)
@@ -1021,14 +1021,14 @@ void FolderStatusModel::slotSetProgress(const ProgressInfo &progress)
 
         } else {
             //: Example text: "12 MB of 345 MB, file 6 of 7"
-            overallSyncString = tr("%1 of %2, file %3 of %4")
+            overallSyncString = tr("%1 de%2, arquivo %3 de %4")
                                     .arg(s1, s2)
                                     .arg(currentFile)
                                     .arg(totalFileCount);
         }
     } else if (totalFileCount > 0) {
         // Don't attempt to estimate the time left if there is no kb to transfer.
-        overallSyncString = tr("file %1 of %2").arg(currentFile).arg(totalFileCount);
+        overallSyncString = tr("arquivo %1 de %2").arg(currentFile).arg(totalFileCount);
     }
 
     pi->_overallSyncString = overallSyncString;
@@ -1074,15 +1074,15 @@ void FolderStatusModel::slotFolderSyncStateChange(Folder *f)
         }
         QString message;
         if (pos <= 0) {
-            message = tr("Waiting...");
+            message = tr("Esperando...");
         } else {
-            message = tr("Waiting for %n other folder(s)...", "", pos);
+            message = tr("Esperando por %n outra pasta...", "", pos);
         }
         pi = SubFolderInfo::Progress();
         pi._overallSyncString = message;
     } else if (state == SyncResult::SyncPrepare) {
         pi = SubFolderInfo::Progress();
-        pi._overallSyncString = tr("Preparing to sync...");
+        pi._overallSyncString = tr("Preparando para sincronizar...");
     } else if (state == SyncResult::Problem || state == SyncResult::Success) {
         // Reset the progress info after a sync.
         pi = SubFolderInfo::Progress();

@@ -177,14 +177,14 @@ void GETFileJob::slotMetaDataChanged()
         // All fine, ETag empty and directDownloadUrl used
     } else if (_etag.isEmpty()) {
         qCWarning(lcGetJob) << "No E-Tag reply by server, considering it invalid";
-        _errorString = tr("No E-Tag received from server, check Proxy/Gateway");
+        _errorString = tr("Nenhuma E-Tag recebida do servidor, verifique Proxy / gateway");
         _errorStatus = SyncFileItem::NormalError;
         reply()->abort();
         return;
     } else if (!_expectedEtagForResume.isEmpty() && _expectedEtagForResume != _etag) {
         qCWarning(lcGetJob) << "We received a different E-Tag for resuming!"
                             << _expectedEtagForResume << "vs" << _etag;
-        _errorString = tr("We received a different E-Tag for resuming. Retrying next time.");
+        _errorString = tr("Recebemos um e-Tag diferente para resumir. Tente uma próxima vez.");
         _errorStatus = SyncFileItem::NormalError;
         reply()->abort();
         return;
@@ -194,7 +194,7 @@ void GETFileJob::slotMetaDataChanged()
     if (_expectedContentLength != -1 && _contentLength != _expectedContentLength) {
         qCWarning(lcGetJob) << "We received a different content length than expected!"
                             << _expectedContentLength << "vs" << _contentLength;
-        _errorString = tr("We received an unexpected download Content-Length.");
+        _errorString = tr("Recebemos um download de Comprimento do Conteúdo inesperado. .");
         _errorStatus = SyncFileItem::NormalError;
         reply()->abort();
         return;
@@ -221,7 +221,7 @@ void GETFileJob::slotMetaDataChanged()
             }
             _resumeStart = 0;
         } else {
-            _errorString = tr("Server returned wrong content-range");
+            _errorString = tr("O servidor retornou erro numa série-de-conteúdo");
             _errorStatus = SyncFileItem::NormalError;
             reply()->abort();
             return;
@@ -331,7 +331,7 @@ void GETJob::onTimedOut()
     qCWarning(lcGetJob) << "Timeout" << (reply() ? reply()->request().url() : path());
     if (!reply())
         return;
-    _errorString = tr("Connection Timeout");
+    _errorString = tr("Conexão Finalizada");
     _errorStatus = SyncFileItem::FatalError;
     reply()->abort();
 }
@@ -360,7 +360,7 @@ void PropagateDownloadFile::start()
         QString fsPath = propagator()->getFilePath(_item->_file);
         if (!FileSystem::verifyFileUnchanged(fsPath, _item->_previousSize, _item->_previousModtime)) {
             propagator()->_anotherSyncNeeded = true;
-            done(SyncFileItem::SoftError, tr("File has changed since discovery"));
+            done(SyncFileItem::SoftError, tr("Arquivo foi alterado desde a descoberta"));
             return;
         }
 
@@ -441,7 +441,7 @@ void PropagateDownloadFile::startDownload()
 
     // do a klaas' case clash check.
     if (propagator()->localFileNameClash(_item->_file)) {
-        done(SyncFileItem::NormalError, tr("File %1 can not be downloaded because of a local file name clash!").arg(QDir::toNativeSeparators(_item->_file)));
+        done(SyncFileItem::NormalError, tr("O arquivo %1 não pode ser baixado devido a um confronto local no nome do arquivo!").arg(QDir::toNativeSeparators(_item->_file)));
         return;
     }
 
@@ -463,24 +463,26 @@ void PropagateDownloadFile::startDownload()
     if (tmpFileName.isEmpty()) {
         tmpFileName = createDownloadTmpFileName(_item->_file);
     }
-
     _tmpFile.setFileName(propagator()->getFilePath(tmpFileName));
-    if (!_tmpFile.open(QIODevice::Append | QIODevice::Unbuffered)) {
-        done(SyncFileItem::NormalError, _tmpFile.errorString());
+
+    _resumeStart = _tmpFile.size();
+    if (_resumeStart > 0 && _resumeStart == _item->_size) {
+        qCInfo(lcPropagateDownload) << "File is already complete, no need to download";
+        downloadFinished();
         return;
     }
 
-    FileSystem::setFileHidden(_tmpFile.fileName(), true);
-
-    _resumeStart = _tmpFile.size();
-    if (_resumeStart > 0) {
-        if (_resumeStart == _item->_size) {
-            qCInfo(lcPropagateDownload) << "File is already complete, no need to download";
-            _tmpFile.close();
-            downloadFinished();
-            return;
-        }
+    // Can't open(Append) read-only files, make sure to make
+    // file writable if it exists.
+    if (_tmpFile.exists())
+        FileSystem::setFileReadOnly(_tmpFile.fileName(), false);
+    if (!_tmpFile.open(QIODevice::Append | QIODevice::Unbuffered)) {
+        qCWarning(lcPropagateDownload) << "could not open temporary file" << _tmpFile.fileName();
+        done(SyncFileItem::NormalError, _tmpFile.errorString());
+        return;
     }
+    // Hide temporary after creation
+    FileSystem::setFileHidden(_tmpFile.fileName(), true);
 
     // If there's not enough space to fully download this file, stop.
     const auto diskSpaceResult = propagator()->diskSpaceCheck();
@@ -490,11 +492,11 @@ void PropagateDownloadFile::startDownload()
             // tab: instead we'll generate a general "disk space low" message and show
             // these detail errors only in the error view.
             done(SyncFileItem::DetailError,
-                tr("The download would reduce free local disk space below the limit"));
+                tr("O download reduziria o espaço livre no disco local abaixo do limite"));
             emit propagator()->insufficientLocalStorage();
         } else if (diskSpaceResult == OwncloudPropagator::DiskSpaceCritical) {
             done(SyncFileItem::FatalError,
-                tr("Free space on disk is less than %1").arg(Utility::octetsToString(criticalFreeSpaceLimit())));
+                tr("O espaço livre no disco é inferior a %1").arg(Utility::octetsToString(criticalFreeSpaceLimit())));
         }
 
         // Remove the temporary, if empty.
@@ -628,7 +630,7 @@ void PropagateDownloadFile::slotGetFinished()
         }
 
         ASSERT(false, "Download slot finished, but there was no reply!");
-        done(SyncFileItem::FatalError, tr("Download slot finished, but there was no reply!"));
+        done(SyncFileItem::FatalError, tr("Baixa do slot finalizada, mas não existe resposta!"));
         return;
     }
 
@@ -681,7 +683,7 @@ void PropagateDownloadFile::slotGetFinished()
             // Range header should result in NormalError.
             job->setErrorStatus(SyncFileItem::SoftError);
         } else if (fileNotFound) {
-            job->setErrorString(tr("File was deleted from server"));
+            job->setErrorString(tr("O arquivo foi eliminado do servidor"));
             job->setErrorStatus(SyncFileItem::SoftError);
 
             // As a precaution against bugs that cause our database and the
@@ -752,14 +754,14 @@ void PropagateDownloadFile::slotGetFinished()
     if (!_isDeltaSyncDownload && bodySize > 0 && bodySize != _tmpFile.size() - job->resumeStart()) {
         qCDebug(lcPropagateDownload) << bodySize << _tmpFile.size() << job->resumeStart();
         propagator()->_anotherSyncNeeded = true;
-        done(SyncFileItem::SoftError, tr("The file could not be downloaded completely."));
+        done(SyncFileItem::SoftError, tr("O arquivo não pode ser baixado completamente."));
         return;
     }
 
     if (_tmpFile.size() == 0 && _item->_size > 0) {
         FileSystem::remove(_tmpFile.fileName());
         done(SyncFileItem::NormalError,
-            tr("The downloaded file is empty despite the server announced it should have been %1.")
+            tr("O arquivo baixado está vazio apesar do servidor anunciou que deveria ter %1.")
                 .arg(Utility::octetsToString(_item->_size)));
         return;
     }
@@ -939,7 +941,7 @@ void PropagateDownloadFile::downloadFinished()
     // In case of file name clash, report an error
     // This can happen if another parallel download saved a clashing file.
     if (propagator()->localFileNameClash(_item->_file)) {
-        done(SyncFileItem::NormalError, tr("File %1 cannot be saved because of a local file name clash!").arg(QDir::toNativeSeparators(_item->_file)));
+        done(SyncFileItem::NormalError, tr("O arquivo %1 não pode ser salvo devido a um confronto com um nome de arquivo local!").arg(QDir::toNativeSeparators(_item->_file)));
         return;
     }
 
@@ -984,7 +986,7 @@ void PropagateDownloadFile::downloadFinished()
         const time_t expectedMtime = _item->_previousModtime;
         if (!FileSystem::verifyFileUnchanged(fn, expectedSize, expectedMtime)) {
             propagator()->_anotherSyncNeeded = true;
-            done(SyncFileItem::SoftError, tr("File has changed since discovery"));
+            done(SyncFileItem::SoftError, tr("Arquivo foi alterado desde a descoberta"));
             return;
         }
     }
@@ -1050,7 +1052,7 @@ void PropagateDownloadFile::updateMetadata(bool isConflict)
     QString fn = propagator()->getFilePath(_item->_file);
 
     if (!propagator()->updateMetadata(*_item)) {
-        done(SyncFileItem::FatalError, tr("Error writing metadata to the database"));
+        done(SyncFileItem::FatalError, tr("Ocorreu um erro ao escrever metadados ao banco de dados"));
         return;
     }
     propagator()->_journal->setDownloadInfo(_item->_file, SyncJournalDb::DownloadInfo());

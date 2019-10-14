@@ -50,6 +50,8 @@ OwncloudWizard::OwncloudWizard(QWidget *parent)
     , _credentialsPage(0)
     , _setupLog()
 {
+    setObjectName("owncloudWizard");
+
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setPage(WizardCommon::Page_ServerSetup, _setupPage);
     setPage(WizardCommon::Page_HttpCreds, _httpCredsPage);
@@ -72,7 +74,7 @@ OwncloudWizard::OwncloudWizard(QWidget *parent)
 
 
     Theme *theme = Theme::instance();
-    setWindowTitle(tr("%1 Connection Wizard").arg(theme->appNameGUI()));
+    setWindowTitle(tr("%Assistente de Conexões do %1").arg(theme->appNameGUI()));
     setWizardStyle(QWizard::ModernStyle);
     setPixmap(QWizard::BannerPixmap, theme->wizardHeaderBanner());
     setPixmap(QWizard::LogoPixmap, theme->wizardHeaderLogo());
@@ -81,6 +83,10 @@ OwncloudWizard::OwncloudWizard(QWidget *parent)
     setOption(QWizard::NoCancelButton);
     setTitleFormat(Qt::RichText);
     setSubTitleFormat(Qt::RichText);
+	setButtonText(QWizard::NoBackButtonOnStartPage,tr("VOLTAR"));
+	setButtonText(QWizard::NoBackButtonOnLastPage,tr("VOLTAR"));
+	setButtonText(QWizard::NoCancelButton,tr("CANCELAR"));
+
 }
 
 void OwncloudWizard::setAccount(AccountPtr account)
@@ -192,7 +198,7 @@ void OwncloudWizard::slotCurrentPageChanged(int id)
     if (id == WizardCommon::Page_AdvancedSetup && _credentialsPage == _browserCredsPage) {
         // For OAuth, disable the back button in the Page_AdvancedSetup because we don't want
         // to re-open the browser.
-        button(QWizard::BackButton)->setEnabled(false);
+        button(QWizard::BackButton,tr("&voltar"))->setEnabled(false);
     }
 }
 
@@ -235,46 +241,43 @@ AbstractCredentials *OwncloudWizard::getCredentials() const
 
 void OwncloudWizard::askExperimentalVirtualFilesFeature(const std::function<void(bool enable)> &callback)
 {
-    auto bestVfsMode = bestAvailableVfsMode();
+    const auto bestVfsMode = bestAvailableVfsMode();
     QMessageBox *msgBox = nullptr;
     if (bestVfsMode == Vfs::WindowsCfApi) {
         msgBox = new QMessageBox(
             QMessageBox::Warning,
-            tr("Enable experimental feature?"),
-            tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
-               "Instead a placeholder file will be created for each file that exists on the server. "
-               "When a file is opened its contents will be downloaded automatically. "
-               "Alternatively files can be downloaded manually by using their context menu."
+            tr("Ativar recurso experimental?"),
+            tr("Quando o modo &quot;arquivos virtuais&quot; estiver habilitado, nenhum arquivo será baixado inicialmente. "
+               "Em vez disso, um pequeno arquivo &quot;%1&quot; será criado para cada arquivo existente no servidor. "
+               "Quando um arquivo for aberto ele será baixado automaticamente "
+               "Alternativamente, você pode habilitar para baixar manualmente"
                "\n\n"
-               "The virtual files mode is mutually exclusive with selective sync. "
-               "Currently unselected folders will be translated to online-only folders "
-               "and your selective sync settings will be reset."
-               "\n\n"
-               "Switching to this mode will abort any currently running synchronization."
-               "\n\n"
-               "This is a new, experimental mode. If you decide to use it, please report any "
-               "issues that come up."));
+               "Os arquivos virtuais é compativel com outras formas de sincronização "
+               "Se não estiver selecionado, os arquivos serão encaminhados para o site"
+               "e suas opções de sincronização serão resetadas."));
+        msgBox->addButton(tr("Habilitar arquivos virtuais?"), QMessageBox::AcceptRole);
+        msgBox->addButton(tr("Prossiga para selecionar opção de sincronização"), QMessageBox::RejectRole);
     } else {
-        ASSERT(bestVfsMode == Vfs::WithSuffix);
+        ASSERT(bestVfsMode == Vfs::WithSuffix)
         msgBox = new QMessageBox(
             QMessageBox::Warning,
-            tr("Enable experimental feature?"),
-            tr("When the \"virtual files\" mode is enabled no files will be downloaded initially. "
-               "Instead, a tiny \"%1\" file will be created for each file that exists on the server. "
-               "The contents can be downloaded by running these files or by using their context menu."
+            tr("Ativar recurso experimental?"),
+            tr("Quando o modo &quot;arquivos virtuais&quot; estiver habilitado, nenhum arquivo será baixado inicialmente. "
+               "Em vez disso, um pequeno arquivo &quot;%1&quot; será criado para cada arquivo existente no servidor. "
+               "O conteúdo pode ser baixado executando esses arquivos ou usando seu menu de contexto."
                "\n\n"
-               "The virtual files mode is mutually exclusive with selective sync. "
-               "Currently unselected folders will be translated to online-only folders "
-               "and your selective sync settings will be reset."
+               "O modo de arquivos virtuais é mutuamente exclusivo com a sincronização seletiva. "
+               " As pastas atualmente não selecionadas serão traduzidas para pastas somente on-line e "
+               "suas configurações de sincronização seletiva serão redefinidas. "
                "\n\n"
-               "Switching to this mode will abort any currently running synchronization."
+               "Mudar para este modo abortará qualquer sincronização em execução no momento."
                "\n\n"
-               "This is a new, experimental mode. If you decide to use it, please report any "
-               "issues that come up.")
+               "Este é um novo modo experimental. Se você decidir usá-lo, relate quaisquer  "
+               "problemas que surgirem.")
                 .arg(APPLICATION_DOTVIRTUALFILE_SUFFIX));
+        msgBox->addButton(tr("Habilitar o modo experimental"), QMessageBox::AcceptRole);
+        msgBox->addButton(tr("Fique seguro"), QMessageBox::RejectRole);
     }
-    msgBox->addButton(tr("Enable experimental mode"), QMessageBox::AcceptRole);
-    msgBox->addButton(tr("Stay safe"), QMessageBox::RejectRole);
     connect(msgBox, &QMessageBox::finished, msgBox, [callback, msgBox](int result) {
         callback(result == QMessageBox::AcceptRole);
         msgBox->deleteLater();

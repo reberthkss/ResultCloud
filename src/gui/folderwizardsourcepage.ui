@@ -30,7 +30,7 @@
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Pick a local folder on your computer to sync</string>
+      <string>Selecione um diretório no seu computador para ser sincronizado</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
@@ -41,7 +41,7 @@
         <item>
          <widget class="QPushButton" name="localFolderChooseBtn">
           <property name="text">
-           <string>&amp;Choose...</string>
+           <string>&amp;Escolha...</string>
           </property>
          </widget>
         </item>

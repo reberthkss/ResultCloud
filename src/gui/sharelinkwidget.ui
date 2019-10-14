@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Share NewDocument.odt</string>
+   <string>Compartilhar NewDocument.odt</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="publicLinkWarningLabel">
      <property name="text">
-      <string>Anyone with the link has access to the file/folder</string>
+      <string>Qualquer pessoa com o link tem acesso ao arquivo/pasta</string>
      </property>
      <property name="textFormat">
       <enum>Qt::PlainText</enum>
@@ -84,7 +84,7 @@
         <item>
          <widget class="QCheckBox" name="checkBox_expire">
           <property name="text">
-           <string>Set &amp;expiration date</string>
+           <string>Configurar data de &amp;expiração</string>
           </property>
          </widget>
         </item>
@@ -118,7 +118,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Set &amp;password </string>
+           <string>Configurar &amp;senha </string>
           </property>
          </widget>
         </item>
@@ -135,7 +135,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Set password</string>
+           <string>Configurar senha</string>
           </property>
          </widget>
         </item>
@@ -170,7 +170,7 @@
           <number>0</number>
          </property>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_readOnly">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -178,7 +178,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Recipients can view or download contents.</string>
+            <string>Os destinatários podem visualizar ou baixar o conteúdo.</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -204,12 +204,12 @@
          <item row="6" column="0">
           <widget class="QRadioButton" name="radio_uploadOnly">
            <property name="text">
-            <string>Upload only (File Drop)</string>
+            <string>Apenas enviar (Deixar um Arquivo)</string>
            </property>
           </widget>
          </item>
          <item row="7" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label_uploadOnly">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -217,7 +217,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Receive files from others without revealing the contents of the folder.</string>
+            <string>Receba arquivos de outros sem revelar o conteúdo da pasta.</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -227,19 +227,19 @@
          <item row="0" column="0">
           <widget class="QRadioButton" name="radio_readOnly">
            <property name="text">
-            <string>Download / View</string>
+            <string>Baixar / Visualizar</string>
            </property>
           </widget>
          </item>
          <item row="3" column="0">
           <widget class="QRadioButton" name="radio_readWrite">
            <property name="text">
-            <string>Download / View / Upload</string>
+            <string>Baixar / Visualizar / Enviar</string>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_readWrite">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -247,7 +247,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Recipients can view, download, edit, delete and upload contents.</string>
+            <string>Os destinatários podem visualizar, baixar, editar, excluir e enviar conteúdos.</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -294,21 +294,21 @@
       <item>
        <widget class="QLabel" name="nameLabel">
         <property name="text">
-         <string>Name:</string>
+         <string>Nome:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="nameLineEdit">
         <property name="placeholderText">
-         <string>Enter name of new share...</string>
+         <string>Digite o nome do novo compartilhamento...</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="createShareButton">
         <property name="text">
-         <string>&amp;Create</string>
+         <string>&amp;Criar</string>
         </property>
        </widget>
       </item>

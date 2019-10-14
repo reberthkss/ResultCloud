@@ -146,7 +146,7 @@ void GETFileZsyncJob::seedFinished(void *zs)
         zsync_end(zs);
     });
     if (!_zs) {
-        _errorString = tr("Unable to parse zsync.");
+        _errorString = tr("Não é possível analisar o zsync.");
         _errorStatus = SyncFileItem::NormalError;
         qCDebug(lcZsyncGet) << _errorString;
         emit finishedSignal();
@@ -168,7 +168,7 @@ void GETFileZsyncJob::seedFinished(void *zs)
         free(zbr);
     });
     if (!_zbyterange) {
-        _errorString = tr("Failed to get zsync byte ranges.");
+        _errorString = tr("Falha ao obter os intervalos de bytes do zsync.");
         _errorStatus = SyncFileItem::NormalError;
         qCDebug(lcZsyncGet) << _errorString;
         emit finishedSignal();
@@ -191,7 +191,7 @@ void GETFileZsyncJob::seedFinished(void *zs)
         zsync_end_receive(zr);
     });
     if (!_zr) {
-        _errorString = tr("Failed to initialize zsync receive structure.");
+        _errorString = tr("Falha ao inicializar a estrutura de recebimento do zsync.");
         _errorStatus = SyncFileItem::NormalError;
         qCDebug(lcZsyncGet) << _errorString;
         emit finishedSignal();
@@ -316,7 +316,7 @@ void GETFileZsyncJob::slotMetaDataChanged()
     if (!_expectedEtagForResume.isEmpty() && _expectedEtagForResume != _etag) {
         qCWarning(lcZsyncGet) << "We received a different E-Tag for delta!"
                               << _expectedEtagForResume << "vs" << _etag;
-        _errorString = tr("We received a different E-Tag for delta. Retrying next time.");
+        _errorString = tr("Recebemos uma E-Tag diferente para o delta. Repetir na próxima vez.");
         _errorStatus = SyncFileItem::NormalError;
         reply()->abort();
         return;

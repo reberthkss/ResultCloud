@@ -48,8 +48,8 @@ OwncloudSetupPage::OwncloudSetupPage(QWidget *parent)
     _ocWizard = qobject_cast<OwncloudWizard *>(parent);
 
     Theme *theme = Theme::instance();
-    setTitle(WizardCommon::titleTemplate().arg(tr("Connect to %1").arg(theme->appNameGUI())));
-    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Setup %1 server").arg(theme->appNameGUI())));
+    setTitle(WizardCommon::titleTemplate().arg(tr("Conectar a %1").arg(theme->appNameGUI())));
+    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Configurar servidor %1").arg(theme->appNameGUI())));
 
     if (theme->overrideServerUrl().isEmpty()) {
         _ui.leUrl->setPostfix(theme->wizardUrlPostfix());
@@ -128,11 +128,11 @@ void OwncloudSetupPage::slotUrlChanged(const QString &url)
 
     if (!url.startsWith(QLatin1String("https://"))) {
         _ui.urlLabel->setPixmap(QPixmap(Theme::hidpiFileName(":/client/resources/lock-http.png")));
-        _ui.urlLabel->setToolTip(tr("This url is NOT secure as it is not encrypted.\n"
-                                    "It is not advisable to use it."));
+        _ui.urlLabel->setToolTip(tr("Esta URL não é segura, pois não é criptografada. \n"
+                                    "Não é aconselhável usá-lo."));
     } else {
         _ui.urlLabel->setPixmap(QPixmap(Theme::hidpiFileName(":/client/resources/lock-https.png")));
-        _ui.urlLabel->setToolTip(tr("This url is secure. You can use it."));
+        _ui.urlLabel->setToolTip(tr("Esta url é segura. Você pode usá-la."));
     }
 }
 
@@ -160,6 +160,7 @@ void OwncloudSetupPage::initializePage()
 
     QAbstractButton *nextButton = wizard()->button(QWizard::NextButton);
     QPushButton *pushButton = qobject_cast<QPushButton *>(nextButton);
+	
     if (pushButton)
         pushButton->setDefault(true);
 
@@ -171,7 +172,7 @@ void OwncloudSetupPage::initializePage()
     } else {
         setCommitPage(true);
         // Hack: setCommitPage() changes caption, but after an error this page could still be visible
-        setButtonText(QWizard::CommitButton, tr("&Next >"));
+        setButtonText(QWizard::CommitButton, tr("&amp;Próximo &gt;"));
         validatePage();
         setVisible(false);
     }
@@ -200,7 +201,7 @@ bool OwncloudSetupPage::validatePage()
         QString u = url();
         QUrl qurl(u);
         if (!qurl.isValid() || qurl.host().isEmpty()) {
-            setErrorString(tr("Invalid URL"), false);
+            setErrorString(tr("URL inválida"), false);
             return false;
         }
 
@@ -312,7 +313,7 @@ void OwncloudSetupPage::slotCertificateAccepted()
         // The extracted SSL key and cert gets added to the QSslConfiguration in checkServer()
         validatePage();
     } else {
-        addCertDial->showErrorMessage(tr("Could not load certificate. Maybe wrong password?"));
+        addCertDial->showErrorMessage(tr("Não foi possível carregar o certificado. Talvez a senha esteja errada?"));
         addCertDial->show();
     }
 }

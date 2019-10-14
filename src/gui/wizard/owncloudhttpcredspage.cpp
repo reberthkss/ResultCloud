@@ -56,8 +56,8 @@ OwncloudHttpCredsPage::OwncloudHttpCredsPage(QWidget *parent)
     }
     _ui.leUsername->setPlaceholderText(theme->userIDHint());
 
-    setTitle(WizardCommon::titleTemplate().arg(tr("Connect to %1").arg(Theme::instance()->appNameGUI())));
-    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Enter user credentials")));
+    setTitle(WizardCommon::titleTemplate().arg(tr("Conectar a %1").arg(Theme::instance()->appNameGUI())));
+    setSubTitle(WizardCommon::subTitleTemplate().arg(tr("Entre com as credenciais do usuário")));
 
     _ui.resultLayout->addWidget(_progressIndi);
     stopSpinner();

@@ -123,23 +123,23 @@ bool Application::configVersionMigration()
     if (warningMessage) {
         QString boldMessage;
         if (!deleteKeys.isEmpty()) {
-            boldMessage = tr("Continuing will mean <b>deleting these settings</b>.");
+            boldMessage = tr("Continuar significa &lt;b&gt;excluir essas configurações&lt;/b&gt;.");
         } else {
-            boldMessage = tr("Continuing will mean <b>ignoring these settings</b>.");
+            boldMessage = tr("Continuar significa &lt;b&gt;ignorar essas configurações&lt;/b&gt;.");
         }
 
         QMessageBox box(
             QMessageBox::Warning,
             APPLICATION_SHORTNAME,
-            tr("Some settings were configured in newer versions of this client and "
-               "use features that are not available in this version.<br>"
+            tr("Algumas configurações foram realizadas em versões mais recentes deste cliente e "
+               "usam recursos que não estão disponíveis nesta versão."
                "<br>"
                "%1<br>"
                "<br>"
-               "The current configuration file was already backed up to <i>%2</i>.")
+               "O arquivo de configuração atual já foi feito backup em &lt;i&gt;%2&lt;/i&gt;.")
                 .arg(boldMessage, backupFile));
-        box.addButton(tr("Quit"), QMessageBox::AcceptRole);
-        auto continueBtn = box.addButton(tr("Continue"), QMessageBox::DestructiveRole);
+        box.addButton(tr("Sair"), QMessageBox::AcceptRole);
+        auto continueBtn = box.addButton(tr("Continuar"), QMessageBox::DestructiveRole);
 
         box.exec();
         if (box.clickedButton() != continueBtn) {
@@ -288,11 +288,11 @@ Application::Application(int &argc, char **argv)
             qCCritical(lcApplication) << "Could not read the account settings, quitting";
             QMessageBox::critical(
                 0,
-                tr("Error accessing the configuration file"),
-                tr("There was an error while accessing the configuration "
-                   "file at %1.")
+                tr("Erro acessando o arquivo de configuração"),
+                tr("Ocorreu um erro ao acessar o arquivo de  "
+                   "configuração em %1.")
                     .arg(ConfigFile().configFile()),
-                tr("Quit ownCloud"));
+                tr("Sair"));
             QTimer::singleShot(0, qApp, SLOT(quit()));
             return;
         }

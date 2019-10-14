@@ -104,13 +104,13 @@ ShareDialog::ShareDialog(QPointer<AccountState> accountState,
     } else {
         _ui->gridLayout->addWidget(_ui->label_name, 0, 1, 1, 1);
         _ui->gridLayout->addWidget(_ui->label_sharePath, 1, 1, 1, 1);
-        _ui->label_sharePath->setText(tr("Folder: %2").arg(ocDir));
+        _ui->label_sharePath->setText(tr("Pasta: %2").arg(ocDir));
     }
 
-    this->setWindowTitle(tr("%1 Sharing").arg(Theme::instance()->appNameGUI()));
+    this->setWindowTitle(tr("Compartilhamento %1").arg(Theme::instance()->appNameGUI()));
 
     if (!accountState->account()->capabilities().shareAPI()) {
-        auto label = new QLabel(tr("The server does not allow sharing"));
+        auto label = new QLabel(tr("O servidor não permitir o compartilhamento"));
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout()->replaceWidget(_ui->shareWidgets, label);
@@ -126,7 +126,7 @@ ShareDialog::ShareDialog(QPointer<AccountState> accountState,
 
     _progressIndicator = new QProgressIndicator(this);
     _progressIndicator->startAnimation();
-    _progressIndicator->setToolTip(tr("Retrieving maximum possible sharing permissions from server..."));
+    _progressIndicator->setToolTip(tr("Recuperando máximo possível de permissões de compartilhamento do servidor..."));
     _ui->buttonBoxLayout->insertWidget(0, _progressIndicator);
 
     // Server versions >= 9.1 support the "share-permissions" property
@@ -196,7 +196,7 @@ void ShareDialog::showSharingUi()
 
     if (!canReshare) {
         auto label = new QLabel(this);
-        label->setText(tr("The file can not be shared because it was shared without sharing permission."));
+        label->setText(tr("O arquivo não pode ser partilhado, pois foi compartilhado sem permissão de compartilhamento."));
         label->setWordWrap(true);
         label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         layout()->replaceWidget(_ui->shareWidgets, label);
@@ -210,14 +210,14 @@ void ShareDialog::showSharingUi()
 
     if (userGroupSharing) {
         _userGroupWidget = new ShareUserGroupWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, _privateLinkUrl, this);
-        _ui->shareWidgets->addTab(_userGroupWidget, tr("Users and Groups"));
+        _ui->shareWidgets->addTab(_userGroupWidget, tr("Usuários e Grupos"));
         _userGroupWidget->getShares();
     }
 
     if (theme->linkSharing()) {
         _linkWidget = new ShareLinkWidget(_accountState->account(), _sharePath, _localPath, _maxSharingPermissions, this);
         _linkWidget->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
-        _ui->shareWidgets->addTab(_linkWidget, tr("Public Links"));
+        _ui->shareWidgets->addTab(_linkWidget, tr("Linques Públicos"));
         _linkWidget->getShares();
 
         if (_startPage == ShareDialogStartPage::PublicLinks)
