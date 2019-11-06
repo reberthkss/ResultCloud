@@ -83,9 +83,9 @@ OwncloudWizard::OwncloudWizard(QWidget *parent)
     setOption(QWizard::NoCancelButton);
     setTitleFormat(Qt::RichText);
     setSubTitleFormat(Qt::RichText);
-	setButtonText(QWizard::NoBackButtonOnStartPage,tr("VOLTAR"));
-	setButtonText(QWizard::NoBackButtonOnLastPage,tr("VOLTAR"));
-	setButtonText(QWizard::NoCancelButton,tr("CANCELAR"));
+	setButtonText(QWizard::BackButton,tr("< Voltar "));
+	setButtonText(QWizard::NextButton,tr("Próximo > "));
+	
 
 }
 
@@ -198,7 +198,7 @@ void OwncloudWizard::slotCurrentPageChanged(int id)
     if (id == WizardCommon::Page_AdvancedSetup && _credentialsPage == _browserCredsPage) {
         // For OAuth, disable the back button in the Page_AdvancedSetup because we don't want
         // to re-open the browser.
-        button(QWizard::BackButton,tr("&voltar"))->setEnabled(false);
+        button(QWizard::BackButton)->setEnabled(false);
     }
 }
 

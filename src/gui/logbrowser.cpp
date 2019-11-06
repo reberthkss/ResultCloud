@@ -91,7 +91,7 @@ LogBrowser::LogBrowser(QWidget *parent)
     mainLayout->addWidget(openFolderButton);
 
     QDialogButtonBox *btnbox = new QDialogButtonBox;
-    QPushButton *closeBtn = btnbox->addButton(tr("FECHAR"),QDialogButtonBox::Close);
+    QPushButton *closeBtn = btnbox->addButton(QDialogButtonBox::Close);
     connect(closeBtn, &QAbstractButton::clicked, this, &QWidget::close);
 
     mainLayout->addStretch();
