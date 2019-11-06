@@ -36,7 +36,7 @@ NetworkSettings::NetworkSettings(QWidget *parent)
 
     _ui->hostLineEdit->setPlaceholderText(tr("Hostname do servidor proxy"));
     _ui->userLineEdit->setPlaceholderText(tr("Nome de usuário para servidor proxy"));
-    _ui->passwordLineEdit->setPlaceholderText(tr("Senha para servidor proxy<"));
+    _ui->passwordLineEdit->setPlaceholderText(tr("Senha para servidor proxy"));
 
     _ui->typeComboBox->addItem(tr("HTTP(S) proxy"), QNetworkProxy::HttpProxy);
     _ui->typeComboBox->addItem(tr("SOCKS5 proxy"), QNetworkProxy::Socks5Proxy);

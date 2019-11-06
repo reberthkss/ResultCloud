@@ -401,7 +401,7 @@ void OwncloudSetupWizard::slotAuthError()
     } else if (reply->error() != QNetworkReply::NoError) {
         if (!_ocWizard->account()->credentials()->stillValid(reply)) {
             errorMsg = tr("Acesso proibido pelo servidor. Para verificar se você tem acesso adequado,  "
-                          "&lt;a href=&quot;%1&quot;&gt;clique aqui&lt;/a&gt; para acessar o serviço com o seu navegador.")
+                          "<a href=%1>clique aqui</a> para acessar o serviço com o seu navegador.")
                            .arg(Utility::escape(_ocWizard->account()->url().toString()));
         } else {
             errorMsg = job->errorStringParsingBody();

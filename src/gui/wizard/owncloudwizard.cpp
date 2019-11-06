@@ -74,7 +74,7 @@ OwncloudWizard::OwncloudWizard(QWidget *parent)
 
 
     Theme *theme = Theme::instance();
-    setWindowTitle(tr("%Assistente de Conexões do %1").arg(theme->appNameGUI()));
+    setWindowTitle(tr("Assistente de Conexões do %1").arg(theme->appNameGUI()));
     setWizardStyle(QWizard::ModernStyle);
     setPixmap(QWizard::BannerPixmap, theme->wizardHeaderBanner());
     setPixmap(QWizard::LogoPixmap, theme->wizardHeaderLogo());

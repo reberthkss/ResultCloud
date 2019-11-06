@@ -1859,7 +1859,7 @@ foi baixado. A versão instalada é %3.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
-/////////////////////AQUIIIIIIIIIIIIIIIIIIIIIIIII///////////////////////
+
     <name>OCC::NetworkSettings</name>
     <message>
         <location filename="../src/gui/networksettings.ui" line="14"/>
@@ -4174,7 +4174,7 @@ Este é um novo modo experimental. Se você decidir usá-lo, relate quaisquer pr
     </message>
 </context>
 <context>
-//////////////////////////////////////// PAREI AQUIIIIIIIIIIIIII
+
     <name>OwncloudAdvancedSetupPage</name>
     <message>
         <location filename="../src/gui/wizard/owncloudadvancedsetuppage.ui" line="20"/>

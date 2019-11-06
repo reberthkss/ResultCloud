@@ -843,7 +843,7 @@ void AccountSettings::slotAccountStateChanged()
             if (user.isEmpty()) {
                 user = cred->user();
             }
-            serverWithUser = tr("%1 como &lt;i&gt;%2&lt;/i&gt;").arg(server, Utility::escape(user));
+            serverWithUser = tr("%1 como <i>%2</i>").arg(server, Utility::escape(user));
         }
 
         switch (state) {
