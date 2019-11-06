@@ -129,7 +129,7 @@ bool SslErrorDialog::checkFailingCertsKnown(const QList<QSslError> &errors)
     msg += QL("</head><body>");
 
     auto host = _account->url().host();
-    msg += QL("<h3>") + tr("Não é possível conectar com segurança a &lt;i&gt;%1&lt;/i&gt;:").arg(host) + QL("</h3>");
+    msg += QL("<h3>") + tr("Não é possível conectar com segurança a &<i>%1</i>:").arg(host) + QL("</h3>");
     // loop over the unknown certs and line up their errors.
     msg += QL("<div id=\"ca_errors\">");
     foreach (const QSslCertificate &cert, _unknownCerts) {
@@ -172,11 +172,11 @@ QString SslErrorDialog::certDiv(QSslCertificate cert) const
     QString unit = Utility::escape(cert.subjectInfo(QSslCertificate::OrganizationalUnitName));
     QString country = Utility::escape(cert.subjectInfo(QSslCertificate::CountryName));
     if (unit.isEmpty())
-        unit = tr("&amp;lt;não especificado&amp;gt;");
+        unit = tr("não especificado");
     if (org.isEmpty())
-        org = tr("&amp;lt;não especificado&amp;gt;");
+        org = tr("não especificado");
     if (country.isEmpty())
-        country = tr("&amp;lt;não especificado&amp;gt;");
+        country = tr("não especificado");
     li << tr("Organização: %1").arg(org);
     li << tr("Unidade: %1").arg(unit);
     li << tr("País: %1").arg(country);

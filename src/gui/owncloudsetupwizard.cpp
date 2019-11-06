@@ -301,7 +301,7 @@ void OwncloudSetupWizard::slotNoServerFound(QNetworkReply *reply)
         QMessageBox messageBox(_ocWizard);
         messageBox.setText(tr("O servidor informou o seguinte erro:"));
         messageBox.setInformativeText(serverError);
-        messageBox.addButton(tr("ACEITAR"),QMessageBox::Ok);
+        messageBox.addButton(QMessageBox::Ok);
         messageBox.setTextFormat(Qt::RichText);
         messageBox.exec();
     }

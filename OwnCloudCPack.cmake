@@ -1,6 +1,6 @@
 include( InstallRequiredSystemLibraries )
 
-set( CPACK_PACKAGE_CONTACT  "Dominik Schmidt <domme@tomahawk-player.org>" )
+set( CPACK_PACKAGE_CONTACT  "reberth <reberthkss@outlook.com>" )
 
 if ( DEFINED OEM_THEME_DIR AND EXISTS ${OEM_THEME_DIR}/OEM.cmake )
      include ( "${OEM_THEME_DIR}/OEM.cmake" )

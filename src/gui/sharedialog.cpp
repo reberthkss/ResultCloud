@@ -60,6 +60,7 @@ ShareDialog::ShareDialog(QPointer<AccountState> accountState,
     _ui->setupUi(this);
 
     QPushButton *closeButton = _ui->buttonBox->button(QDialogButtonBox::Close);
+	closeButton->setText("Fechar");
     connect(closeButton, &QAbstractButton::clicked, this, &QWidget::close);
 
     // We want to act on account state changes

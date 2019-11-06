@@ -71,13 +71,13 @@ void NotificationWidget::setActivity(const Activity &activity)
     // display buttons for the links
     if (activity._links.isEmpty()) {
         // in case there is no action defined, do a close button.
-        QPushButton *b = _ui._buttonBox->addButton(tr("FECHAR"),QDialogButtonBox::Close);
+        QPushButton *b = _ui._buttonBox->addButton(QDialogButtonBox::Close);
         b->setDefault(true);
         connect(b, &QAbstractButton::clicked, this, &NotificationWidget::slotButtonClicked);
         _buttons.append(b);
     } else {
         foreach (auto link, activity._links) {
-            QPushButton *b = _ui._buttonBox->addButton(tr("ACEITAR"), QDialogButtonBox::AcceptRole);
+            QPushButton *b = _ui._buttonBox->addButton(link._label,QDialogButtonBox::AcceptRole);
             b->setDefault(link._isPrimary);
             connect(b, &QAbstractButton::clicked, this, &NotificationWidget::slotButtonClicked);
             _buttons.append(b);

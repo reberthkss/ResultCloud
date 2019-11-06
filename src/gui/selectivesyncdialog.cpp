@@ -461,10 +461,10 @@ void SelectiveSyncDialog::init(const AccountPtr &account)
     _selectiveSync = new SelectiveSyncWidget(account, this);
     layout->addWidget(_selectiveSync);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(Qt::Horizontal);
-    _okButton = buttonBox->addButton(tr("ACEITAR"),QDialogButtonBox::Ok);
+    _okButton = buttonBox->addButton(QDialogButtonBox::Ok);
     connect(_okButton, &QPushButton::clicked, this, &SelectiveSyncDialog::accept);
     QPushButton *button;
-    button = buttonBox->addButton(tr("CANCELAR"),QDialogButtonBox::Cancel);
+    button = buttonBox->addButton(QDialogButtonBox::Cancel);
     connect(button, &QAbstractButton::clicked, this, &QDialog::reject);
     layout->addWidget(buttonBox);
 }
