@@ -337,7 +337,7 @@ QString Theme::about() const
     QString vendor = APPLICATION_VENDOR;
     // Ideally, the vendor should be "ownCloud GmbH", but it cannot be changed without
     // changing the location of the settings and other registery keys.
-    if (vendor == "ownCloud") vendor = QLatin1String("Result Tecnologia Cloud Storage");
+    if (vendor == "ownCloud") vendor = QLatin1String("ownCloud GmbH");
 
     QString devString;
     devString = tr("&lt;p&gt;Versão %2. Para mais informações visite &lt;a href=&quot;%3&quot;&gt;https://%4&lt;/a&gt;&lt;/p&gt;"
