@@ -31,7 +31,7 @@ OwncloudConnectionMethodDialog::OwncloudConnectionMethodDialog(QWidget *parent)
 
 void OwncloudConnectionMethodDialog::setUrl(const QUrl &url)
 {
-    ui->label->setText(tr("&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Falha na conexão com o endereço do servidor seguro &lt;em&gt;%1&lt;/em&gt;. Como você deseja prosseguir?&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;").arg(url.toDisplayString().toHtmlEscaped()));
+    ui->label->setText(tr("<html><head><body><p>Falha na conexão com o endereço do servidor seguro <em>%1</em>. Como você deseja prosseguir?</p></body></html>").arg(url.toDisplayString().toHtmlEscaped()));
 }
 
 
