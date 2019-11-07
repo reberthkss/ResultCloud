@@ -1,5 +1,5 @@
 set( APPLICATION_NAME       "Result Storage" )
-set( APPLICATION_SHORTNAME  "ownCloud" )
+set( APPLICATION_SHORTNAME  "Result Storage" )
 set( APPLICATION_EXECUTABLE "ownCloud" )
 set( APPLICATION_DOMAIN     "owncloud.com" )
 set( APPLICATION_VENDOR     "ownCloud" )
