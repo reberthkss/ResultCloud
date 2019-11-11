@@ -101,7 +101,7 @@ QString Theme::appNameGUI() const
 
 QString Theme::appName() const
 {
-    return APPLICATION_SHORTNAME;
+    return "resultStorage";
 }
 
 QString Theme::version() const
