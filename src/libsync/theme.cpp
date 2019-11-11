@@ -340,14 +340,7 @@ QString Theme::about() const
     if (vendor == "ownCloud") vendor = QLatin1String("ownCloud GmbH");
 
     QString devString;
-    devString = tr("&lt;p&gt;Versão %2. Para mais informações visite &lt;a href=&quot;%3&quot;&gt;https://%4&lt;/a&gt;&lt;/p&gt;"
-                       "&lt;p&gt;Para problemas e ajuda conhecidos, visite: &lt;a href=&quot;https://central.owncloud.org/c/desktop-client&quot;&gt;https://central.owncloud.org&lt;/a&gt;&lt;/p&gt;"
-                       "&lt;p&gt;&lt;small&gt;By Klaas Freitag, Daniel Molkentin, Olivier Goffart, Markus Götz, "
-                       "  Jan-Christoph Borchardt, and others.&lt;/small&gt;&lt;/p&gt;")
-                    .arg(Utility::escape(MIRALL_VERSION_STRING),
-                        Utility::escape("https://" MIRALL_STRINGIFY(APPLICATION_DOMAIN)),
-                        Utility::escape(MIRALL_STRINGIFY(APPLICATION_DOMAIN)));
-    devString += tr("<p>Copyright Result Tecnologia </p>");
+    devString += tr("<p>Copyright Result Tecnologia and own Cloud GmbH </p>");
     devString += tr("<p>Distributed by %1 and licensed under the GNU General Public License (GPL) Version 2.0.<br/>"
                     "%2 and the %2 logo are registered trademarks of %1 in the "
                     "United States, other countries, or both.</p>")
