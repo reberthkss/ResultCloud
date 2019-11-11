@@ -70,10 +70,10 @@ Var NoAutomaticUpdates
 ;-----------------------------------------------------------------------------
 ; Initial installer setup and definitions.
 ;-----------------------------------------------------------------------------
-Name "@CPACK_NSIS_PACKAGE_NAME@"
-BrandingText "${APPLICATION_NAME} ${VERSION}  -- ${BUILD_TIME}"
+Name "ResultStorageInstaller"
+BrandingText "ResultStorage ${VERSION}  -- ${BUILD_TIME}"
 OutFile "@CPACK_TOPLEVEL_DIRECTORY@/@CPACK_OUTPUT_FILE_NAME@"
-InstallDir "$PROGRAMFILES\@CPACK_PACKAGE_INSTALL_DIRECTORY@"
+InstallDir "$PROGRAMFILES\ResultStorages"
 InstallDirRegKey HKCU "Software\${APPLICATION_VENDOR}\${APPLICATION_NAME}" ""
 InstType Standard
 InstType Full
