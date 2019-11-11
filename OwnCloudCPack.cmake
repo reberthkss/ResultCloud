@@ -49,7 +49,7 @@ if(WIN32)
     set( CPACK_PACKAGE_DESCRIPTION_SUMMARY  "Result Syncing Client" ) #  Description summary of a project
     # CPACK_PACKAGE_EXECUTABLES   List of pairs of executables and labels. Used by the NSIS generator to create Start Menu shortcuts.     ccmake;CMake
     set( CPACK_PACKAGE_INSTALL_DIRECTORY  "result" )     # Installation directory on the target system -> C:\Program Files\${APPLICATION_SHORTNAME}
-    set( CPACK_PACKAGE_INSTALL_REGISTRY_KEY "result" )  # Registry key used when installing this project  CMake 2.5.0
+    set( CPACK_PACKAGE_INSTALL_REGISTRY_KEY ${APPLICATION_SHORTNAME} )  # Registry key used when installing this project  CMake 2.5.0
     set( CPACK_PACKAGE_NAME  "result" ) # Package name, defaults to the project name
     set( CPACK_PACKAGE_VENDOR  "http://${APPLICATION_DOMAIN}" )   # Package vendor name
 endif()
