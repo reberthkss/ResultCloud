@@ -1,6 +1,6 @@
 set( APPLICATION_NAME       "Result Storage" )
 set( APPLICATION_SHORTNAME  "ownCloud" )
-set( APPLICATION_EXECUTABLE "resultStorage" )
+set( APPLICATION_EXECUTABLE "ownCloud" )
 set( APPLICATION_DOMAIN     "owncloud.com" )
 set( APPLICATION_VENDOR     "ownCloud" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE string "URL for updater" )
