@@ -1,13 +1,13 @@
-set( APPLICATION_NAME       "Result Storage" )
+set( APPLICATION_NAME       "ownCloud" )
 set( APPLICATION_SHORTNAME  "ownCloud" )
-set( APPLICATION_EXECUTABLE "ResultStorage" )
+set( APPLICATION_EXECUTABLE "ownCloud" )
 set( APPLICATION_DOMAIN     "owncloud.com" )
 set( APPLICATION_VENDOR     "ownCloud" )
 set( APPLICATION_UPDATE_URL "https://updates.owncloud.com/client/" CACHE string "URL for updater" )
-set( APPLICATION_ICON_NAME  "ownCloud" )
+set( APPLICATION_ICON_NAME  "owncloud" )
 set( APPLICATION_VIRTUALFILE_SUFFIX "owncloud" CACHE STRING "Virtual file suffix (not including the .)")
 
-set( LINUX_PACKAGE_SHORTNAME "Result" )
+set( LINUX_PACKAGE_SHORTNAME "owncloud" )
 
 set( THEME_CLASS            "ownCloudTheme" )
 set( APPLICATION_REV_DOMAIN "com.owncloud.desktopclient" )

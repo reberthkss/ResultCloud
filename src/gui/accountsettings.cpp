@@ -1066,8 +1066,8 @@ void AccountSettings::slotDeleteAccount()
     {
         QMessageBox messageBox(QMessageBox::Question,
             tr("Confirmar a Remoção da Conta"),
-            tr("<p>Você realmente deseja remover a conexão desta conta<i>%1</i>?</p>"
-               "<p><b>Nota:</b> Isto <b>não</b> irá deletar nenhum arquivo!!</p>")
+            tr("&lt;p&gt;Você realmente deseja remover a conexão desta conta&lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
+               "&lt;p&gt;&lt;b&gt;Nota:&lt;/b&gt; Isto &lt;b&gt;não&lt;/b&gt; irá deletar nenhum arquivo.&lt;/p&gt;")
                 .arg(_accountState->account()->displayName()),
             QMessageBox::NoButton,
             this);
