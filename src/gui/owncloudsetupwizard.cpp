@@ -510,7 +510,7 @@ void OwncloudSetupWizard::slotRemoteFolderExists(QNetworkReply *reply)
 
 void OwncloudSetupWizard::createRemoteFolder()
 {
-    _ocWizard->appendToConfigurationLog(tr("criar pasta no Result Cloud Storage: %1").arg(_remoteFolder));
+    _ocWizard->appendToConfigurationLog(tr("criar pasta no Result Cloud: %1").arg(_remoteFolder));
 
     MkColJob *job = new MkColJob(_ocWizard->account(), _remoteFolder, this);
     connect(job, SIGNAL(finished(QNetworkReply::NetworkError)), SLOT(slotCreateRemoteFolderFinished(QNetworkReply::NetworkError)));

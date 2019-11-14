@@ -44,7 +44,7 @@ ConnectionValidator::ConnectionValidator(AccountPtr account, QObject *parent)
 void ConnectionValidator::checkServerAndAuth()
 {
     if (!_account) {
-        _errors << tr("Nenhuma conta Result Cloud Storage configurada");
+        _errors << tr("Nenhuma conta Result Cloud configurada");
         reportResult(NotConfigured);
         return;
     }
