@@ -101,7 +101,7 @@ QString Theme::appNameGUI() const
 
 QString Theme::appName() const
 {
-    return APPLICATION_SHORTNAME;
+    return "Result Cloud";
 }
 
 QString Theme::version() const
