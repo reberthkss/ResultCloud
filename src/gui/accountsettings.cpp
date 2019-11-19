@@ -1065,12 +1065,10 @@ void AccountSettings::slotDeleteAccount()
     // the QMessageBox should be destroyed before that happens.
     {
         QMessageBox messageBox(QMessageBox::Question,
-            tr("Confirmar a Remoção da Conta"),
-            tr("&lt;p&gt;Você realmente deseja remover a conexão desta conta&lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
-               "&lt;p&gt;&lt;b&gt;Nota:&lt;/b&gt; Isto &lt;b&gt;não&lt;/b&gt; irá deletar nenhum arquivo.&lt;/p&gt;")
-                .arg(_accountState->account()->displayName()),
-            QMessageBox::NoButton,
-            this);
+                                tr("Confirmar a Remoção da Conta"),
+                                 tr("<p>Você realmente deseja remover a conexão desta conta<i>?),
+                                    QMessageBox::NoButton,
+                                        this);
         QPushButton *yesButton =
             messageBox.addButton(tr("Remover conexão"), QMessageBox::YesRole);
         messageBox.addButton(tr("Cancelar"), QMessageBox::NoRole);
