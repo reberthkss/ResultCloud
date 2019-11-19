@@ -502,8 +502,8 @@ void AccountSettings::slotRemoveCurrentFolder()
 
         QMessageBox messageBox(QMessageBox::Question,
             tr("Confirme a Remoção de Sincronização de Pasta"),
-            tr("&lt;p&gt;Você realmente deseja para a sincronização desta pasta &lt;i&gt;%1&lt;/i&gt;?&lt;/p&gt;"
-               "&lt;p&gt;&lt;b&gt;Nota:&lt;/b&gt; Isto &lt;b&gt;não&lt;/b&gt; vai deletar qualquer arquivo.&lt;/p&gt;")
+            tr("<p>Você realmente deseja parar a sincronização desta pasta <i>%1</i></p>"
+               "<p><b>Nota: Isto vai deletar qualquer arquivo.</b></p>")
                 .arg(shortGuiLocalPath),
             QMessageBox::NoButton,
             this);
