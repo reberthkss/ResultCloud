@@ -85,7 +85,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
 
     stream << QLatin1String("<html><body>");
 
-    stream << tr("&lt;h3&gt; Detalhes do Certificado &lt;/h3&gt;");
+    stream << tr("<h3> Detalhes do Certificado </h3>");
 
     stream << QLatin1String("<table>");
     stream << addCertDetailsField(tr("Nome Comum (CN):"), Utility::escape(cn));
