@@ -1066,7 +1066,7 @@ void AccountSettings::slotDeleteAccount()
     {
         QMessageBox messageBox(QMessageBox::Question,
                                 tr("Confirmar a Remoção da Conta"),
-                                 tr("<p>Você realmente deseja remover a conexão desta conta<i>?),
+                                 tr("<p>Você realmente deseja remover a conexão desta conta<i>?"),
                                     QMessageBox::NoButton,
                                         this);
         QPushButton *yesButton =
