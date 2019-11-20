@@ -85,7 +85,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
 
     stream << QLatin1String("<html><body>");
 
-    stream << tr("&lt;h3&gt; Detalhes do Certificado &lt;/h3&gt;");
+    stream << tr("<h3> Detalhes do Certificado </h3>");
 
     stream << QLatin1String("<table>");
     stream << addCertDetailsField(tr("Nome Comum (CN):"), Utility::escape(cn));
@@ -97,7 +97,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
     stream << addCertDetailsField(tr("Série:"), Utility::escape(serial));
     stream << QLatin1String("</table>");
 
-    stream << tr("&lt;h3&gt;Emissor&lt;/h3&gt;");
+    stream << tr("<h3>Emissor</h3>");
 
     stream << QLatin1String("<table>");
     stream << addCertDetailsField(tr("Emissor:"), Utility::escape(issuer));
@@ -114,7 +114,7 @@ QMenu *SslButton::buildCertMenu(QMenu *parent, const QSslCertificate &cert,
     stream << QLatin1String("</table>");
 
     if (userApproved.contains(cert)) {
-        stream << tr("&lt;p&gt;&lt;b&gt; Nota:&lt;/b&gt;Este certificado foi aprovado manualmente&lt;/p&gt;");
+        stream << tr("<p><b> Nota:</b>Este certificado foi aprovado manualmente </p>");
     }
     stream << QLatin1String("</body></html>");
 
